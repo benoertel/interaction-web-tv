@@ -1,0 +1,36 @@
+<form method="post" id="contentTextForm" class="contentForm" novalidate>
+    <fieldset>
+    <legend>Text hinzufügen</legend>
+    <div class="control-group">
+        <label class="control-label" for="start">Start</label>
+        <div class="controls">
+            <input 
+                name="start" type="text" id="start" required class="input-medium"
+                data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
+                data-validation-regex-message="Format 31.01.2012 14:30:20." />
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="end">Ende</label>
+        <div class="controls">
+            <input name="end" type="text" id="end" required class="input-medium"
+                data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
+                data-validation-regex-message="Format 31.01.2012 14:30:20." />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="text">Text</label>
+        <div class="controls"><textarea name="text" id="text" required rows="5" class="input-block-level"></textarea>
+    </div>
+
+    <input type="hidden" name="type" value="content" />
+    <input type="hidden" name="category" value="text" />
+    <input type="hidden" name="channel" value="zdf" />
+    
+    <div class="form-actions">
+        <button value="submit" class="btn btn-primary" type="submit">Speichern</button>
+    </div>
+    </fieldset>
+</form>
