@@ -1,14 +1,45 @@
 $(document).ready(function(){
-    $.couch.urlPrefix = "http://192.168.1.9:2013/couch";
+    $.couch.urlPrefix = "http://localhost:2013/couch";
+    var websocketUri = 'ws://localhost:1337';
 
     $(window).bind('hashchange', hashChanged);
-    init();
-   
-    function init() {
+    
+    setupWebsocket();
+    
+    function setupWebsocket() {
+        websocket = new WebSocket(websocketUri);
+        websocket.onopen = onWebsocketOpen;
+        websocket.onerror = onWebsocketError;
+        websocket.onclose = onWebsocketClose;
+    }
+    
+    function onWebsocketOpen(event) {
         hashChanged();
         updateChannelList();
         showForm('contentTextTemplate');
-
+        updateWebsocketStatus('connected');
+    }
+    
+    function onWebsocketClose(event) {
+        updateWebsocketStatus('disconnected');
+        window.setTimeout(function() {
+            setupWebsocket()
+        }, 5000);
+    }
+    
+    function onWebsocketError(event) {
+        alert('error');
+    }
+    
+    function updateWebsocketStatus(status) {
+        if(status == 'connected') {
+            $('#websocket-status').attr('data-status', 'connected');
+            $('#websocket-status').attr('data-original-title', 'connection established');
+            
+        } else if(status == 'disconnected') {
+            $('#websocket-status').attr('data-status', 'disconnected');
+            $('#websocket-status').attr('data-original-title', 'no connection');
+        }
     }
     
     function hashChanged() {
@@ -76,6 +107,8 @@ $(document).ready(function(){
      * Load the additional content for a specific channel.
      */
     function updateContentList(channel) {
+        
+        
         $.couch.db("persad").view("content/by-channel", {
             'key': channel,
             
@@ -101,8 +134,6 @@ $(document).ready(function(){
                 $('#content-form').html(result);
                 initValidation();
             });
-            
-        
     }
     
     /**
@@ -121,14 +152,20 @@ $(document).ready(function(){
         
         event.preventDefault();
     }
-    
+
     function storeContentForm(form, event) {
         var data = $('.contentForm input, .contentForm select, .contentForm textarea').serializeArray();
         var doc = prepareCouchData(data);
 
         $.couch.db("persad").saveDoc(doc, {
             success: function(data) {
-                alert('saved');
+                var data = {
+                    'method': 'channel-content-updated',
+                    'channel': doc.channel
+                };
+        
+                websocket.send(JSON.stringify(data));
+                updateContentList(doc.channel);
             },
             error: function(status) {
                 alert(status);
@@ -163,5 +200,42 @@ $(document).ready(function(){
         
         return doc;
     }
+    
+    $('#channel-list li a').live('click', function(){
+        $('#channel-list li a').removeClass('active');
+        $(this).addClass('active');
+        $('#channel').val($(this).attr('data-channel-id'));
+    });
+    
+    $('#content-list li a button').live('click', function(){
+        var channel = $('#channel-list li a.active').attr('data-channel-id');
+
+        var docId = $(this).parent().attr('data-id');
+        var docRev = $(this).parent().attr('data-rev');
+                
+        var doc = {
+            _id: docId,
+            _rev: docRev
+        };
+        
+        $.couch.db("persad").removeDoc(doc, {
+            success: function(data) {         
+                var wsData = {
+                    'method': 'channel-content-updated',
+                    'channel': channel
+                };
+        
+                websocket.send(JSON.stringify(wsData));
+                
+                updateContentList(channel);
+            },
+            error: function(status) {
+                console.log(status);
+            }
+        });
+
+        return false;
+         
+    });
     
 });

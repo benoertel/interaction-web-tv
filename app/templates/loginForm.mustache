@@ -1,0 +1,29 @@
+<div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Log In</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" id="loginForm" class="contentForm form-horizontal" novalidate>
+    <fieldset>
+    <div class="control-group">
+        <label class="control-label" for="username">Username</label>
+        <div class="controls">
+            <input name="username" type="text" placeholder="Username" id="username" required class="input-large" />
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="password">Password</label>
+        <div class="controls">
+            <input name="password" type="password" placeholder="Password" id="password" required class="input-large" />
+        </div>
+    </div>
+    </fieldset>
+</form>
+  </div>
+  <div class="modal-footer">
+    <small>No account yet?</small> <button class="btn" data-dismiss="modal" data-action="signup">Sign Up</button>
+    <button class="btn btn-success">Log In</button>
+  </div>
+</div>

@@ -21,13 +21,17 @@
     </div>
 
     <div class="control-group">
+        <label class="control-label" for="channel">Sender</label>
+        <div class="controls"><input type="text" name="channel" id="channel" required readonly class="input-large" />
+    </div>
+
+    <div class="control-group">
         <label class="control-label" for="text">Text</label>
         <div class="controls"><textarea name="text" id="text" required rows="5" class="input-block-level"></textarea>
     </div>
 
     <input type="hidden" name="type" value="content" />
     <input type="hidden" name="category" value="text" />
-    <input type="hidden" name="channel" value="zdf" />
     
     <div class="form-actions">
         <button value="submit" class="btn btn-primary" type="submit">Speichern</button>

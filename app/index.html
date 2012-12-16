@@ -7,20 +7,38 @@
 
         <link href="/shared/resources/css/bootstrap.css" rel="stylesheet">
         <link href="/shared/resources/css/bootstrap-responsive.css" rel="stylesheet">
-        <link href="/app/resources/css/style.css" rel="stylesheet">
+        <link href="/app/resources/css/style.css?23=23" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
         <script src="/shared/resources/js/jquery-1.8.3.min.js"></script>
+        <script src="/shared/resources/js/bootstrap.js"></script>
         <script src="/shared/resources/js/mustache.js"></script>
         <script src="/shared/resources/js/chevron.js"></script>
         <script src="/shared/resources/js/jquery.couch.js"></script>
         <script src="/shared/resources/js/jqBootstrapValidation.js"></script>
+        <script src="/shared/resources/js/jquery.cookie.js"></script>
+
         <script src="/app/resources/js/jquery.main.js"></script>
-        <script src="/app/resources/js/jquery.cookie.js"></script>
+
+        <link href="/app/templates/contentList.mustache" rel="contentListTemplate" id="contentListTemplate"/>
+        <link href="/app/templates/signupForm.mustache" rel="signupFormTemplate" id="signupFormTemplate"/>
+        <link href="/app/templates/loginForm.mustache" rel="loginFormTemplate" id="loginFormTemplate"/>
+        <link href="/app/templates/settings.mustache" rel=settingsTemplate" id="settingsTemplate"/>
     </head>
     <body>
-        <h1>app</h1>
-        <div id="content">
+        <div class="navbar navbar-static-top navbar-inverse">
+            <div class="navbar-inner">
+                <a class="brand" href="#">Welcome benjamin</a>
+                <ul class="nav pull-right">
+                      <li class="divider-vertical"></li>
+                      <li><a href="#" data-action="settings"><i class="icon-white icon-list-alt"></i></a></li>
+                      <li><a href="#" rel="tooltip" data-placement="bottom" data-original-title="receiving live updates" data-action="toggle-updates" id="live-updates"><i class="icon-white icon-pause"></i></a></li>
+                      <li><a href="#" rel="tooltip" data-placement="bottom" data-original-title="no connection" id="websocket-status" data-status="disconnected">●</a></li>
+                    </ul>
+            </div>
         </div>
+        <h1 id="current-channel"></h1>
+        <div id="content-list"></div>
+        <div id="modal"></div>
     </body>
 </html>

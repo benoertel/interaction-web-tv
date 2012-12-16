@@ -1,0 +1,47 @@
+<div id="signupModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Sign Up</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" id="signupForm" class="contentForm form-horizontal" novalidate>
+    <fieldset>
+    <div class="control-group">
+        <label class="control-label" for="start">Username</label>
+        <div class="controls">
+            <input name="username" type="text" placeholder="Username" id="username" required class="input-large" />
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="end">Password</label>
+        <div class="controls">
+            <input name="password" type="password" placeholder="Password" id="password" required class="input-large" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="end">Age</label>
+        <div class="controls">
+            <input name="age" type="text" placeholder="Age" id="age" required class="input-large" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="end">Sex</label>
+        <div class="controls">
+            <select name="sex" type="sex" id="password" required class="input-large">
+            <option value="">please choose</option>
+            <option value="male">male</option>
+            <option value="female">female</option>
+            </select>
+        </div>
+    </div>
+    </fieldset>
+</form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" data-action="login">Log In</button>
+    <button class="btn btn-success">Create my account</button>
+  </div>
+</div>
