@@ -1,8 +1,7 @@
 $(document).ready(function() {
-    $.couch.urlPrefix = "http://localhost:2013/couch";
+    $.couch.urlPrefix = couchdbUri;
   
     var remoteId = '8KJLAoBXIoRqY34j';
-    var websocketUri = 'ws://localhost:1337';
     var websocket = null;
     var receiveUpdates = true;
 

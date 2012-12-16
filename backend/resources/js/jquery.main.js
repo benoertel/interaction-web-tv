@@ -1,6 +1,5 @@
 $(document).ready(function(){
-    $.couch.urlPrefix = "http://localhost:2013/couch";
-    var websocketUri = 'ws://localhost:1337';
+    $.couch.urlPrefix = couchdbUri;
 
     $(window).bind('hashchange', hashChanged);
     
