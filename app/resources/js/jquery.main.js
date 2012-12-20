@@ -167,11 +167,13 @@ $(document).ready(function() {
         if(receiveUpdates){
             var dataList = prepareListData(data.data);
 
-            $("#contentListTemplate").Chevron("render", {
+var response = Mustache.render("<div>The three <br>{{#contents}}<p>{{text}}</p>{{/contents}}<br> Those guys</div>", dataList);
+         /*   $("#contentListTemplate").Chevron("render", {
                 'contents': dataList
             }, function(result){
-                $('#content-list').html(result);       
-            });
+            */
+           $('#content-list').html(response);       
+          //  });
                 
             $('#current-channel').html(data.channel);
         }
