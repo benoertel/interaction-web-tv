@@ -166,16 +166,22 @@ $(document).ready(function() {
         updateTvStatus('available');
         if(receiveUpdates){
             var dataList = prepareListData(data.data);
+            $.get("/app/templates/contentList.mustache", function(html) { 
+                console.log(dataList);
+                var obj = {
+                    'contents': dataList
+                }
+                $('#content-list').html(Mustache.render(html, obj));
+                $('#current-channel').html(data.channel);
+            });
 
-var response = Mustache.render("<div>The three <br>{{#contents}}<p>{{text}}</p>{{/contents}}<br> Those guys</div>", dataList);
-         /*   $("#contentListTemplate").Chevron("render", {
+        //var response = Mustache.render("<div>The three <br>{{#contents}}<p>{{text}}</p>{{/contents}}<br> Those guys</div>", dataList);
+        /*   $("#contentListTemplate").Chevron("render", {
                 'contents': dataList
             }, function(result){
             */
-           $('#content-list').html(response);       
-          //  });
-                
-            $('#current-channel').html(data.channel);
+        //         $('#content-list').html(response);       
+        //  });
         }
     }
     
