@@ -19,7 +19,9 @@ $(document).ready(function() {
     $('a[rel=tooltip]').tooltip();
     
     function init() {
-        tvId = $.cookie('tvId');
+        $("link[rel=template]").Chevron("preload", function(){
+            tvId = $.cookie('tvId');
+        });
     }
     
     function showLoginForm(callback) {
