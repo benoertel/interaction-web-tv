@@ -1,7 +1,6 @@
 $(document).ready(function(){
     
-    var deviceId = null;
-    var websocketUri = 'ws://localhost:1337';
+    var tvId = null;
     var websocket = null;
     var channel = null;
     
@@ -15,15 +14,15 @@ $(document).ready(function(){
     init();
     
     function init(){
-        initDeviceId();
+        initTvId();
         setupWebsocket();
     }
     
-    function initDeviceId() {
-        deviceId = $.cookie('persad');
-        if(!deviceId) {
-            deviceId = makeId();
-            $.cookie('persad', deviceId, {
+    function initTvId() {
+        tvId = $.cookie('persad');
+        if(!tvId) {
+            tvId = makeId();
+            $.cookie('persad', tvId, {
                 expires: 365
             });
         }
@@ -94,7 +93,7 @@ $(document).ready(function(){
 
         video.play();
                 
-        $('#program-info').html('deviceId: ' + deviceId + '<br/> channel: ' + channel);
+        $('#program-info').html('tvId: ' + tvId + '<br/> channel: ' + channel);
         
         // notify server about current channel                    
         notifyChannelChange(channel);
@@ -102,8 +101,8 @@ $(document).ready(function(){
                 
     function notifyChannelChange(channel){
         var data = {
-            'method': 'zapp',
-            'deviceId': deviceId,
+            'method': 'channel-changed',
+            'tvId': tvId,
             'channel': channel
         };
         

@@ -8,6 +8,7 @@ var webSocketsServerPort = 1337;
 var webSocketServer = require('websocket').server;
 var http = require('http');
 var cradle = require('cradle');
+var hash = require("mhash").hash;
 
 var db = new(cradle.Connection)('http://localhost', 5984, {
     cache: true,
@@ -15,7 +16,7 @@ var db = new(cradle.Connection)('http://localhost', 5984, {
 }).database('persad');
   
 // list of currently connected televisions
-var devices = [ ];
+var televisions = [ ];
 
 // list of currently subscribed users
 var subscriptions = [ ];
@@ -45,78 +46,161 @@ wsServer.on('request', function(request) {
     
     // we need to know client index to remove them on 'close' event
     var index = clients.push(connection) - 1;
+    var deviceType = null;
+    var tvId = null;
     
-    // var deviceId = false;
-    /*
-    // send back chat history
-    connection.send();JSON.stringify( {
-        type: 'history'
-    } ));
-    */
-
     // user sent some message
     connection.on('message', function(message) {
-        
-        console.log(clients.length);
+        // @todo: we need to notify users, when their smart tv becomes available
         
         if (message.type === 'utf8') {
             var data = JSON.parse(message.utf8Data);
-
+            
+            // a second-screen device subscribes to a smart tv
             if(data.method == 'subscribe') {
-                subscriptions[index] = data.remoteId;
+                deviceType = 'secondScreen';
                 
-                db.view('content/by-channel', {
-                    key: devices[data.remoteId]
-                }, function (err, result) {
-                    var obj = { 
-                        method: 'zapp',
-                        channel: devices[data.remoteId] ,
-                        data: result
-                    };
+                subscriptions[index] = data.tvId;
+                
+                var obj = {
+                    'method': 'subscribe-response'
+                };
+                
+                // check if tvId exists
+                if(televisions[data.tvId]) {
+                    // send back, send in next response the current channel
+                    db.view('content/by-channel', {
+                        key: televisions[data.tvId]
+                    }, function (err, result) {
+                        obj.status = 'success';
+                        obj.message = 'Remote Smart-TV is available.';                        
+                        obj.tv = {
+                            'channel': televisions[data.tvId],
+                            'data': result
+                        };
                         
+                        connection.send(JSON.stringify(obj));
+                    });
+                } else {
+                    obj.status = 'error';
+                    obj.message = 'Remote Smart-TV currently not available';
                     connection.send(JSON.stringify(obj));
-                });
+                }
+            
+            // channel change on smart tv
+            } else if(data.method == 'channel-changed') {
+                if(!televisions[data.tvId]) {
+                    deviceType = 'tv';
+                    tvId = data.tvId;
+                    // when it is a new device, we need to notify all second screen 
+                    // devices, that are waiting for this device
+                    console.log('smart tv ' + data.tvId + ' is online');
+                }
                 
-            } else if(data.method == 'zapp') {
-                devices[data.deviceId] = data.channel;
-
+                televisions[data.tvId] = data.channel;
+                                
                 db.view('content/by-channel', {
                     key: data.channel
                 }, function (err, result) {
                     var obj = { 
-                        method: 'zapp',
+                        method: 'channel-changed',
                         channel: data.channel,
                         data: result
                     };
-                    console.log('subscriptions ' + subscriptions.length);
-                    console.log(subscriptions);
+
                     for (var i=0; i < subscriptions.length; i++) {
-                        if(subscriptions[i] == data.deviceId) {
-                            clients[i].send(JSON.stringify(obj));
+                        if(subscriptions[i] == data.tvId) {
+                            if(clients[i].authorized) {
+                                clients[i].send(JSON.stringify(obj));
+                            }
                         }
-                    }     
+                    }
                 });
-                
+            
+            // content of a channel was updated in backend
             } else if(data.method == 'channel-content-updated') {
                 
                 db.view('content/by-channel', {
                     key: data.channel
                 }, function (err, result) {
                     var obj = { 
-                        method: 'zapp',
+                        method: 'channel-changed',
                         channel: data.channel,
                         data: result
                     };
                         
-                    for(var deviceId in devices) {
-                        if(devices[deviceId] == data.channel) {
+                    for(var tvId in televisions) {
+                        if(televisions[tvId] == data.channel) {
                             for (var i=0; i < subscriptions.length; i++) {
-                                if(subscriptions[i] == deviceId) {
-                                    clients[i].send(JSON.stringify(obj));
+                                if(subscriptions[i] == tvId) {
+                                    if(clients[i].authorized) {
+                                        clients[i].send(JSON.stringify(obj));
+                                    }
                                 }
                             }
                         } 
                     }
+                }); 
+            } else if(data.method == 'register-user') {
+                var obj = {
+                    'method': 'register-user-response'
+                };
+                    
+                if(!data.username || !data.password) {
+                    obj.status = 'error';
+                    obj.message = 'Username and password are required.';     
+                    clients[index].send(JSON.stringify(obj));
+                } else {    
+                    var id = 'user-' + data.username;
+                    db.get(id, function (err, doc) {
+                        if(!doc) {
+                            db.save(id, {
+                                'type': 'user',
+                                'age': data.age,
+                                'sex': data.sex,
+                                'username': data.username,
+                                'password': hash("sha512", data.password)
+                            }, function (err, res) {
+
+                                if(res.ok) {
+                                    obj.status = 'success';
+                                    obj.message = 'Youre registration was finished. Login and enjoy.';  
+                                } else {
+                                    obj.status = 'error';
+                                    obj.message = 'Error during registration, try again.';     
+                                }
+
+                                clients[index].send(JSON.stringify(obj));
+                            });
+                        } else {
+                            obj.status = 'error';
+                            obj.message = 'Username already in use.';
+                            clients[index].send(JSON.stringify(obj));
+                        }
+                    });
+                }
+  
+                
+ 
+            } else if(data.method == 'login-user') {                
+                var id = 'user-' + data.username;
+                db.get(id, function (err, doc) {
+                    var obj = {
+                        'method': 'login-user-response'
+                    };
+
+                    if(doc && doc.password == hash("sha512", data.password)) {
+                        obj.status = 'success';
+                        obj.message = 'You were logged in successfully. Enjoy using the app.';
+                        obj.user = data;
+                        clients[index].authorized = true;
+                        
+                    } else {
+                        obj.status = 'error';
+                        obj.message = 'The provided credentials are incorrect.';
+                    }
+                    
+                    clients[index].send(JSON.stringify(obj));
                 });
                 
             }
@@ -126,9 +210,31 @@ wsServer.on('request', function(request) {
     // user disconnected
     connection.on('close', function(connection) {
         // remove user from the list of connected clients
-        clients.splice(index, 1);
-        subscriptions.splice(index, 1);
+        delete clients[index];
+        delete subscriptions[index];
         
-        console.log('connection closed');
+        if(deviceType == 'tv') {            
+            var obj = {
+                'method': 'tv-disconnected'
+            };
+            
+            for (var i=0; i < subscriptions.length; i++) {
+                if(subscriptions[i] == tvId) {
+                    if(clients[i].authorized) {
+                        clients[i].send(JSON.stringify(obj));
+                    }
+                }
+            }
+            
+            delete televisions[tvId];
+            console.log('smart tv ' + tvId + ' closed the connection.');
+        } else {
+            console.log('second screen device closed the connection.');            
+        }
+    });
+    
+    // connection error
+    connection.on('error', function(connection) {
+        console.log('connection error.');
     });
 });

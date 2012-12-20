@@ -6,8 +6,8 @@ body {
 }
 
 .navbar-static-top {
-margin-right: -20px;
-margin-left: -20px;
+    margin-right: -20px;
+    margin-left: -20px;
 }
 
 #content-list {
@@ -73,15 +73,18 @@ margin-left: -20px;
 }
 
 /* navbar */
-#websocket-status {
+#websocket-status,
+#tv-status {
     font-size: 24px;
 }
 
-#websocket-status[data-status="connected"] {
+#websocket-status[data-status="connected"],
+#tv-status[data-status="available"]{
     color: #5BB75B;
 }
 
-#websocket-status[data-status="disconnected"] {
+#websocket-status[data-status="disconnected"],
+#tv-status[data-status="unavailable"]{
     color: #D44D45;
 }
 
@@ -95,4 +98,11 @@ margin-left: -20px;
     .modal-body {
         max-height: 90px;
     }
+}
+
+.loader {
+    background-image: url(/shared/resources/img/loader.gif);
+    height: 35px;
+    background-repeat: no-repeat;
+    background-position: center 0;
 }

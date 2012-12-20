@@ -1,15 +1,14 @@
 <div id="settingsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Settings</h3>
   </div>
   <div class="modal-body">
     <form method="post" id="settingsForm" class="contentForm form-horizontal" novalidate>
     <fieldset>
     <div class="control-group">
-        <label class="control-label" for="deviceId">Subscribed device</label>
+        <label class="control-label" for="tvId">Subscribed device</label>
         <div class="controls">
-            <input name="deviceId" value="{{deviceId}}" type="text" placeholder="Device-Id" id="deviceId" required class="input-large" />
+            <input name="tvId" value="{{tvId}}" type="text" placeholder="Device-Id" id="tvId" required class="input-large" />
         </div>
     </div>
     </fieldset>
@@ -17,6 +16,6 @@
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal">Cancel</button>
-    <button class="btn btn-success">Update Settings</button>
+    <button class="btn btn-success" data-action="update-settings" data-dismiss="modal">Update Settings</button>
   </div>
 </div>
