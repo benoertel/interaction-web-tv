@@ -19,9 +19,7 @@ $(document).ready(function() {
     $('a[rel=tooltip]').tooltip();
     
     function init() {
-        $("link[rel=template]").Chevron("preload", function(){
-            tvId = $.cookie('tvId');
-        });
+        tvId = $.cookie('tvId');
     }
     
     function showLoginForm(callback) {
@@ -166,22 +164,14 @@ $(document).ready(function() {
         updateTvStatus('available');
         if(receiveUpdates){
             var dataList = prepareListData(data.data);
-            $.get("/app/templates/contentList.mustache", function(html) { 
-                console.log(dataList);
-                var obj = {
-                    'contents': dataList
-                }
-                $('#content-list').html(Mustache.render(html, obj));
-                $('#current-channel').html(data.channel);
-            });
 
-        //var response = Mustache.render("<div>The three <br>{{#contents}}<p>{{text}}</p>{{/contents}}<br> Those guys</div>", dataList);
-        /*   $("#contentListTemplate").Chevron("render", {
+            $("#contentListTemplate").Chevron("render", {
                 'contents': dataList
             }, function(result){
-            */
-        //         $('#content-list').html(response);       
-        //  });
+                $('#content-list').html(result);       
+            });
+                
+            $('#current-channel').html(data.channel);
         }
     }
     

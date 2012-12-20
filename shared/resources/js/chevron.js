@@ -24,7 +24,8 @@
 
 							if (callback && this._preloadCount == this.length && $.isFunction(callback))
 								callback.call(this)
-						}
+						},
+                                                dataType: 'html'
 					})
 				}
 				else if (callback && index == this.length - 1 && $.isFunction(callback))
@@ -50,7 +51,8 @@
 					$.ajax({
 						type: "GET",
 						url: this.templatePath,
-						success: $.proxy( methods.invokeRender, this)
+						success: $.proxy( methods.invokeRender, this),
+                                                dataType: 'html'
 					})
 				}
 				else
