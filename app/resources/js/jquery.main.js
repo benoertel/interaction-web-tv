@@ -298,6 +298,13 @@ $(document).ready(function() {
         
         if(data){
             $.each(data, function(index, value) { 
+                var elem = value.value;
+            
+                elem.formatted = {
+                    'start': parseHourMin(elem.start),
+                    'duration': calcDuration(elem.start, elem.end, 'min')
+                }
+            
                 dataList.push(value.value);
             });
         }
@@ -317,7 +324,7 @@ $(document).ready(function() {
         return '<div class="' + classes + '">' + text + '</div>';
     }
     
-        function parseHourMin(date) {
+    function parseHourMin(date) {
         var dateTime = date.split(' ');
         var timePart = dateTime[1].split(':');
         
