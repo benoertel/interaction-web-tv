@@ -5,8 +5,10 @@
             <button class="btn btn-mini" href="#"><i class="icon-remove"></i></button>
             <h5>{{text}}</h5>
             <div class="time">
-                <div class="start">09:50</div>
-                <div class="duration">45min</div>
+                {{#formatted}}
+                <div class="start">{{start}}</div>
+                <div class="duration">{{duration}}min</div>
+                {{/formatted}}
             </div>
         </a>
     </li>

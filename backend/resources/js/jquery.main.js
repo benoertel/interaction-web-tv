@@ -112,14 +112,12 @@ $(document).ready(function(){
      * Load the additional content for a specific channel.
      */
     function updateContentList(channel) {
-        
-        
         $.couch.db("persad").view("content/by-channel", {
             'key': channel,
             
             success: function(data) {
                 var dataList = prepareListData(data);
-
+                console.log(dataList);
                 $("#contentListTemplate").Chevron("render", {
                     'contents': dataList
                 }, function(result){
@@ -166,7 +164,7 @@ $(document).ready(function(){
             doc.start = formatDate(doc.start);
             doc.end = formatDate(doc.end);
         }
-        console.log(doc);
+
         $.couch.db("persad").saveDoc(doc, {
             success: function(data) {
                 var data = {
@@ -191,10 +189,18 @@ $(document).ready(function(){
     function prepareListData(data) {
         var dataList = [];
          
-        $.each(data.rows, function(index, value) { 
+        $.each(data.rows, function(index, value) {
+            var elem = value.value;
+            
+            elem.formatted = {
+                'start': parseHourMin(elem.start),
+                'duration': calcDuration(elem.start, elem.end, 'min')
+            }
             dataList.push(value.value);
         });
-         
+        
+        console.log(dataList);
+        
         return dataList;
     }
     
@@ -252,7 +258,31 @@ $(document).ready(function(){
         var dateTime = date.split(' ');
         var datePart = dateTime[0].split('.');
 
-        return datePart[2] + '-' + datePart[0] + '-' + datePart[1] + ' ' + dateTime[1];
+        return datePart[2] + '-' + datePart[1] + '-' + datePart[0] + ' ' + dateTime[1];
+    }
+    
+    function parseHourMin(date) {
+        var dateTime = date.split(' ');
+        var timePart = dateTime[1].split(':');
+        
+        return timePart[0] + ':' + timePart[1];
+    }
+    
+    function calcDuration(start, end, unit) {
+        var diff = Math.abs(new Date(parseDate(start)) - new Date(parseDate(end)));
+        
+        if(unit == 'min') {
+            return Math.floor((diff/1000)/60);
+        }
+        
+        return null;
+    }
+    
+    function parseDate(date) {
+        var dateTime = date.split(' ');
+        var datePart = dateTime[0].split('-');
+        
+        return datePart[0] + '/' + datePart[1] + '/' + datePart[2] + ' ' + dateTime[1];        
     }
     
 });

@@ -316,4 +316,28 @@ $(document).ready(function() {
         
         return '<div class="' + classes + '">' + text + '</div>';
     }
+    
+        function parseHourMin(date) {
+        var dateTime = date.split(' ');
+        var timePart = dateTime[1].split(':');
+        
+        return timePart[0] + ':' + timePart[1];
+    }
+    
+    function calcDuration(start, end, unit) {
+        var diff = Math.abs(new Date(parseDate(start)) - new Date(parseDate(end)));
+        
+        if(unit == 'min') {
+            return Math.floor((diff/1000)/60);
+        }
+        
+        return null;
+    }
+    
+    function parseDate(date) {
+        var dateTime = date.split(' ');
+        var datePart = dateTime[0].split('-');
+        
+        return datePart[0] + '/' + datePart[1] + '/' + datePart[2] + ' ' + dateTime[1];        
+    }
 });
