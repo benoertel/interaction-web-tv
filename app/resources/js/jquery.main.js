@@ -17,7 +17,8 @@ $(document).ready(function() {
     showLoginForm();
     
     window.addEventListener("offline", function(e) {
-        onWebsocketClose();
+        updateWebsocketStatus('disconnected');
+        updateTvStatus('unavailable');
     })
  
     window.addEventListener("online", function(e) {
