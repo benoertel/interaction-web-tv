@@ -32,10 +32,14 @@ $(document).ready(function(){
     
     function updateWebsocketStatus(status) {
         if(status == 'connected') {
+            $('#websocket-status i').removeClass('gicon-ws-signal-off');
+            $('#websocket-status i').addClass('gicon-ws-signal-on');
             $('#websocket-status').attr('data-status', 'connected');
             $('#websocket-status').attr('data-original-title', 'connection established');
             
         } else if(status == 'disconnected') {
+            $('#websocket-status i').removeClass('gicon-ws-signal-on');
+            $('#websocket-status i').addClass('gicon-ws-signal-off');
             $('#websocket-status').attr('data-status', 'disconnected');
             $('#websocket-status').attr('data-original-title', 'no connection');
         }
@@ -49,8 +53,10 @@ $(document).ready(function(){
             formData[urlParam[0]] = urlParam[1]; 
         });
         
-        updateShowList(formData.channel);
-        updateContentList(formData.channel);
+        if(formData.channel) {
+            updateShowList(formData.channel);
+            updateContentList(formData.channel);
+        }
     }
     
     /**
@@ -156,6 +162,11 @@ $(document).ready(function(){
         var data = $('.contentForm input, .contentForm select, .contentForm textarea').serializeArray();
         var doc = prepareCouchData(data);
 
+        if(doc.type == 'content' && doc.category == 'text') {
+            doc.start = formatDate(doc.start);
+            doc.end = formatDate(doc.end);
+        }
+        console.log(doc);
         $.couch.db("persad").saveDoc(doc, {
             success: function(data) {
                 var data = {
@@ -236,5 +247,12 @@ $(document).ready(function(){
         return false;
          
     });
+    
+    function formatDate(date) {
+        var dateTime = date.split(' ');
+        var datePart = dateTime[0].split('.');
+
+        return datePart[2] + '-' + datePart[0] + '-' + datePart[1] + ' ' + dateTime[1];
+    }
     
 });

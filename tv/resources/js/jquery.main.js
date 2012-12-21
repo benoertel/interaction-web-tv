@@ -139,10 +139,14 @@ $(document).ready(function(){
     
     function updateWebsocketStatus(status) {
         if(status == 'connected') {
+            $('#websocket-status i').removeClass('gicon-ws-signal-off');
+            $('#websocket-status i').addClass('gicon-ws-signal-on');
             $('#websocket-status').attr('data-status', 'connected');
             $('#websocket-status').attr('data-original-title', 'connection established');
             
         } else if(status == 'disconnected') {
+            $('#websocket-status i').removeClass('gicon-ws-signal-on');
+            $('#websocket-status i').addClass('gicon-ws-signal-off');
             $('#websocket-status').attr('data-status', 'disconnected');
             $('#websocket-status').attr('data-original-title', 'no connection');
         }

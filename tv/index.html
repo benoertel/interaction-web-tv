@@ -6,6 +6,7 @@
 
         <link href="/shared/resources/css/bootstrap.css" rel="stylesheet">
         <link href="/tv/resources/css/style.css" rel="stylesheet">
+        <link href="/shared/resources/css/style.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
 
         <script src="/shared/resources/js/config.js"></script>
@@ -14,7 +15,9 @@
         <script src="/tv/resources/js/jquery.main.js"></script>
     </head>
     <body>
-        <div id="websocket-status" data-status="disconnected">●</div>
+        <div id="websocket-status" data-status="disconnected">
+            <i class="gicon gicon-ws-signal-off"></i>
+        </div>
         <video autoplay controls id="tv-stream" data-channel="0"></video>
         <div id="program-info-wrapper">        
             <div id="program-info">no program</div>

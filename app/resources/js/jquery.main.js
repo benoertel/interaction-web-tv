@@ -123,10 +123,14 @@ $(document).ready(function() {
     
     function updateWebsocketStatus(status) {
         if(status == 'connected') {
+            $('#websocket-status i').removeClass('gicon-ws-signal-off');
+            $('#websocket-status i').addClass('gicon-ws-signal-on');
             $('#websocket-status').attr('data-status', 'connected');
             $('#websocket-status').attr('data-original-title', 'connection established');
             
         } else if(status == 'disconnected') {
+            $('#websocket-status i').removeClass('gicon-ws-signal-on');
+            $('#websocket-status i').addClass('gicon-ws-signal-off');
             $('#websocket-status').attr('data-status', 'disconnected');
             $('#websocket-status').attr('data-original-title', 'no connection');
         }
@@ -134,10 +138,14 @@ $(document).ready(function() {
     
     function updateTvStatus(status) {
         if(status == 'available') {
+            $('#tv-status i').removeClass('gicon-tv-signal-off');
+            $('#tv-status i').addClass('gicon-tv-signal-on');
             $('#tv-status').attr('data-status', 'available');
             $('#tv-status').attr('data-original-title', 'tv is available');
             
         } else if(status == 'unavailable') {
+            $('#tv-status i').removeClass('gicon-tv-signal-on');
+            $('#tv-status i').addClass('gicon-tv-signal-off');
             $('#tv-status').attr('data-status', 'unavailable');
             $('#tv-status').attr('data-original-title', 'tv is not available');
         }
@@ -145,15 +153,15 @@ $(document).ready(function() {
     
     function toggleReceiveUpdates() {        
         if(!receiveUpdates) {
-            $('#live-updates i').removeClass('icon-play');
-            $('#live-updates i').addClass('icon-pause');
+            $('#live-updates i').removeClass('gicon-play');
+            $('#live-updates i').addClass('gicon-pause');
             $('#live-updates').attr('data-original-title', 'receiving live updates');
             receiveUpdates = true;
             
             channelChanged(latestData);
         } else {
-            $('#live-updates i').removeClass('icon-pause');
-            $('#live-updates i').addClass('icon-play');
+            $('#live-updates i').removeClass('gicon-pause');
+            $('#live-updates i').addClass('gicon-play');
             $('#live-updates').attr('data-original-title', 'no live updates');
             receiveUpdates = false;
         }

@@ -45,9 +45,10 @@ wsServer.on('request', function(request) {
     var connection = request.accept(null, request.origin); 
     
     // we need to know client index to remove them on 'close' event
-    var index = clients.push(connection) - 1;
-    var deviceType = null;
-    var tvId = null;
+    var device = {
+        'index': clients.push(connection) - 1,
+        'type': null
+    };
     
     // user sent some message
     connection.on('message', function(message) {
@@ -58,9 +59,9 @@ wsServer.on('request', function(request) {
             
             // a second-screen device subscribes to a smart tv
             if(data.method == 'subscribe') {
-                deviceType = 'secondScreen';
+                device.type = 'secondScreen';
                 
-                subscriptions[index] = data.tvId;
+                subscriptions[device.index] = data.tvId;
                 
                 var obj = {
                     'method': 'subscribe-response'
@@ -90,8 +91,8 @@ wsServer.on('request', function(request) {
             // channel change on smart tv
             } else if(data.method == 'channel-changed') {
                 if(!televisions[data.tvId]) {
-                    deviceType = 'tv';
-                    tvId = data.tvId;
+                    device.type = 'tv';
+                    device.tvId = data.tvId;
                     // when it is a new device, we need to notify all second screen 
                     // devices, that are waiting for this device
                     console.log('smart tv ' + data.tvId + ' is online');
@@ -149,7 +150,7 @@ wsServer.on('request', function(request) {
                 if(!data.username || !data.password) {
                     obj.status = 'error';
                     obj.message = 'Username and password are required.';     
-                    clients[index].send(JSON.stringify(obj));
+                    clients[device.index].send(JSON.stringify(obj));
                 } else {    
                     var id = 'user-' + data.username;
                     db.get(id, function (err, doc) {
@@ -170,12 +171,12 @@ wsServer.on('request', function(request) {
                                     obj.message = 'Error during registration, try again.';     
                                 }
 
-                                clients[index].send(JSON.stringify(obj));
+                                clients[device.index].send(JSON.stringify(obj));
                             });
                         } else {
                             obj.status = 'error';
                             obj.message = 'Username already in use.';
-                            clients[index].send(JSON.stringify(obj));
+                            clients[device.index].send(JSON.stringify(obj));
                         }
                     });
                 }
@@ -193,14 +194,14 @@ wsServer.on('request', function(request) {
                         obj.status = 'success';
                         obj.message = 'You were logged in successfully. Enjoy using the app.';
                         obj.user = data;
-                        clients[index].authorized = true;
+                        clients[device.index].authorized = true;
                         
                     } else {
                         obj.status = 'error';
                         obj.message = 'The provided credentials are incorrect.';
                     }
                     
-                    clients[index].send(JSON.stringify(obj));
+                    clients[device.index].send(JSON.stringify(obj));
                 });
                 
             }
@@ -210,24 +211,24 @@ wsServer.on('request', function(request) {
     // user disconnected
     connection.on('close', function(connection) {
         // remove user from the list of connected clients
-        delete clients[index];
-        delete subscriptions[index];
+        delete clients[device.index];
+        delete subscriptions[device.index];
         
-        if(deviceType == 'tv') {            
+        if(device.type == 'tv') {            
             var obj = {
                 'method': 'tv-disconnected'
             };
             
             for (var i=0; i < subscriptions.length; i++) {
-                if(subscriptions[i] == tvId) {
+                if(subscriptions[i] == device.tvId) {
                     if(clients[i].authorized) {
                         clients[i].send(JSON.stringify(obj));
                     }
                 }
             }
             
-            delete televisions[tvId];
-            console.log('smart tv ' + tvId + ' closed the connection.');
+            delete televisions[device.tvId];
+            console.log('smart tv ' + device.tvId + ' closed the connection.');
         } else {
             console.log('second screen device closed the connection.');            
         }

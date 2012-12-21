@@ -194,20 +194,6 @@ body {
     line-height: 21px;
 }
 
-/* navbar */
-#websocket-status {
-    font-size: 24px;
-}
-
-#websocket-status[data-status="connected"] {
-    color: #5BB75B;
-}
-
-#websocket-status[data-status="disconnected"] {
-    color: #D44D45;
-}
-
-
 @media (max-width: 400px) {
     #show-list ul li .time {
         width: 50px;

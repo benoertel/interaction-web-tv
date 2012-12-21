@@ -26,17 +26,6 @@ body {
 
 /* navbar */
 #websocket-status {
-    font-size: 24px;
     position: fixed;
-    left: 50%;
-    margin-left: -10px;
+    width:100%;
 }
-
-#websocket-status[data-status="connected"] {
-    color: #5BB75B;
-}
-
-#websocket-status[data-status="disconnected"] {
-    color: #D44D45;
-}
-

@@ -73,21 +73,6 @@ body {
 }
 
 /* navbar */
-#websocket-status,
-#tv-status {
-    font-size: 24px;
-}
-
-#websocket-status[data-status="connected"],
-#tv-status[data-status="available"]{
-    color: #5BB75B;
-}
-
-#websocket-status[data-status="disconnected"],
-#tv-status[data-status="unavailable"]{
-    color: #D44D45;
-}
-
 @media (max-height: 480px) {
     .modal-body {
         max-height: 180px;
