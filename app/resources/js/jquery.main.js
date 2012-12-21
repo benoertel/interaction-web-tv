@@ -16,6 +16,14 @@ $(document).ready(function() {
     setupWebsocket();
     showLoginForm();
     
+    window.addEventListener("offline", function(e) {
+        onWebsocketClose();
+    })
+ 
+    window.addEventListener("online", function(e) {
+        setupWebsocket();
+    });
+
     $('a[rel=tooltip]').tooltip();
     
     function init() {
