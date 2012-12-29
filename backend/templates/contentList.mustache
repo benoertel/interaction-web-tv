@@ -1,19 +1,5 @@
-<ul>
+<ul class="clearfix content">
 {{#contents}}
-    <li>
-        <a href="#" data-id="{{_id}}" data-rev="{{_rev}}" class="clearfix">
-            <button class="btn btn-mini" href="#"><i class="icon-remove"></i></button>
-            <h5>{{text}}</h5>
-            <div class="time">
-                {{#formatted}}
-                <div class="start">{{start}}</div>
-                <div class="duration">{{duration}}min</div>
-                {{/formatted}}
-            </div>
-        </a>
-    </li>
-{{/contents}}
-{{^contents}}
-    <li><a>No content :(</a></li>
+    {{#formatted}}<li style="width: {{width}}px; margin-left: {{margin}}px"><span>{{start}}</span>{{/formatted}}{{text}}{{#formatted}}</li>{{/formatted}}
 {{/contents}}
 </ul>

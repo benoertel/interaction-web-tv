@@ -1,45 +1,35 @@
-// Optional. You will see this name in eg. 'ps' or 'top' command
-process.title = 'node-chat';
 
-// Port where we'll run the websocket server
-var webSocketsServerPort = 1337;
+process.title = 'node-persad';
 
-// websocket and http servers
-var webSocketServer = require('websocket').server;
+var server = require('websocket').server;
 var http = require('http');
 var cradle = require('cradle');
 var hash = require("mhash").hash;
+var schedule = require('node-schedule');
 
+// init global vars
+var televisions = [];
+var subscriptions = [];
+var clients = [];
+
+// setup db connection
 var db = new(cradle.Connection)('http://localhost', 5984, {
     cache: true,
     raw: false
 }).database('persad');
-  
-// list of currently connected televisions
-var televisions = [ ];
 
-// list of currently subscribed users
-var subscriptions = [ ];
-
-var clients = [ ];
-
-var server = http.createServer();
-server.listen(webSocketsServerPort, function() {
-    console.log((new Date()) + " Server is listening on port " + webSocketsServerPort);
+// create server
+var httpServer = http.createServer();
+httpServer.listen(1337, function() {
+    console.log((new Date()) + " Server is listening on port " + 1337);
 });
 
-/**
- * WebSocket server
- */
-var wsServer = new webSocketServer({
-    // WebSocket server is tied to a HTTP server. WebSocket request is just
-    // an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
-    httpServer: server
+var websocketServer = new server({
+    httpServer: httpServer
 });
 
-// This callback function is called every time someone
-// tries to connect to the WebSocket server
-wsServer.on('request', function(request) {
+// websocket server
+websocketServer.on('request', function(request) {
     console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
 
     var connection = request.accept(null, request.origin); 
@@ -51,9 +41,7 @@ wsServer.on('request', function(request) {
     };
     
     // user sent some message
-    connection.on('message', function(message) {
-        // @todo: we need to notify users, when their smart tv becomes available
-        
+    connection.on('message', function(message) {        
         if (message.type === 'utf8') {
             var data = JSON.parse(message.utf8Data);
             
@@ -141,7 +129,7 @@ wsServer.on('request', function(request) {
                             }
                         } 
                     }
-                }); 
+                });
             } else if(data.method == 'register-user') {
                 var obj = {
                     'method': 'register-user-response'
@@ -239,3 +227,24 @@ wsServer.on('request', function(request) {
         console.log('connection error.');
     });
 });
+
+/**
+ * Schedule the next content to be sent to 
+ */
+function scheduleContent() {
+    var date = new Date(2012, 11, 21, 21, 56, 00);  
+    createJob(date);
+
+    var j = schedule.scheduleJob(date, function(){
+        console.log('The answer to life, the universe, and everything!');
+        
+        date.setSeconds(date.getSeconds() + 5);
+        createJob(date);
+    });
+}
+
+// 1) get content that already started and is still running (independent of channel)
+
+// 2) schedule next update to next content start date in the db
+
+// 3)

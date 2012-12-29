@@ -62,7 +62,77 @@ body {
     color: #67141B;
 }
 
-/* show list */
+/* guide */
+#guide-wrapper {
+    padding: 0 5px;
+    background: #67141b;
+    -webkit-border-radius: 4px;
+    color: white;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+#guide {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+#guide ul {
+    width: 8640px;
+    margin: 0;
+}
+
+#guide ul li {
+    list-style-type: none;
+    float: left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#guide ul.time li {
+    width: 172px;
+    padding: 10px 0 10px 5px;
+    border-left: 3px #040404 solid;
+}
+#guide ul.show {
+    border-bottom: 1px solid #BFB093;
+    padding: 2px 0;
+    color: black;
+}
+#guide ul.show li {
+    background: whitesmoke;
+    border-radius: 3px;
+    padding: 3px;
+    cursor: pointer;
+    height: 100px;
+}
+
+#guide ul.show li span {
+    font-weight: bold;
+}
+
+#guide ul.content {
+    border-bottom: 1px solid #BFB093;
+    padding: 2px 0;
+    color: black;
+}
+
+#guide ul.content li {
+    background: greenyellow;
+    border-radius: 3px;
+    padding: 3px;
+    cursor: pointer;
+}
+
+#guide ul.content li span {
+    font-weight: bold;
+}
+
+#guide::-webkit-scrollbar { 
+    display: none; 
+}
+
+/* show list
 #show-list {
     background: #2d585a;
     -webkit-border-radius: 4px;
@@ -103,7 +173,7 @@ body {
     color: #2d585a;
 }
 
-/* time */
+
 #show-list ul li h5 {
     font-size: 16px;
     line-height: 4px;
@@ -126,7 +196,6 @@ body {
     line-height: 21px;
 }
 
-/* content list */
 #content-list {
     background: #2d585a;
     -webkit-border-radius: 4px;
@@ -199,7 +268,7 @@ body {
         width: 50px;
     }
 }
-
+*/
 @media (max-width: 767px) {
     body {
         padding-left: 10px;

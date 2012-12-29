@@ -19,10 +19,17 @@
         <script src="/shared/resources/js/jqBootstrapValidation.js"></script>
         <script src="/backend/resources/js/jquery.main.js"></script>
 
-        <link href="/backend/templates/channelList.mustache" rel="channelListTemplate" id="channelListTemplate"/>
-        <link href="/backend/templates/showList.mustache" rel="showListTemplate" id="showListTemplate"/>
-        <link href="/backend/templates/contentList.mustache" rel="contentListTemplate" id="contentListTemplate"/>
-        <link href="/backend/templates/content/text.mustache" rel="contentTextTemplate" id="contentTextTemplate"/>
+        <link href="/backend/templates/channelList.mustache" rel="template" id="channelListTemplate"/>
+<!--        <link href="/backend/templates/showList.mustache" rel="template" id="showListTemplate"/>
+        <link href="/backend/templates/contentList.mustache" rel="template" id="contentListTemplate"/>-->
+
+        <link href="/backend/templates/showList.mustache" rel="template" id="showListTemplate"/>
+        <link href="/backend/templates/contentList.mustache" rel="template" id="contentListTemplate"/>
+        <link href="/backend/templates/timeList.mustache" rel="template" id="timeListTemplate"/>
+
+        <link href="/backend/templates/content/_header.mustache" rel="template" id="contentHeaderTemplate"/>
+        <link href="/backend/templates/content/_footer.mustache" rel="template" id="contentFooterTemplate"/>
+        <link href="/backend/templates/content/text.mustache" rel="template" id="contentTextTemplate"/>
     </head>
     <body>
         <div class="navbar navbar-static-top navbar-inverse">
@@ -39,8 +46,13 @@
             <div id="channel-list-wrapper">
                 <div id="channel-list"></div>
             </div>
-            <div id="show-list"></div>
-            <div id="content-list"></div>
+            <div id="guide-wrapper">
+                <div id="guide">
+                    <div id="time-list"></div>
+                    <div id="show-list"></div>
+                    <div id="content-list"></div>
+                </div>
+            </div>
             <div id="content-form"></div>
         </div>
     </body>

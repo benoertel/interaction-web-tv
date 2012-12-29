@@ -1,0 +1,65 @@
+<form method="post" id="contentTextForm" class="contentForm" novalidate>
+    <fieldset>
+    <legend>Laufzeit</legend>
+        <div class="control-group">
+            <label class="control-label" for="start">Start</label>
+            <div class="controls">
+                <input 
+                    name="start" type="text" id="start" required class="input-medium"
+                    data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
+                    data-validation-regex-message="Format 31.01.2012 14:30:20." />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="end">Ende</label>
+            <div class="controls">
+                <input name="end" type="text" id="end" required class="input-medium"
+                    data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
+                    data-validation-regex-message="Format 31.01.2012 14:30:20." />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="duration">Minimum duration in seconds</label>
+            <div class="controls">
+                <input type="number" name="duration" id="duration" min="0" max="360" required class="input-mini" />
+        
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="channel">Sender</label>
+            <div class="controls">
+                <input type="text" name="channel" id="channel" required readonly class="input-small" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Zielgruppe</legend>
+        <div class="control-group">
+            <label class="control-label" for="sex">Geschlecht</label>
+            <div class="controls">
+                <select name="sex" id="sex" required class="input-large">
+                    <option value="all">männlich und weiblich</option>
+                    <option value="male">männlich</option>
+                    <option value="female">weiblich</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="ageFrom">Alter von (in Jahren)</label>
+            <div class="controls">
+                <input type="number" name="ageFrom" id="ageFrom" min="0" max="99" required class="input-mini" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="ageTo">Alter bis (in Jahren)</label>
+            <div class="controls">
+                <input type="number" name="ageTo" id="ageTo" min="0" max="99" required class="input-mini" />
+            </div>
+        </div>
+    </fieldset>

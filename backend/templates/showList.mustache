@@ -1,16 +1,5 @@
-<ul>
+<ul class="clearfix show">
 {{#shows}}
-    <li>
-        <a href="#" class="clearfix">
-            <h5>{{name}}</h5>
-            <div class="time">
-                <div class="start">09:50</div>
-                <div class="duration">45min</div>
-            </div>
-        </a>
-    </li>
-{{/shows}}
-{{^shows}}
-    <li><a>No shows :(</a></li>
+    {{#formatted}}<li style="width: {{width}}px; margin-left: {{margin}}px"><span>{{start}}</span>{{/formatted}}{{title}}{{#formatted}}</li>{{/formatted}}
 {{/shows}}
 </ul>
