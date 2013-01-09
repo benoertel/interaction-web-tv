@@ -1,17 +1,9 @@
 
 body {
-    padding-top: 0;
-    padding-left: 20px;
-    padding-right: 20px;
-    /*background: url(/app/resources/img/stock-photo-20415277-watching-television.jpg) no-repeat center center fixed;*/
-   /* background: url(/app/resources/img/background.jpg) no-repeat top center fixed;
-    
-    -webkit-background-size: cover;
-    background-size: cover;*/
 }
 
 #wrapper {
-    margin: 10px 30px;
+    margin: 10px 20px;
 }
 
 #background {
