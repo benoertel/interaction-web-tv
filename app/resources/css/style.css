@@ -4,10 +4,26 @@ body {
     padding-left: 20px;
     padding-right: 20px;
     /*background: url(/app/resources/img/stock-photo-20415277-watching-television.jpg) no-repeat center center fixed;*/
-    background: url(/app/resources/img/background.jpg) no-repeat top center fixed;
+   /* background: url(/app/resources/img/background.jpg) no-repeat top center fixed;
     
     -webkit-background-size: cover;
+    background-size: cover;*/
+}
+
+#wrapper {
+    margin: 10px 30px;
+}
+
+#background {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: url(/app/resources/img/background.jpg) no-repeat top center fixed;
     background-size: cover;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .navbar-static-top {
@@ -58,6 +74,11 @@ body {
 
 .navbar .navbar-inner {
     background: rgba(0, 0, 0, 0.95);
+}
+
+.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 /* navbar */
