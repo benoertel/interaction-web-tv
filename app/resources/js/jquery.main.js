@@ -185,6 +185,7 @@ $(document).ready(function() {
         updateTvStatus('available');
         if(receiveUpdates){
             $('#current-channel').html(data.channel);
+            $('#content').html('<p>Keine Zusatzinhalte verfügbar</p>');
         }
     }
     
