@@ -109,18 +109,16 @@ if(!region || !xmlfile) {
         var stop = programme.attr['stop'];
         var date = (programme.children['date']) ? programme.children['date'] : '';
 
-        start = start.substr(0, 4) + '-' + start.substr(4, 2) + '-' + start.substr(6, 2) + ' ' + start.substr(8, 2) + ':' + start.substr(10, 2) + ':' + start.substr(12, 2);
-        stop = stop.substr(0, 4) + '-' + stop.substr(4, 2) + '-' + stop.substr(6, 2) + ' ' + stop.substr(8, 2) + ':' + stop.substr(10, 2) + ':' + stop.substr(12, 2);
-        date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
+        start = dateToArr(new Date(start.substr(0, 4) + '-' + start.substr(4, 2) + '-' + start.substr(6, 2) + ' ' + start.substr(8, 2) + ':' + start.substr(10, 2) + ':' + start.substr(12, 2)));
+        stop = dateToArr(new Date(stop.substr(0, 4) + '-' + stop.substr(4, 2) + '-' + stop.substr(6, 2) + ' ' + stop.substr(8, 2) + ':' + stop.substr(10, 2) + ':' + stop.substr(12, 2)));
 
         var doc = {
             type: 'show',
             title: title,
             subtitle: subtitle,
             desc: desc,
-            start: start,
-            end: stop,
-            date: date,
+            startDate: start,
+            endDate: stop,
             channel: channel
         }
         db.save('show-' + id, doc, function (err, res) {});
@@ -132,5 +130,19 @@ if(!region || !xmlfile) {
             if(haystack[i] == needle) return true;
         }
         return false;
+    }
+    
+    function dateToArr(date) {
+        var arr = [
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds()
+        ];
+
+        return arr;
     }
 }

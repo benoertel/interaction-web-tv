@@ -23,33 +23,34 @@ body {
     margin-left: -20px;
 }
 
-#content-list {
+#content {
+    padding: 20px 20px 10px 20px;
     background-color: rgba(255, 255, 255, .95);
     margin-bottom: 20px;
 }
 
-#content-list ul {
+#content ul {
     margin: 0;
     padding: 0;
 }
 
-#content-list ul li {
+#content ul li {
     list-style-type: none;
 }
 
-#content-list ul li a {
+#content ul li a {
     padding: 5px 15px;
     display: block;
 }
 
-#content-list ul li h5 {
+#content ul li h5 {
     font-size: 16px;
     line-height: 4px;
     padding-left: 8px;
     float: right;
 }
 
-#content-list ul li .start {
+#content ul li .start {
     background: #D44D45;
     border: 1px solid #B8413A;
     float: left;
@@ -57,7 +58,7 @@ body {
     -webkit-border-radius: 4px;
 }
 
-#content-list ul li .duration {
+#content ul li .duration {
     float: left;
     padding: 2px 6px;
     font-size: 12px;

@@ -2,19 +2,19 @@
     <fieldset>
     <legend>Laufzeit</legend>
         <div class="control-group">
-            <label class="control-label" for="start">Start</label>
+            <label class="control-label" for="startDate">Start</label>
             <div class="controls">
                 <input 
-                    name="start" type="text" id="start" required class="input-medium"
+                    name="startDate" type="text" id="startDate" required class="input-medium"
                     data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
                     data-validation-regex-message="Format 31.01.2012 14:30:20." />
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label" for="end">Ende</label>
+            <label class="control-label" for="endDate">Ende</label>
             <div class="controls">
-                <input name="end" type="text" id="end" required class="input-medium"
+                <input name="endDate" type="text" id="endDate" required class="input-medium"
                     data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
                     data-validation-regex-message="Format 31.01.2012 14:30:20." />
             </div>
@@ -50,16 +50,15 @@
         </div>
 
         <div class="control-group">
-            <label class="control-label" for="ageFrom">Alter von (in Jahren)</label>
+            <label class="control-label" for="ageRange">Altersbereich</label>
             <div class="controls">
-                <input type="number" name="ageFrom" id="ageFrom" min="0" max="99" required class="input-mini" />
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label" for="ageTo">Alter bis (in Jahren)</label>
-            <div class="controls">
-                <input type="number" name="ageTo" id="ageTo" min="0" max="99" required class="input-mini" />
+                <select name="ageRange" id="ageRange" required class="input-large">
+                    <option value="all">Alle</option>
+                    <option value="children">Kinder 6 – 13 Jahre</option>
+                    <option value="teenager">Jugendliche 14 – 29 Jahre</option>
+                    <option value="adults">Erwachsene 30 – 49 Jahre</option>
+                    <option value="elderly">Ältere Erwachsene ab 50 Jahre</option>
+                </select>
             </div>
         </div>
     </fieldset>

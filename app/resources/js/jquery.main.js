@@ -119,6 +119,8 @@ $(document).ready(function() {
 
         if(json.method == 'channel-changed') {
             channelChanged(json);
+        } else if(json.method == 'content-changed') {
+            contentChanged(json);
         } else if(json.method == 'login-user-response') {
             loginUserResponse(json);
         } else if(json.method == 'register-user-response') {
@@ -177,19 +179,23 @@ $(document).ready(function() {
     }
     
     function channelChanged(data) {
+        console.log('channel changed');
+        
         latestData = data;
         updateTvStatus('available');
         if(receiveUpdates){
-            var dataList = prepareListData(data.data);
-
-            $("#contentListTemplate").Chevron("render", {
-                'contents': dataList
-            }, function(result){
-                $('#content-list').html(result);       
-            });
-                
             $('#current-channel').html(data.channel);
         }
+    }
+    
+    function contentChanged(data) {
+        console.log('content changed');
+        
+        $("#contentFreetextTemplate").Chevron("render", {
+            'data': data.data
+        }, function(result){
+            $('#content').html(result);       
+        });
     }
     
     function tvDisconnected() {
@@ -293,23 +299,13 @@ $(document).ready(function() {
     /**
      * Prepare couch db list data for mustache.
      */
-    function prepareListData(data) {
-        var dataList = [];
-        
-        if(data){
-            $.each(data, function(index, value) { 
-                var elem = value.value;
-            
-                elem.formatted = {
-                    'start': parseHourMin(elem.start),
-                    'duration': calcDuration(elem.start, elem.end, 'min')
-                }
-            
-                dataList.push(value.value);
-            });
+    function prepareData(data) {
+        data.formatted = {
+            'start': parseHourMin(data.startDate),
+            'duration': calcDuration(data.startDate, data.endDate, 'min')
         }
-         
-        return dataList;
+        
+        return data;
     }
     
     function createAlert(type, text) {
@@ -325,10 +321,7 @@ $(document).ready(function() {
     }
     
     function parseHourMin(date) {
-        var dateTime = date.split(' ');
-        var timePart = dateTime[1].split(':');
-        
-        return timePart[0] + ':' + timePart[1];
+        return pad(date[3], 2) + ':' + pad(date[4], 2);
     }
     
     function calcDuration(start, end, unit) {
