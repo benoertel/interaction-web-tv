@@ -1,0 +1,476 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		43DE28FC16A75A06003DBA3C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DE28FB16A75A06003DBA3C /* UIKit.framework */; };
+		43DE28FE16A75A06003DBA3C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DE28FD16A75A06003DBA3C /* Foundation.framework */; };
+		43DE290016A75A06003DBA3C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DE28FF16A75A06003DBA3C /* CoreGraphics.framework */; };
+		43DE290616A75A06003DBA3C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43DE290416A75A06003DBA3C /* InfoPlist.strings */; };
+		43DE290816A75A06003DBA3C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 43DE290716A75A06003DBA3C /* main.m */; };
+		43DE290C16A75A06003DBA3C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 43DE290B16A75A06003DBA3C /* AppDelegate.m */; };
+		43DE290E16A75A06003DBA3C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 43DE290D16A75A06003DBA3C /* Default.png */; };
+		43DE291016A75A06003DBA3C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 43DE290F16A75A06003DBA3C /* Default@2x.png */; };
+		43DE291216A75A06003DBA3C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 43DE291116A75A06003DBA3C /* Default-568h@2x.png */; };
+		43DE291516A75A06003DBA3C /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43DE291316A75A06003DBA3C /* MainStoryboard_iPhone.storyboard */; };
+		43DE291816A75A06003DBA3C /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43DE291616A75A06003DBA3C /* MainStoryboard_iPad.storyboard */; };
+		43DE291B16A75A06003DBA3C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43DE291A16A75A06003DBA3C /* ViewController.m */; };
+		43DE292316A75A06003DBA3C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DE292216A75A06003DBA3C /* SenTestingKit.framework */; };
+		43DE292416A75A06003DBA3C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DE28FB16A75A06003DBA3C /* UIKit.framework */; };
+		43DE292516A75A06003DBA3C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DE28FD16A75A06003DBA3C /* Foundation.framework */; };
+		43DE292D16A75A06003DBA3C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43DE292B16A75A06003DBA3C /* InfoPlist.strings */; };
+		43DE293016A75A06003DBA3C /* persadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 43DE292F16A75A06003DBA3C /* persadTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		43DE292616A75A06003DBA3C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43DE28EE16A75A06003DBA3C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43DE28F616A75A06003DBA3C;
+			remoteInfo = persad;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		43DE28F716A75A06003DBA3C /* persad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = persad.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		43DE28FB16A75A06003DBA3C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		43DE28FD16A75A06003DBA3C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		43DE28FF16A75A06003DBA3C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		43DE290316A75A06003DBA3C /* persad-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "persad-Info.plist"; sourceTree = "<group>"; };
+		43DE290516A75A06003DBA3C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43DE290716A75A06003DBA3C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		43DE290916A75A06003DBA3C /* persad-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "persad-Prefix.pch"; sourceTree = "<group>"; };
+		43DE290A16A75A06003DBA3C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		43DE290B16A75A06003DBA3C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		43DE290D16A75A06003DBA3C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		43DE290F16A75A06003DBA3C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		43DE291116A75A06003DBA3C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		43DE291416A75A06003DBA3C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		43DE291716A75A06003DBA3C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		43DE291916A75A06003DBA3C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		43DE291A16A75A06003DBA3C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		43DE292116A75A06003DBA3C /* persadTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = persadTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		43DE292216A75A06003DBA3C /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		43DE292A16A75A06003DBA3C /* persadTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "persadTests-Info.plist"; sourceTree = "<group>"; };
+		43DE292C16A75A06003DBA3C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43DE292E16A75A06003DBA3C /* persadTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = persadTests.h; sourceTree = "<group>"; };
+		43DE292F16A75A06003DBA3C /* persadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = persadTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		43DE28F416A75A06003DBA3C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43DE28FC16A75A06003DBA3C /* UIKit.framework in Frameworks */,
+				43DE28FE16A75A06003DBA3C /* Foundation.framework in Frameworks */,
+				43DE290016A75A06003DBA3C /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43DE291D16A75A06003DBA3C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43DE292316A75A06003DBA3C /* SenTestingKit.framework in Frameworks */,
+				43DE292416A75A06003DBA3C /* UIKit.framework in Frameworks */,
+				43DE292516A75A06003DBA3C /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		43DE28EC16A75A06003DBA3C = {
+			isa = PBXGroup;
+			children = (
+				43DE290116A75A06003DBA3C /* persad */,
+				43DE292816A75A06003DBA3C /* persadTests */,
+				43DE28FA16A75A06003DBA3C /* Frameworks */,
+				43DE28F816A75A06003DBA3C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		43DE28F816A75A06003DBA3C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				43DE28F716A75A06003DBA3C /* persad.app */,
+				43DE292116A75A06003DBA3C /* persadTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		43DE28FA16A75A06003DBA3C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43DE28FB16A75A06003DBA3C /* UIKit.framework */,
+				43DE28FD16A75A06003DBA3C /* Foundation.framework */,
+				43DE28FF16A75A06003DBA3C /* CoreGraphics.framework */,
+				43DE292216A75A06003DBA3C /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		43DE290116A75A06003DBA3C /* persad */ = {
+			isa = PBXGroup;
+			children = (
+				43DE290A16A75A06003DBA3C /* AppDelegate.h */,
+				43DE290B16A75A06003DBA3C /* AppDelegate.m */,
+				43DE291316A75A06003DBA3C /* MainStoryboard_iPhone.storyboard */,
+				43DE291616A75A06003DBA3C /* MainStoryboard_iPad.storyboard */,
+				43DE291916A75A06003DBA3C /* ViewController.h */,
+				43DE291A16A75A06003DBA3C /* ViewController.m */,
+				43DE290216A75A06003DBA3C /* Supporting Files */,
+			);
+			path = persad;
+			sourceTree = "<group>";
+		};
+		43DE290216A75A06003DBA3C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				43DE290316A75A06003DBA3C /* persad-Info.plist */,
+				43DE290416A75A06003DBA3C /* InfoPlist.strings */,
+				43DE290716A75A06003DBA3C /* main.m */,
+				43DE290916A75A06003DBA3C /* persad-Prefix.pch */,
+				43DE290D16A75A06003DBA3C /* Default.png */,
+				43DE290F16A75A06003DBA3C /* Default@2x.png */,
+				43DE291116A75A06003DBA3C /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		43DE292816A75A06003DBA3C /* persadTests */ = {
+			isa = PBXGroup;
+			children = (
+				43DE292E16A75A06003DBA3C /* persadTests.h */,
+				43DE292F16A75A06003DBA3C /* persadTests.m */,
+				43DE292916A75A06003DBA3C /* Supporting Files */,
+			);
+			path = persadTests;
+			sourceTree = "<group>";
+		};
+		43DE292916A75A06003DBA3C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				43DE292A16A75A06003DBA3C /* persadTests-Info.plist */,
+				43DE292B16A75A06003DBA3C /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		43DE28F616A75A06003DBA3C /* persad */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43DE293316A75A06003DBA3C /* Build configuration list for PBXNativeTarget "persad" */;
+			buildPhases = (
+				43DE28F316A75A06003DBA3C /* Sources */,
+				43DE28F416A75A06003DBA3C /* Frameworks */,
+				43DE28F516A75A06003DBA3C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = persad;
+			productName = persad;
+			productReference = 43DE28F716A75A06003DBA3C /* persad.app */;
+			productType = "com.apple.product-type.application";
+		};
+		43DE292016A75A06003DBA3C /* persadTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43DE293616A75A06003DBA3C /* Build configuration list for PBXNativeTarget "persadTests" */;
+			buildPhases = (
+				43DE291C16A75A06003DBA3C /* Sources */,
+				43DE291D16A75A06003DBA3C /* Frameworks */,
+				43DE291E16A75A06003DBA3C /* Resources */,
+				43DE291F16A75A06003DBA3C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43DE292716A75A06003DBA3C /* PBXTargetDependency */,
+			);
+			name = persadTests;
+			productName = persadTests;
+			productReference = 43DE292116A75A06003DBA3C /* persadTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		43DE28EE16A75A06003DBA3C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Benjamin Oertel";
+			};
+			buildConfigurationList = 43DE28F116A75A06003DBA3C /* Build configuration list for PBXProject "persad" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 43DE28EC16A75A06003DBA3C;
+			productRefGroup = 43DE28F816A75A06003DBA3C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				43DE28F616A75A06003DBA3C /* persad */,
+				43DE292016A75A06003DBA3C /* persadTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		43DE28F516A75A06003DBA3C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43DE290616A75A06003DBA3C /* InfoPlist.strings in Resources */,
+				43DE290E16A75A06003DBA3C /* Default.png in Resources */,
+				43DE291016A75A06003DBA3C /* Default@2x.png in Resources */,
+				43DE291216A75A06003DBA3C /* Default-568h@2x.png in Resources */,
+				43DE291516A75A06003DBA3C /* MainStoryboard_iPhone.storyboard in Resources */,
+				43DE291816A75A06003DBA3C /* MainStoryboard_iPad.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43DE291E16A75A06003DBA3C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43DE292D16A75A06003DBA3C /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		43DE291F16A75A06003DBA3C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		43DE28F316A75A06003DBA3C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43DE290816A75A06003DBA3C /* main.m in Sources */,
+				43DE290C16A75A06003DBA3C /* AppDelegate.m in Sources */,
+				43DE291B16A75A06003DBA3C /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43DE291C16A75A06003DBA3C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43DE293016A75A06003DBA3C /* persadTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		43DE292716A75A06003DBA3C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43DE28F616A75A06003DBA3C /* persad */;
+			targetProxy = 43DE292616A75A06003DBA3C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		43DE290416A75A06003DBA3C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43DE290516A75A06003DBA3C /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		43DE291316A75A06003DBA3C /* MainStoryboard_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43DE291416A75A06003DBA3C /* en */,
+			);
+			name = MainStoryboard_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		43DE291616A75A06003DBA3C /* MainStoryboard_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43DE291716A75A06003DBA3C /* en */,
+			);
+			name = MainStoryboard_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		43DE292B16A75A06003DBA3C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43DE292C16A75A06003DBA3C /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		43DE293116A75A06003DBA3C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		43DE293216A75A06003DBA3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		43DE293416A75A06003DBA3C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "persad/persad-Prefix.pch";
+				INFOPLIST_FILE = "persad/persad-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		43DE293516A75A06003DBA3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "persad/persad-Prefix.pch";
+				INFOPLIST_FILE = "persad/persad-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		43DE293716A75A06003DBA3C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/persad.app/persad";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "persad/persad-Prefix.pch";
+				INFOPLIST_FILE = "persadTests/persadTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		43DE293816A75A06003DBA3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/persad.app/persad";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "persad/persad-Prefix.pch";
+				INFOPLIST_FILE = "persadTests/persadTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		43DE28F116A75A06003DBA3C /* Build configuration list for PBXProject "persad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43DE293116A75A06003DBA3C /* Debug */,
+				43DE293216A75A06003DBA3C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43DE293316A75A06003DBA3C /* Build configuration list for PBXNativeTarget "persad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43DE293416A75A06003DBA3C /* Debug */,
+				43DE293516A75A06003DBA3C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		43DE293616A75A06003DBA3C /* Build configuration list for PBXNativeTarget "persadTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43DE293716A75A06003DBA3C /* Debug */,
+				43DE293816A75A06003DBA3C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 43DE28EE16A75A06003DBA3C /* Project object */;
+}

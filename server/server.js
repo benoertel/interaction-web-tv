@@ -7,6 +7,9 @@ var cradle = require('cradle');
 var hash = require("mhash").hash;
 var schedule = require('node-schedule');
 
+var helper = require('../shared/js/helper.js');
+var queue = require('./js/queue.js');
+
 // init global vars
 var televisions = [];
 var subscriptions = [];
@@ -110,7 +113,7 @@ websocketServer.on('request', function(request) {
                 db.view('content/by-channel', {
                     key: data.channel
                 }, function (err, result) {
-                    resetQueue();
+                    queue.reset();
                     initQueue();
                     
                 });
@@ -212,99 +215,41 @@ websocketServer.on('request', function(request) {
     });
 });
 
-
-
-// #############
-// # scheduler #
-// #############
-
-/**
- * Initialize the priority queue with all content that starts within next 15 min.
- */
-function initPriorityQueue() {
-
-}
-
-/**
- * Update new contents into the priority queue.
- */
-function updatePriorityQueue() {
-
-}
-
-//startDateNextTask
-/*
-scheduleTask(startDateNextTask);
-
-function scheduleTask(date) {
-    var j = schedule.scheduleJob(date, function(){
-        console.log('The answer to life, the universe, and everything!');
-
-        date.setSeconds(date.getSeconds() + 5);
-        createJob(date);
-    });
-}
-
-
-/**
- * Schedule the next content to be sent to
- */
-function scheduleContent() {
-    var date = new Date(2012, 11, 21, 21, 56, 00);
-    createJob(date);
-
-    var j = schedule.scheduleJob(date, function(){
-        console.log('The answer to life, the universe, and everything!');
-
-        date.setSeconds(date.getSeconds() + 5);
-        createJob(date);
-    });
-}
-
-// 1) get content that already started and is still running (independent of channel)
-
-// 2) schedule next update to next content start date in the db
-
-// 3)
-
-var contentQueue = {};
-var currentQueuePos = 0;
+// ##################
+// ### SCHEDULER ####
+// ##################
 
 initQueue();
-
-function resetQueue() {
-    contentQueue = {};
-    currentQueuePos = 0;
-    
-    console.log('reset queue');
-}
 
 // 1) get content that starts within the next 15 minutes
 function initQueue(startDate, nowDate) {
     if(!nowDate) {
-        nowDate = new Date();
+        nowDate = helper.dateToArr(new Date());
     }
     
     if(!startDate) {
-        startDate = dateToArr(nowDate);
+        startDate = nowDate;
     }
-    var endDate = dateToArr(addMinutes(arrToDate(startDate), 15));
+    var endDate = helper.dateToArr(helper.addMinutes(helper.arrToDate(startDate), 15));
     
     console.log(startDate);
     console.log(endDate);
-    
     db.view('content/by-date', {
         startkey: startDate,
         endkey: endDate
     }, function (err, result) {
+        console.log(result);
         if(!err) {
             // when there is no starting task within 15mins, get the next task that starts in the future
             if(result.length == 0) {
+                console.log('server - initQueue() - no tasks within 15mins');
+                console.log(nowDate);
                 db.view('content/by-date', {
-                    startkey: dateToArr(nowDate),
+                    startkey: nowDate,
                     limit: 1
                 }, function (suberr, subresult) {
                     if(!suberr) {
+                        // when the subresult length is 0, we can stop at this point, no tasks in the future
                         if(subresult.length == 1) {
                             initQueue(subresult[0].value.startDate);
                         }
@@ -313,20 +258,22 @@ function initQueue(startDate, nowDate) {
                     }
                 });
             } else {
-                var length = getLength(contentQueue);
-                
+                console.log('server - initQueue() - found tasks within 15mins');
                 for(var idx in result) {
-                    queueContent(result[idx]);
+                    var timestamp = helper.arrToTimestamp(result[idx].value.startDate);
+                    console.log('server - initQueue() - timestamp' + timestamp);
+                    queue.push(timestamp, result[idx]);
                 }
-                
+
                 // in case the queue is empty, restart
-                console.log('current length' + length);
-                if(length == 0) {
+                console.log('current length' + queue.length);
+                //if(queue.length == 0) {
                     // when the queue is filled up, start the distribution scheduler
-                    var jk = schedule.scheduleJob(arrToDate(result[0].value.startDate), function(){
+                 //   console.log(result);
+                    var jk = schedule.scheduleJob(helper.arrToDate(result[0].value.startDate), function(){
                         distributeContent();
                     });
-                }
+                //}
             }
         } else {
             console.log(err);
@@ -334,19 +281,9 @@ function initQueue(startDate, nowDate) {
     });
 }
 
-// add a content to the queue
-function queueContent(content) {
-    var startTimestamp = arrToTimestamp(content.value.startDate);
-    if(!contentQueue[startTimestamp]) {
-        contentQueue[startTimestamp] = new Array();
-    }
-
-    contentQueue[startTimestamp].push(content);
-}
-
 // 2) initialize the distributon to the second screen devices
 function distributeContent() {
-    var nextTasks = getAtPos(contentQueue, currentQueuePos);
+    var nextTasks = queue.current();
     
     // distribute to connected devices
     console.log('send tasks to second screen devices:');
@@ -372,110 +309,23 @@ function distributeContent() {
         }
     }
     
-    
-
-    
-    
-    
-    
     // get the time of the very next task
-    var nextTaskTimestamp = getIndexAtPos(contentQueue, currentQueuePos + 1);
-    if(nextTaskTimestamp) {
+    if(queue.next()) {
         // when the pre-last task is reached, refill the queue
-        var length = getLength(contentQueue);
-        console.log((currentQueuePos + 1) + ' ... ' + (length));
-        if(currentQueuePos + 1 == length - 1) {
+        console.log((currentQueuePos + 1) + ' ... ' + (queue.length));
+        
+        if(queue.pos + 1 == queue.length - 1) {
             console.log('refill queue');
-            var lastTaskTimestamp = getIndexAtPos(contentQueue, length - 1);
-            var startDate = timestampToDate(lastTaskTimestamp + 1);
-            initQueue(dateToArr(startDate), startDate);
+            var startDate = helper.timestampToDate(queue.top() + 1);
+            initQueue(helper.dateToArr(startDate), startDate);
         }
             
-        var nextTaskDate = timestampToDate(nextTaskTimestamp);
+        var nextTaskDate = helper.timestampToDate(queue.next());
         var j = schedule.scheduleJob(nextTaskDate, function(){
-            currentQueuePos++;
+            queue.pos++;
             distributeContent();
         });
     } else {
         console.log('queue is empty for now, no more contents available');
     }
-}
-
-function getAtPos(obj, pos) {
-    count = 0;
-    for (var idx in obj) {
-        if(count == pos) {
-            return obj[idx];
-        }
-        count++;
-    }
-
-    return null;
-}
-
-function getIndexAtPos(obj, pos) {
-    count = 0;
-    for (var idx in obj) {
-        if(count == pos) {
-            return parseInt(idx);
-        }
-        count++;
-    }
-
-    return null;
-}
-
-function getLength(obj) {
-    count = 0;
-    for (var idx in obj) {
-        count++;
-    }
-
-    return count;
-}
-
-
-// ##########
-// # helper #
-// ##########
-
-function dateToArr(date) {
-    var arr = [
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate(),
-
-    date.getHours(),
-    date.getMinutes(),
-    date.getSeconds()
-    ];
-
-    return arr;
-}
-
-function addMinutes(date, minutes) {
-    return new Date(date.getTime() + minutes*60000);
-}
-
-function subMinutes(date, minutes) {
-    return new Date(date.getTime() - minutes*60000);
-}
-
-function arrToDate(arr) {
-    var date = new Date(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]);
-
-    return date;
-}
-
-function arrToTimestamp(arr) {
-    var date = new Date(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]);
-
-    return date.getTime() / 1000;
-}
-
-function timestampToDate(timestamp) {
-    var date = new Date();
-    date.setTime (timestamp * 1000);
-
-    return date;
 }
