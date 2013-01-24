@@ -41,6 +41,6 @@
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .gicon {
-        background-image: url("/shared/resources/img/glyph-icons@2x.png");  
+        background-image: url("/shared/img/glyph-icons@2x.png");  
     }
 }
