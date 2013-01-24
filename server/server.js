@@ -294,7 +294,7 @@ function distributeContent() {
             channel: nextTasks[idx].value.channel,
             data: nextTasks[idx].value
         };
-    
+        console.log(subscriptions);
         for(var tvId in televisions) {
             if(televisions[tvId] == nextTasks[idx].value.channel) {
                 for (var i=0; i < subscriptions.length; i++) {
