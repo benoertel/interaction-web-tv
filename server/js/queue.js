@@ -67,11 +67,14 @@ exports.current = function() {
 exports.next = function() {
     if(debug) {
         console.log('queue: next()');
+        console.log(queue);
     }
     
     var i = 0;
     for (var idx in queue) {
-        if(i == queue.pos + 1) {
+        console.log('lets iterate' + i + '...' + pos);
+        if(i == pos + 1) {
+            console.log('yep, here we go' + i);
             return parseInt(idx);
         }
         i++;
@@ -97,6 +100,11 @@ exports.top = function() {
     }
 
     return null;
+}
+
+exports.posAdd = function() {
+    pos++;
+    __updateExportVars();
 }
 
 function __updateExportVars() {

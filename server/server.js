@@ -15,6 +15,24 @@ var televisions = [];
 var subscriptions = [];
 var clients = [];
 
+var mode = 'television';
+var timeDiff = 0;
+
+// read command line args and parse them
+var arguments = process.argv.splice(2);
+arguments.forEach(function (val, index, array) {
+    var value = val.match(/[^=]+$/g);
+    var param = val.match(/^[a-z-]+[^=]/g);
+
+    if(value && param) {
+        if(param[0] == '--mode') {
+            mode = value[0];
+        }
+    }
+});
+
+console.log('server.js - mode: ' + mode);
+
 // setup db connection
 var db = new(cradle.Connection)('http://localhost', 5984, {
     cache: true,
@@ -178,7 +196,26 @@ websocketServer.on('request', function(request) {
 
                     clients[device.index].send(JSON.stringify(obj));
                 });
-
+            } else if(data.method == 'movie-play') {
+                console.log('movie play');
+                
+                // now we have to calc the date difference between the current real time and the the time we
+                // need to sync additional content with and then we have to calc everything for this device
+                // with the diff
+                var now = new Date();
+                var nowTimestamp = helper.dateToTimestamp(now);
+                timeDiff = data.start - nowTimestamp;
+                
+                initQueue();
+                
+                console.log(data);
+                
+            } else if(data.method == 'movie-pause') {
+                console.log('movie pause');
+                
+                // @todo: here we need to pause the synchronization with this device
+                
+                console.log(data);
             }
         }
     });
@@ -219,12 +256,18 @@ websocketServer.on('request', function(request) {
 // ### SCHEDULER ####
 // ##################
 
-initQueue();
+if(mode == 'television') {
+    initQueue();
+}
 
 // 1) get content that starts within the next 15 minutes
 function initQueue(startDate, nowDate) {
+    if(timeDiff > 0) {
+        console.log('we have a timeDiff of ' + timeDiff + ' seconds.');
+    }
+    
     if(!nowDate) {
-        nowDate = helper.dateToArr(new Date());
+        nowDate = helper.dateToArr(helper.adjustDate(new Date(), timeDiff));
     }
     
     if(!startDate) {
@@ -242,7 +285,7 @@ function initQueue(startDate, nowDate) {
         if(!err) {
             // when there is no starting task within 15mins, get the next task that starts in the future
             if(result.length == 0) {
-                console.log('server - initQueue() - no tasks within 15mins');
+                console.log('server.js - initQueue() - no tasks within 15mins');
                 console.log(nowDate);
                 db.view('content/by-date', {
                     startkey: nowDate,
@@ -258,22 +301,19 @@ function initQueue(startDate, nowDate) {
                     }
                 });
             } else {
-                console.log('server - initQueue() - found tasks within 15mins');
+                console.log('server.js - initQueue() - found tasks within 15mins');
                 for(var idx in result) {
-                    var timestamp = helper.arrToTimestamp(result[idx].value.startDate);
-                    console.log('server - initQueue() - timestamp' + timestamp);
+                    var timestamp = helper.adjustTimestamp(helper.arrToTimestamp(result[idx].value.startDate), -1 * timeDiff);
+                    console.log('server.js - the new scheduled date is ' + new Date(timestamp * 1000));
+                    console.log('server.js - initQueue() - timestamp' + timestamp);
+
                     queue.push(timestamp, result[idx]);
                 }
-
-                // in case the queue is empty, restart
-                console.log('current length' + queue.length);
-                //if(queue.length == 0) {
-                    // when the queue is filled up, start the distribution scheduler
-                 //   console.log(result);
-                    var jk = schedule.scheduleJob(helper.arrToDate(result[0].value.startDate), function(){
-                        distributeContent();
-                    });
-                //}
+                
+                console.log('server.js - initQueue() - current length' + queue.length);
+                var jk = schedule.scheduleJob(helper.adjustDate(helper.arrToDate(result[0].value.startDate), -1 * timeDiff), function(){
+                    distributeContent();
+                });
             }
         } else {
             console.log(err);
@@ -286,7 +326,7 @@ function distributeContent() {
     var nextTasks = queue.current();
     
     // distribute to connected devices
-    console.log('send tasks to second screen devices:');
+    console.log('server.js - distributeContent() - send tasks to second screen devices:');
     
     for (var idx in nextTasks) {
         var obj = {
@@ -312,19 +352,21 @@ function distributeContent() {
     // get the time of the very next task
     if(queue.next()) {
         // when the pre-last task is reached, refill the queue
-        console.log((currentQueuePos + 1) + ' ... ' + (queue.length));
+        console.log((queue.pos) + ' ... ' + (queue.length - 1));
         
-        if(queue.pos + 1 == queue.length - 1) {
+        if(queue.pos == queue.length - 1) {
             console.log('refill queue');
             var startDate = helper.timestampToDate(queue.top() + 1);
             initQueue(helper.dateToArr(startDate), startDate);
         }
-            
+        
         var j = schedule.scheduleJob(helper.timestampToDate(queue.next()), function(){
-            queue.pos++;
             distributeContent();
         });
     } else {
         console.log('queue is empty for now, no more contents available');
     }
+    
+    queue.posAdd();
 }
+

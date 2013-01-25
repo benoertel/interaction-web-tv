@@ -5,11 +5,31 @@ $(document).ready(function(){
     var channel = null;
     
     var channelList = [
-        'ard-hd',
-        'zdf',
-        'rtl',
-        'rtl2'
+    'schweig-hd'
     ];
+    
+    var video = document.getElementById('tv-stream');
+    var startTimestamp = null;
+    
+    var hash = document.location.hash;
+    hash = hash.substr(1);
+    hash = hash.split('/');
+    
+    // check for faked start time
+    if(hash[0] == 'date') {
+        startTime = hash[1];
+        
+        var year = parseInt(hash[1].substr(0, 4));
+        var month = parseInt(hash[1].substr(4, 2)) - 1;
+        var day = parseInt(hash[1].substr(6, 2));
+        var hour = parseInt(hash[1].substr(8, 2));
+        var minute = parseInt(hash[1].substr(10, 2));
+        var second = parseInt(hash[1].substr(12, 2));
+        
+        var date = new Date(year, month, day, hour, minute, second);
+        
+        startTimestamp = date.getTime() / 1000;
+    }
     
     init();
     
@@ -75,7 +95,6 @@ $(document).ready(function(){
     function updateChannel(channelId) {
         channel = channelList[channelId];
         
-        var video = document.getElementById('tv-stream');
         video.pause();
         video.src = "";
         video.load();
@@ -91,7 +110,11 @@ $(document).ready(function(){
 
         addSourceToVideo(video, 'http://localhost:2013/data/' + channel + '.mp4', 'video/mp4');
 
-        video.play();
+        if(startTime == null) {
+            video.play();
+        } else {
+            console.log('we start this manually');
+        }
                 
         $('#program-info').html('tvId: ' + tvId + '<br/> channel: ' + channel);
         
@@ -164,4 +187,25 @@ $(document).ready(function(){
 
         return text;
     }
+    
+    $(document).on('click', '#tv-stream', function() {
+        var data = {
+            'tvId': tvId,
+            'channel': channel
+        };
+            
+        if(video.paused) {
+            data.method = 'movie-play';
+            data.start = Math.round(startTimestamp + video.currentTime);
+            
+            video.play();           
+        } else {
+            data.method = 'movie-pause';
+            video.pause();
+        }
+        
+        websocket.send(JSON.stringify(data));
+        
+        console.log(data);
+    });
 });

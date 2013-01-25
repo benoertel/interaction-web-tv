@@ -16,10 +16,14 @@ exports.arrToTimestamp = function(arr) {
  * Convert a timestamp to a javascript date object.
  */
 exports.timestampToDate = function(timestamp) {
-    var date = new Date();
-    date.setTime (timestamp * 1000);
+    return new Date(timestamp * 1000);
+}
 
-    return date;
+/**
+ * Convert a javascript date object to a unix timestamp.
+ */
+exports.dateToTimestamp = function(date) {
+    return Math.round(date.getTime() / 1000);
 }
 
 /**
@@ -60,4 +64,14 @@ exports.arrToDate = function(arr) {
     var date = new Date(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]);
 
     return date;
+}
+
+exports.adjustDate = function(date, diff) {
+    date.setTime(date.getTime() + diff * 1000);
+    
+    return date;
+}
+
+exports.adjustTimestamp = function(timestamp, diff) {
+    return timestamp + diff;
 }

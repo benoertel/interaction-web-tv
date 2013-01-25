@@ -2,6 +2,8 @@ var fs = require('fs');
 var xml2js = require('xml2js');
 var cradle = require('cradle');
 var libxmljs = require("libxmljs");
+var expat = require('node-expat');
+var util = require('util');
 
 // setup db connection
 var db = new(cradle.Connection)('http://localhost', 5984, {
@@ -9,13 +11,9 @@ var db = new(cradle.Connection)('http://localhost', 5984, {
     raw: false
 }).database('persad');
 
-var expat = require('node-expat');
-var util = require('util');
-var fs = require('fs');
 
 var region = null;
 var xmlfile = null;
-
 var channels = [
     'ard-hd',
     'rtl-hd',
