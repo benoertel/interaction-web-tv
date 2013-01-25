@@ -101,7 +101,7 @@ $(document).ready(function(){
         
         $('video').remove();
         video = document.createElement('video');
-        video.volume= 0;
+        //video.volume = 0;
         
         $('body').append(video);
         $('video').attr('data-channel', channelId);
