@@ -1,13 +1,13 @@
 /* icons */
 .gicon {
     display: inline-block;
-    width: 15px;
-    height: 15px;
-    line-height: 15px;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
     vertical-align: text-top;
     background-image: url("/shared/img/glyph-icons.png");
     background-repeat: no-repeat;
-    -webkit-background-size: 60px 30px;
+    -webkit-background-size: 100px 50px;
     margin-top: 1px;    
 }
 
@@ -16,27 +16,27 @@
 }
 
 .gicon-ws-signal-off {
-    background-position: 0 -15px;
+    background-position: 0 -25px;
 }
 
 .gicon-tv-signal-on {
-    background-position: -15px 0;
+    background-position: -25px 0;
 }
 
 .gicon-tv-signal-off {
-    background-position: -15px -15px;
+    background-position: -25px -25px;
 }
 
 .gicon-play {
-    background-position: -30px 0;
+    background-position: -50px 0;
 }
 
 .gicon-pause {
-    background-position: -30px -15px;
+    background-position: -50px -25px;
 }
 
 .gicon-settings {
-    background-position: -45px 0;
+    background-position: -75px 0;
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {

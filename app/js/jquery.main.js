@@ -76,6 +76,13 @@ $(document).ready(function() {
             loginUser();
         }
     });
+    
+    $(document).on('keypress', 'form', function(e) {
+        if (e.which == 13) {
+            $(this).parent().next('.modal-footer').children('.btn-success').click();
+            return false;
+        }
+    });
    
     function showSettings(){
         $("#settingsTemplate").Chevron("render", {
@@ -286,8 +293,9 @@ $(document).ready(function() {
         var alert = createAlert(data.status, data.message);
         
         $('#loginForm').prepend(alert);
-        $('span.username').html(data.user.username);
-        
+        if(data.user) {
+            $('span.username').html(data.user.username);
+        }
         if(data.status == 'success') {
             subscribe();
             $('#loginForm').prepend('<div class="loader"></div>');

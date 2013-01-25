@@ -294,7 +294,7 @@ function distributeContent() {
             channel: nextTasks[idx].value.channel,
             data: nextTasks[idx].value
         };
-        console.log(subscriptions);
+
         for(var tvId in televisions) {
             if(televisions[tvId] == nextTasks[idx].value.channel) {
                 for (var i=0; i < subscriptions.length; i++) {
@@ -320,8 +320,7 @@ function distributeContent() {
             initQueue(helper.dateToArr(startDate), startDate);
         }
             
-        var nextTaskDate = helper.timestampToDate(queue.next());
-        var j = schedule.scheduleJob(nextTaskDate, function(){
+        var j = schedule.scheduleJob(helper.timestampToDate(queue.next()), function(){
             queue.pos++;
             distributeContent();
         });
