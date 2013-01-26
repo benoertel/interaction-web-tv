@@ -349,9 +349,9 @@ $(document).ready(function() {
         }, function(result){
             $('#bookmarks').html(result);
             if(displayActions) {
-                        $('#bookmarks .show').show();
+                $('#bookmarks .remove').show();
             }
-        });  
+        });
     }
     
     function toggleDeleteBookmarks() {
@@ -365,7 +365,8 @@ $(document).ready(function() {
         console.log(bookmarks);
         for(var idx in bookmarks) {
             if(bookmarks[idx].id == id) {
-                bookmarks.splice(idx, 1);;
+                bookmarks.splice(idx, 1);
+                ;
                 break;
             }
         }
