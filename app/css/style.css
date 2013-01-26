@@ -76,17 +76,8 @@ body {
 }
 
 /* navbar */
-@media (max-height: 480px) {
-    .modal-body {
-        max-height: 180px;
-    }
-}
 
-@media (max-height: 320px) {
-    .modal-body {
-        max-height: 90px;
-    }
-}
+
 
 .loader {
     background-image: url(/shared/img/loader.gif);
@@ -162,4 +153,26 @@ display: none;
     padding: 10px;
     position: absolute;
     font-size: 17px;
+}
+
+@media (max-height: 480px) {
+    .modal-body {
+        max-height: 180px;
+    }
+}
+
+@media (max-height: 320px) {
+    .modal-body {
+        max-height: 90px;
+    }
+}
+
+@media (max-width: 350px) {
+    #bookmarks li {
+        height: 80px;
+    }
+    #bookmarks li a.tile {
+        height: 80px;
+        width: 120px;
+    }
 }

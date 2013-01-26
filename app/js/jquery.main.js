@@ -323,7 +323,6 @@ $(document).ready(function() {
     function addBookmark(data) {
         for(var idx in bookmarks) {
             if(bookmarks[idx].id == data._id) {
-                alert('already on your list');
                 return;
             }
         }

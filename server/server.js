@@ -158,17 +158,17 @@ websocketServer.on('request', function(request) {
 
                                 if(res.ok) {
                                     obj.status = 'success';
-                                    obj.message = 'Youre registration was finished. Login and enjoy.';
+                                    obj.message = 'Deine Registrierung ist abgeschlossen, du kannst dich jetzt anmelden.';
                                 } else {
                                     obj.status = 'error';
-                                    obj.message = 'Error during registration, try again.';
+                                    obj.message = 'Es ist ein Fehler aufgetreten, versuche es erneut.';
                                 }
 
                                 clients[device.index].send(JSON.stringify(obj));
                             });
                         } else {
                             obj.status = 'error';
-                            obj.message = 'Username already in use.';
+                            obj.message = 'Der Benutzername existiert bereits.';
                             clients[device.index].send(JSON.stringify(obj));
                         }
                     });
@@ -185,13 +185,13 @@ websocketServer.on('request', function(request) {
 
                     if(doc && doc.password == hash("sha512", data.password)) {
                         obj.status = 'success';
-                        obj.message = 'You were logged in successfully. Enjoy using the app.';
+                        obj.message = 'Du wurdest erfolgreich angemeldet. Viel Spaß beim Benutzen der App.';
                         obj.user = data;
                         clients[device.index].authorized = true;
 
                     } else {
                         obj.status = 'error';
-                        obj.message = 'The provided credentials are incorrect.';
+                        obj.message = 'Die Zugangsdaten sind nicht korrekt.';
                     }
 
                     clients[device.index].send(JSON.stringify(obj));

@@ -2,14 +2,14 @@
 <ul class="clearfix">
 {{#bookmarks}}
     <li>
-        <a class="tile" href="{{{link}}}">
+        <a class="tile" target="_blank" href="{{{link}}}">
             <img class="thumb" src="{{{image}}}" />
             <div class="overlay"><span>{{title}}</span></div>
-            <a href="#" data-action="delete-bookmark" data-id="{{id}}" class="remove"><img src="/app/img/bin.png" /></a>
+            <a href="#"  data-action="delete-bookmark" data-id="{{id}}" class="remove"><img src="/app/img/bin.png" /></a>
         </a>
     </li>
 {{/bookmarks}}
 {{^bookmarks}}
-    <li><a>No bookmarks yet :(</a></li>
+    <li><a>Deine Merkliste ist leer.</a></li>
 {{/bookmarks}}
 </ul>
