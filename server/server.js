@@ -206,16 +206,14 @@ websocketServer.on('request', function(request) {
                 var nowTimestamp = helper.dateToTimestamp(now);
                 timeDiff = data.start - nowTimestamp;
                 
+                queue.reset();
                 initQueue();
-                
-                console.log(data);
-                
+                                
             } else if(data.method == 'movie-pause') {
                 console.log('movie pause');
                 
                 // @todo: here we need to pause the synchronization with this device
-                
-                console.log(data);
+                queue.reset();
             }
         }
     });

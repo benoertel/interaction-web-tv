@@ -1,5 +1,8 @@
 {{#data}}
     <p><b style="font-size: 20px">{{title}}</b></p>
     {{{text}}}
-    <p><a href="" class="button">Auf Merkliste setzen</a></p>
+    <p><a href="#" class="button" data-action="bookmark">Auf Merkliste setzen</a></p>
+{{/data}}
+{{^data}}
+    <p>Keine Zusatzinhalte verfügbar</p>
 {{/data}}

@@ -1,5 +1,6 @@
 $(document).ready(function() {
-  
+    
+    var bookmarks = [];
     var tvId = null;
     var websocket = null;
     var receiveUpdates = true;
@@ -30,6 +31,8 @@ $(document).ready(function() {
     
     function init() {
         tvId = $.cookie('tvId');
+        loadBookmarks(false);
+        contentChanged();
     }
     
     function showLoginForm(callback) {
@@ -75,6 +78,12 @@ $(document).ready(function() {
             registerUser();
         } else if(action == 'login-user') {
             loginUser();
+        } else if(action == 'bookmark') {
+            addBookmark(latestData);
+        } else if(action == 'toggle-delete-bookmarks') {
+            toggleDeleteBookmarks();
+        } else if(action == 'delete-bookmark') {
+            deleteBookmark($(this).attr('data-id'));
         }
     });
     
@@ -128,7 +137,7 @@ $(document).ready(function() {
         if(json.method == 'channel-changed') {
             channelChanged(json);
         } else if(json.method == 'content-changed') {
-            contentChanged(json);
+            contentChanged(json.data);
         } else if(json.method == 'login-user-response') {
             loginUserResponse(json);
         } else if(json.method == 'register-user-response') {
@@ -189,19 +198,20 @@ $(document).ready(function() {
     function channelChanged(data) {
         console.log('channel changed');
         
-        latestData = data;
         updateTvStatus('available');
         if(receiveUpdates){
             $('#current-channel').html(data.channel);
-            $('#content').html('<p>Keine Zusatzinhalte verfügbar</p>');
+            contentChanged(latestData);
         }
     }
     
     function contentChanged(data) {
         console.log('content changed');
-        
+        if(data) {
+            latestData = data;
+        }
         $("#contentFreetextTemplate").Chevron("render", {
-            'data': data.data
+            'data': data 
         }, function(result){
             $('#content').html(result);       
         });
@@ -304,6 +314,66 @@ $(document).ready(function() {
                 $('#loginModal').modal('hide');
             }, 2000);
         }
+    }
+    
+    // ###############
+    // ## bookmarks ##
+    // ###############
+    
+    function addBookmark(data) {
+        for(var idx in bookmarks) {
+            if(bookmarks[idx].id == data._id) {
+                alert('already on your list');
+                return;
+            }
+        }
+        
+        bookmarks.push({
+            'id': data._id,
+            'link': data.extLink,
+            'title': data.title,
+            'image': data.thumb
+        });
+        $.totalStorage('bookmarks', bookmarks);
+        loadBookmarks(false);
+    }
+    
+    function loadBookmarks(displayActions) {
+        bookmarks = $.totalStorage('bookmarks');
+        if(!bookmarks) {
+            bookmarks = [];
+        }
+        
+        console.log(bookmarks);
+        $("#bookmarksTemplate").Chevron("render", {
+            'bookmarks': bookmarks
+        }, function(result){
+            $('#bookmarks').html(result);
+            if(displayActions) {
+                        $('#bookmarks .show').show();
+            }
+        });  
+    }
+    
+    function toggleDeleteBookmarks() {
+        console.log('toggle it');
+        $('#bookmarks .remove').toggle();
+        
+        return false;
+    }
+    
+    function deleteBookmark(id) {
+        console.log(bookmarks);
+        for(var idx in bookmarks) {
+            if(bookmarks[idx].id == id) {
+                bookmarks.splice(idx, 1);;
+                break;
+            }
+        }
+        $.totalStorage('bookmarks', bookmarks);
+        loadBookmarks(true);
+
+        return false;
     }
     
     /**
