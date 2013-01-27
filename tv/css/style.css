@@ -10,7 +10,7 @@ body {
     position: absolute;
     bottom: 0;
     margin-bottom: 30px;
-    display: block;
+    display: none;
     width: 100%;
 }
 
