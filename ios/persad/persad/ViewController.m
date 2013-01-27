@@ -18,7 +18,7 @@
 {
     [super viewDidLoad];
     
-    NSString *fullURL = @"http://ec2-107-22-145-140.compute-1.amazonaws.com/app";
+    NSString *fullURL = @"http://localhost:2013/app";
     NSURL *url = [NSURL URLWithString:fullURL];
     NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
     [_viewWeb loadRequest:requestObj];

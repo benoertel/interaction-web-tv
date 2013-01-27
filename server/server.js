@@ -6,7 +6,6 @@ var http = require('http');
 var cradle = require('cradle');
 var hash = require("mhash").hash;
 var schedule = require('node-schedule');
-
 var helper = require('../shared/js/helper.js');
 var queue = require('./js/queue.js');
 
@@ -15,24 +14,14 @@ var televisions = [];
 var subscriptions = [];
 var clients = [];
 
-var mode = 'television';
 var timeDiff = 0;
 var j = null;
 
 // read command line args and parse them
-var arguments = process.argv.splice(2);
-arguments.forEach(function (val, index, array) {
-    var value = val.match(/[^=]+$/g);
-    var param = val.match(/^[a-z-]+[^=]/g);
+var args = helper.parseArgs(process.argv.splice(2));
+var mode = args.mode ? args.mode : 'television';
 
-    if(value && param) {
-        if(param[0] == '--mode') {
-            mode = value[0];
-        }
-    }
-});
-
-console.log('server.js - mode: ' + mode);
+console.log('server.js - running in mode: ' + mode);
 
 // setup db connection
 var db = new(cradle.Connection)('http://localhost', 5984, {
@@ -123,9 +112,6 @@ websocketServer.on('request', function(request) {
                     }
                 }
 
-            //resetQueue();
-            //initQueue();
-
             // content of a channel was updated in backend
             } else if(data.method == 'channel-content-updated') {
 
@@ -178,8 +164,7 @@ websocketServer.on('request', function(request) {
 
 
             } else if(data.method == 'login-user') {
-                var id = 'user-' + data.username;
-                db.get(id, function (err, doc) {
+                db.get('user-' + data.username, function (err, doc) {
                     var obj = {
                         'method': 'login-user-response'
                     };
@@ -212,9 +197,31 @@ websocketServer.on('request', function(request) {
             } else if(data.method == 'movie-pause') {
                 console.log('movie pause');
                 
-                // @todo: here we need to pause the synchronization with this device
-                j.cancel();
+                if(j) {
+                    j.cancel();
+                }
                 queue.reset();
+            } else if(data.method == 'display-link') {                
+                var obj = {
+                    'method': 'display-link',
+                    'data': {
+                        'title': 'Auswertung',
+                        'text':     '<img src="/app/img/amazoncard.png" />' + 
+                                    '<p>Vielen Dank für die Teilnahme am Usability-Test, bitte fülle nun den Fragebogen zum Test aus.</p>' +
+                                    '<p style="color: #f9963f">Unter allen Teilnehmern wird ein Amazon Gutschein i.H.v. 30 Euro verlost.</p>' +
+                                    '<p style="font-size: 10px">Für Teilnahme am Gewinnspiel ist die Angabe einer validen E-Mail-Adresse notwendig!</p>',
+                        'linkText': 'zum Fragebogen',
+                        'link': 'https://de.surveymonkey.com/s/HBPMFGY'
+                    }
+                }
+                
+                for (var i=0; i < subscriptions.length; i++) {
+                    if(subscriptions[i] == data.tvId) {
+                        if(clients[i].authorized) {
+                            clients[i].send(JSON.stringify(obj));
+                        }
+                    }
+                }
             }
         }
     });
@@ -276,6 +283,7 @@ function initQueue(startDate, nowDate) {
     
     console.log(startDate);
     console.log(endDate);
+    
     db.view('content/by-date', {
         startkey: startDate,
         endkey: endDate

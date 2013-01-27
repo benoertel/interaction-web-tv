@@ -66,12 +66,34 @@ exports.arrToDate = function(arr) {
     return date;
 }
 
+/**
+ * Adjust a javascript date object by a given amount of seconds.
+ */
 exports.adjustDate = function(date, diff) {
     date.setTime(date.getTime() + diff * 1000);
     
     return date;
 }
 
+/**
+ * Adjust a javascript timestamp by a given amount of seconds.
+ */
 exports.adjustTimestamp = function(timestamp, diff) {
     return timestamp + diff;
+}
+
+/**
+ * Parse arguments from command line into an array
+ */
+exports.parseArgs = function(arguments) {
+    var response = [];
+    
+    arguments.forEach(function (val, index, array) {
+        var value = val.match(/[^=]+$/g);
+        var param = val.match(/^[a-z-]+[^=]/g);
+        
+        response[param[0].substr(2)] = value[0];
+    });
+    
+    return response;
 }

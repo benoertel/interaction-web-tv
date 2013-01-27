@@ -71,6 +71,8 @@ $(document).ready(function(){
             case 179: // play, pause
                 togglePlay();
                 break;
+            case 80: // p (poll)
+                displayLink();
         }
     });
  
@@ -208,4 +210,14 @@ $(document).ready(function(){
         
         console.log(data);
     });
+    
+    function displayLink() {
+        var data = {
+            'tvId': tvId,
+            'method': 'display-link'
+        };
+        
+        websocket.send(JSON.stringify(data));
+        console.log(data);
+    }
 });

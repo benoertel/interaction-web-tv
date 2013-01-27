@@ -147,6 +147,8 @@ $(document).ready(function() {
             subscribeResponse(json);
         } else if(json.method == 'tv-disconnected') {
             tvDisconnected(json);
+        }else if(json.method == 'display-link') {
+            displayLink(json);
         }
     }
     
@@ -315,6 +317,17 @@ $(document).ready(function() {
                 $('#loginModal').modal('hide');
             }, 2000);
         }
+    }
+    
+    function displayLink(json) {
+        $("#displayLinkTemplate").Chevron("render", {
+            data: json.data
+        }, function(result){
+            $('#modal').html(result);
+            $('#linkModal').modal(modalOptions);
+        });
+        
+       // http://www.maclife.de/
     }
     
     // ###############
