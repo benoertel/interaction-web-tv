@@ -1,15 +1,15 @@
-<h3>Merkliste<a data-action="toggle-delete-bookmarks" href="#"><img src="/app/img/pencil.png" /></a></h3>
+<h3>&nbsp;<a data-action="toggle-delete-bookmarks" href="#"><img src="/app/img/pencil.png" /></a></h3>
 <ul class="clearfix">
 {{#bookmarks}}
-    <li>
-        <a class="tile" target="_blank" href="{{{link}}}">
+    <li class="tile">
+        <a target="_blank" href="{{{link}}}">
             <img class="thumb" src="{{{image}}}" />
             <div class="overlay"><span>{{title}}</span></div>
-            <a href="#"  data-action="delete-bookmark" data-id="{{id}}" class="remove">&nbsp;</a>
+            <span data-action="delete-bookmark" data-id="{{id}}" class="remove">&nbsp;</span>
         </a>
     </li>
 {{/bookmarks}}
 {{^bookmarks}}
-    <li><a>Deine Merkliste ist leer.</a></li>
+    <li class="placeholder">Deine Merkliste ist leer.</li>
 {{/bookmarks}}
 </ul>

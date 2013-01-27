@@ -17,6 +17,7 @@ var clients = [];
 
 var mode = 'television';
 var timeDiff = 0;
+var j = null;
 
 // read command line args and parse them
 var arguments = process.argv.splice(2);
@@ -206,13 +207,13 @@ websocketServer.on('request', function(request) {
                 var nowTimestamp = helper.dateToTimestamp(now);
                 timeDiff = data.start - nowTimestamp;
                 
-                queue.reset();
                 initQueue();
                                 
             } else if(data.method == 'movie-pause') {
                 console.log('movie pause');
                 
                 // @todo: here we need to pause the synchronization with this device
+                j.cancel();
                 queue.reset();
             }
         }
@@ -309,7 +310,7 @@ function initQueue(startDate, nowDate) {
                 }
                 
                 console.log('server.js - initQueue() - current length' + queue.length);
-                var jk = schedule.scheduleJob(helper.adjustDate(helper.arrToDate(result[0].value.startDate), -1 * timeDiff), function(){
+                j = schedule.scheduleJob(helper.adjustDate(helper.arrToDate(result[0].value.startDate), -1 * timeDiff), function(){
                     distributeContent();
                 });
             }
@@ -358,7 +359,7 @@ function distributeContent() {
             initQueue(helper.dateToArr(startDate), startDate);
         }
         
-        var j = schedule.scheduleJob(helper.timestampToDate(queue.next()), function(){
+        j = schedule.scheduleJob(helper.timestampToDate(queue.next()), function(){
             distributeContent();
         });
     } else {

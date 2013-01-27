@@ -95,19 +95,19 @@ body {
 }
 
 #bookmarks ul {
-    background-color: rgba(216, 215, 220, .75);
+    background-color: rgba(153, 184, 213, .79);
     padding: 10px;
 }
-#bookmarks li a.remove {
+#bookmarks li span.remove {
+    cursor: pointer;
     position: absolute;
-    background-color: rgba(255,0,0,0.4);
-    margin-left: 0px;
-    margin-top: -100px;
+    background-color: rgba(255,0,0,0.2);
+    margin-left: -150px;
     display: none;
     width: 150px;
     height: 100px;
     background-image: url(/app/img/bin.png);
-    background-position: 126px 68px;
+    background-position: 68px 35px;
     background-repeat: no-repeat;
 }
 
@@ -117,6 +117,8 @@ body {
 
 #bookmarks li {
     list-style-type: none;
+}
+#bookmarks li.tile {
     margin: 0;
     float: left;
     width: 50%;
@@ -124,18 +126,20 @@ body {
     margin-bottom: 10px;
 }
 
-#bookmarks li a.tile {
+#bookmarks li.tile a {
     width: 150px;
     height: 100px;
     display: block;
+    margin: 0 auto;
+    color: #333333;
 }
 
-#bookmarks li img.thumb {
+#bookmarks li.tile img.thumb {
     width: 100%;
     float: left;
 }
 
-#bookmarks li .overlay {
+#bookmarks li.tile .overlay {
     float: left;
     color: black;
     background: rgba(183, 200, 225, 0.85);
@@ -149,11 +153,11 @@ body {
     overflow: hidden;
 }
 
-#bookmarks li a:hover .overlay {
+#bookmarks li.tile a:hover .overlay {
     opacity: 1;
 }
 
-#bookmarks li .overlay span {
+#bookmarks li.tile .overlay span {
     bottom: 0;
     left: 0;
     padding: 10px;
@@ -163,54 +167,51 @@ body {
 
 
 @media (max-width: 350px) {
-    #bookmarks li {
+    #bookmarks li.tile {
         height: 80px;
     }
-    #bookmarks li a.tile {
+    #bookmarks li.tile a {
         height: 80px;
         width: 120px;
     }
-    #bookmarks li a.remove {
-        margin-top: -80px;
+    #bookmarks li.tile span.remove {
+        margin-left: -120px;
         width: 120px;
         height: 80px;
-        background-position: 106px 48px;
+        background-position: 51px 27px;
     }
     
-    #bookmarks li .overlay {
+    #bookmarks li.tile .overlay {
         margin-top: -80px;
     }
 }
 
 /* tablet portrait */
 @media (max-width: 768px) { 
-    #bookmarks li {
+    #bookmarks li.tile {
         height: 80px;
     }
-    #bookmarks li a.tile {
+    #bookmarks li.tile a {
         height: 80px;
         width: 120px;
     }
-    #bookmarks li a.remove {
-        margin-top: -80px;
+    #bookmarks li.tile span.remove {
+        margin-left: -120px;
         width: 120px;
         height: 80px;
-        background-position: 106px 48px;
+        background-position: 51px 27px;
     }
     
-    #bookmarks li .overlay {
+    #bookmarks li.tile .overlay {
         margin-top: -80px;
     }
 }
 
 @media (min-width: 450px) and (max-width: 767px) {
-    #bookmarks li {
+    #bookmarks li.tile {
         width: 33%;
     }
 }
-
-
-
 
 @media (max-height: 480px) {
     .modal-body {

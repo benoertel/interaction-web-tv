@@ -61,7 +61,7 @@ $(document).ready(function() {
             });  
     }
     
-    $(document).on('click', 'button[data-action], a[data-action]', function(){
+    $(document).on('click', 'button[data-action], a[data-action], span[data-action]', function(e){
         var action = $(this).attr('data-action');
 
         if(action == 'signup') {
@@ -84,6 +84,7 @@ $(document).ready(function() {
             toggleDeleteBookmarks();
         } else if(action == 'delete-bookmark') {
             deleteBookmark($(this).attr('data-id'));
+            e.preventDefault();
         }
     });
     
