@@ -6,7 +6,7 @@
 
         <link href="/shared/css/bootstrap.css" rel="stylesheet">
         <link href="/tv/css/style.css" rel="stylesheet">
-        <link href="/shared/css/style.css" rel="stylesheet">
+       <!-- <link href="/shared/css/style.css" rel="stylesheet">-->
 
         <script src="/shared/js/config.js"></script>
         <script src="/shared/js/lib/jquery.min.js"></script>
@@ -14,12 +14,16 @@
         <script src="/tv/js/jquery.main.js"></script>
     </head>
     <body>
-        <div id="websocket-status" data-status="disconnected">
-            <i class="gicon gicon-ws-signal-off"></i>
+        <div id="tv-stream-wrapper">
+            <video autoplay controls id="tv-stream" data-channel="0"></video>
         </div>
-        <video autoplay controls id="tv-stream" data-channel="0"></video>
-        <div id="program-info-wrapper">        
-            <div id="program-info">no program</div>
+        
+        <div id="settings-bar">
+            <div id="websocket-status" data-status="disconnected">
+                <i class="gicon gicon-ws-signal-off"></i>
+            </div>
+
+            <button class="btn"><i class="icon-cog"></i></button>
         </div>
     </body>
 </html>

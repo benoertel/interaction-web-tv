@@ -140,15 +140,26 @@ $(document).ready(function(){
         websocket.onopen = onWebsocketOpen;
         websocket.onerror = onWebsocketError;
         websocket.onclose = onWebsocketClose;
+        websocket.onmessage = onWebsocketMessage;
     }
     
     function onWebsocketOpen(event) {
+        getServerConfiguration();
+        
         if(!channel) {
             updateChannel(0);
         } else {
             notifyChannelChange(channel);
         }
         updateWebsocketStatus('connected');
+    }
+    
+    function getServerConfiguration() {
+        var data = {
+            'method': 'get-config'
+        };
+        
+        websocket.send(JSON.stringify(data));
     }
     
     function onWebsocketClose(event) {
@@ -175,6 +186,47 @@ $(document).ready(function(){
             $('#websocket-status').attr('data-status', 'disconnected');
             $('#websocket-status').attr('data-original-title', 'no connection');
         }
+    }
+    
+    function onWebsocketMessage(message) {
+        var json = JSON.parse(message.data);
+
+        if(json.method == 'get-config-response') {
+            getConfigResponse(json);
+        }
+    }
+    
+    function getConfigResponse(json) {
+        if(json.mode == 'movie') {
+            // update video source
+            initMovie(json.file);
+        }
+    }
+    
+    function initMovie(path) {
+        video.pause();
+        video.src = "";
+        video.load();
+        
+        $('video').remove();
+        video = document.createElement('video');
+        //video.volume = 0;
+        
+        $('body').append(video);
+       // $('video').attr('data-channel', channelId);
+        $('video').attr('id', 'tv-stream');
+
+        addSourceToVideo(video, path, 'video/mp4');
+        updateMovieDimension();
+    }
+    
+    $(window).resize(updateMovieDimension);
+    
+    function updateMovieDimension() {
+        $('video').attr('width', $(window).width());
+        
+        var top = ($(window).height() - $('video').height()) / 2;
+            $('video').css('margin-top', top);
     }
     
     /*

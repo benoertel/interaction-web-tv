@@ -6,7 +6,7 @@ var http = require('http');
 var cradle = require('cradle');
 var hash = require("mhash").hash;
 var schedule = require('node-schedule');
-var helper = require('../shared/js/helper.js');
+var helper = require('../js/helper.js');
 var queue = require('./js/queue.js');
 
 // init global vars
@@ -19,7 +19,11 @@ var j = null;
 
 // read command line args and parse them
 var args = helper.parseArgs(process.argv.splice(2));
+
 var mode = args.mode ? args.mode : 'television';
+var virtualStart = args.date ? args.date : null;
+var channel = args.channel ? args.channel : null;
+var movieFile = args.file ? args.file : null;
 
 console.log('server.js - running in mode: ' + mode);
 
@@ -55,9 +59,23 @@ websocketServer.on('request', function(request) {
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             var data = JSON.parse(message.utf8Data);
-
+            
+            // send the server configuration to the smart tv
+            if(data.method == 'get-config') {
+                var obj = {
+                    'method': 'get-config-response',
+                    'mode': mode
+                }
+                
+                if(mode == 'movie') {
+                    obj.file = movieFile,
+                    obj.channel = channel
+                }
+                
+                connection.send(JSON.stringify(obj));
+            
             // a second-screen device subscribes to a smart tv
-            if(data.method == 'subscribe') {
+            } else if(data.method == 'subscribe') {
                 device.type = 'secondScreen';
 
                 subscriptions[device.index] = data.tvId;

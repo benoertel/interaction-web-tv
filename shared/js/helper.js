@@ -1,35 +1,62 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Convert a date in array notation to the corrsponding unix timestamp.
- */
-exports.arrToTimestamp = function(arr) {
-    var date = new Date(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]);
-
-    return date.getTime() / 1000;
+function Helper() {
+    
 };
 
-/**
- * Convert a timestamp to a javascript date object.
- */
-exports.timestampToDate = function(timestamp) {
-    return new Date(timestamp * 1000);
+Helper.prototype.parseHourMin = function(date) {
+    return pad(date[3], 2) + ':' + pad(date[4], 2);
+};
+    
+Helper.prototype.calcDuration = function (start, end, unit) {
+    var diff = Math.abs(new Date(parseDate(start)) - new Date(parseDate(end)));
+        
+    if(unit == 'min') {
+        return Math.floor((diff/1000)/60);
+    }
+        
+    return null;
+};
+    
+Helper.prototype.parseDate = function(date) {
+    var dateTime = date.split(' ');
+    var datePart = dateTime[0].split('-');
+
+    return datePart[0] + '/' + datePart[1] + '/' + datePart[2] + ' ' + dateTime[1];        
+};
+
+Helper.prototype.formatDate = function(date) {
+    var dateTime = date.split(' ');
+    var datePart = dateTime[0].split('.');
+
+    return datePart[2] + '-' + datePart[1] + '-' + datePart[0] + ' ' + dateTime[1];
 }
 
-/**
- * Convert a javascript date object to a unix timestamp.
- */
-exports.dateToTimestamp = function(date) {
-    return Math.round(date.getTime() / 1000);
-}
+Helper.prototype.calcTimeDiff = function(start, end) {
+    var startTime = start.split(':');
+    var endTime = end.split(':');
 
-/**
- * Convert a javascript date object to array notation.
- */
-exports.dateToArr = function(date) {
+    var startx = parseInt(startTime[0]) * 60 + parseInt(startTime[1]);
+    var endx = parseInt(endTime[0]) * 60 + parseInt(endTime[1]);
+
+    var duration = endx - startx
+
+    if(duration < 0){
+        duration = duration + 1440;
+    }
+
+    return duration;
+}
+    
+Helper.prototype.pad = function(number, length) {
+    var str = '' + number;
+    while (str.length < length) {
+        str = '0' + str;
+    }
+   
+    return str;
+
+}
+    
+Helper.prototype.dateToArr = function(date) {
     var arr = [
     date.getUTCFullYear(),
     date.getUTCMonth(),
@@ -43,57 +70,20 @@ exports.dateToArr = function(date) {
     return arr;
 }
 
-/**
- * Add minutes to a given javascript date.
- */
-exports.addMinutes = function(date, minutes) {
-    return new Date(date.getTime() + minutes*60000);
-}
-
-/**
- * Subtract minutes from a given javascript date.
- */
-exports.subMinutes = function(date, minutes) {
-    return new Date(date.getTime() - minutes*60000);
-}
-
-/**
- * Convert a date a array to a javascript date object.
- */
-exports.arrToDate = function(arr) {
+Helper.prototype.arrToDate = function(arr) {
     var date = new Date(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]);
 
     return date;
 }
 
-/**
- * Adjust a javascript date object by a given amount of seconds.
- */
-exports.adjustDate = function(date, diff) {
-    date.setTime(date.getTime() + diff * 1000);
-    
-    return date;
-}
-
-/**
- * Adjust a javascript timestamp by a given amount of seconds.
- */
-exports.adjustTimestamp = function(timestamp, diff) {
-    return timestamp + diff;
-}
-
-/**
- * Parse arguments from command line into an array
- */
-exports.parseArgs = function(arguments) {
-    var response = [];
-    
-    arguments.forEach(function (val, index, array) {
-        var value = val.match(/[^=]+$/g);
-        var param = val.match(/^[a-z-]+[^=]/g);
+Helper.prototype.createAlert = function(type, text) {
+    var classes = 'alert ';
         
-        response[param[0].substr(2)] = value[0];
-    });
-    
-    return response;
+    if(type == 'error') {
+        classes += ' alert-error';
+    } else if(type == 'success') {
+        classes += 'alert-success';
+    }
+        
+    return '<div class="' + classes + '">' + text + '</div>';
 }

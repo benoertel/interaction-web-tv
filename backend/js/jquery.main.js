@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    var helper = new Helper();
+    
     $.couch.urlPrefix = couchdbUri;
 
     $(window).bind('hashchange', hashChanged);
@@ -99,7 +101,7 @@ $(document).ready(function(){
                 hour -= 24;
             }
             for(var minute=0; minute<=30; minute+=30){
-                times.push(pad(hour, 2) + ':' + pad(minute,2));
+                times.push(helper.pad(hour, 2) + ':' + helper.pad(minute,2));
             }
         }
                                 
@@ -191,8 +193,8 @@ $(document).ready(function(){
         var doc = prepareCouchData(data);
 
         if(doc.type == 'content' && doc.category == 'freetext') {
-            doc.startDate = dateToArr(new Date(formatDate(doc.startDate)));
-            doc.endDate = dateToArr(new Date(formatDate(doc.endDate)));
+            doc.startDate = helper.dateToArr(new Date(helper.formatDate(doc.startDate)));
+            doc.endDate = helper.dateToArr(new Date(helper.formatDate(doc.endDate)));
         }
         console.log(doc);
         $.couch.db("persad").saveDoc(doc, {
@@ -222,13 +224,13 @@ $(document).ready(function(){
         
         $.each(data.rows, function(index, value) {
             var elem = value.value;
-            var duration = calcDuration(elem.startDate, elem.endDate, 'sec');
+            var duration = helper.calcDuration(elem.startDate, elem.endDate, 'sec');
             
-            var startTime = parseHourMin(elem.startDate);
-            var endTime = parseHourMin(elem.endDate);
+            var startTime = helper.parseHourMin(elem.startDate);
+            var endTime = helper.parseHourMin(elem.endDate);
             
             var width = (duration / 10) - 7;
-            var margin = calcTimeDiff(prevEndTime, startTime) * 6;
+            var margin = helper.calcTimeDiff(prevEndTime, startTime) * 6;
                         
             elem.formatted = {
                 'start': startTime,
@@ -292,85 +294,4 @@ $(document).ready(function(){
         return false;
 
     });
-
-    
-    
-    // ##########
-    // # helper #
-    // ##########
-    function formatDate(date) {
-        var dateTime = date.split(' ');
-        var datePart = dateTime[0].split('.');
-
-        return datePart[2] + '-' + datePart[1] + '-' + datePart[0] + ' ' + dateTime[1];
-    }
-
-    function parseHourMin(date) {
-        return pad(date[3], 2) + ':' + pad(date[4], 2);
-    }
-
-    function calcTimeDiff(start, end) {
-        var startTime = start.split(':');
-        var endTime = end.split(':');
-        
-        var startx = parseInt(startTime[0]) * 60 + parseInt(startTime[1]);
-        var endx = parseInt(endTime[0]) * 60 + parseInt(endTime[1]);
-
-        var duration = endx - startx
-        
-        if(duration < 0){
-            duration = duration + 1440;
-        }
-        
-        return duration;
-    }
-    
-    function calcDuration(start, end, unit) {
-        var diff = Math.abs(arrToDate(start) - arrToDate(end));
-
-        if(unit == 'min') {
-            return Math.floor((diff/1000)/60);
-        } else if(unit == 'sec') {
-            return Math.floor((diff/1000));
-        }
-
-        return null;
-    }
-
-    function parseDate(date) {
-        var dateTime = date.split(' ');
-        var datePart = dateTime[0].split('-');
-
-        return datePart[0] + '/' + datePart[1] + '/' + datePart[2] + ' ' + dateTime[1];
-    }
-    
-    function pad(number, length) {
-        var str = '' + number;
-        while (str.length < length) {
-            str = '0' + str;
-        }
-   
-        return str;
-
-    }
-    
-    function dateToArr(date) {
-        var arr = [
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
-
-        date.getHours(),
-        date.getMinutes(),
-        date.getSeconds()
-        ];
-
-        return arr;
-    }
-
-    function arrToDate(arr) {
-        var date = new Date(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]);
-
-        return date;
-    }
 });

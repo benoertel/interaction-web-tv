@@ -4,6 +4,7 @@ body {
     margin: 0;
     text-align: center;
     background: black;
+    overflow: hidden;
 }
 
 #program-info-wrapper {
@@ -28,4 +29,13 @@ body {
 #websocket-status {
     position: fixed;
     width:100%;
+}
+
+#settings-bar {
+    background: rgba(255,255,255,0.3);
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: 0;
+    width: 69px;
 }
