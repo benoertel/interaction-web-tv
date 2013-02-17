@@ -1,13 +1,9 @@
-function User(helper, content, modalOptions, websocket){
+function User(helper, modalOptions){
     this.helper = helper;
-    this.content = content;
-    this.modalOptions = modalOptions;
     this.credentials =  null;
-    
-    this.websocket = websocket;
 }
 
-User.prototype.login = function() {
+User.prototype.login = function(websocket) {
     $('#loginForm .alert').remove();
     $('#loginForm .loader').remove();
         
@@ -19,12 +15,11 @@ User.prototype.login = function() {
         'password': $('#password').val()
     };
         
-    this.websocket.send(JSON.stringify(this.credentials));
+    websocket.send(this.credentials);
 };
 
-User.prototype.loginResponse = function(data) {
+User.prototype.loginResponse = function(data, tv, websocket) {
     $('#loginForm .loader').remove();
-        
     var alert = this.helper.createAlert(data.status, data.message);
         
     $('#loginForm').prepend(alert);
@@ -32,7 +27,7 @@ User.prototype.loginResponse = function(data) {
         $('span.username').html(data.user.username);
     }
     if(data.status == 'success') {
-        this.content.subscribe();
+        tv.subscribe(websocket);
         $('#loginForm').prepend('<div class="loader"></div>');
         window.setTimeout(function() {
             $('#loginModal').modal('hide');
@@ -40,7 +35,7 @@ User.prototype.loginResponse = function(data) {
     }
 };
 
-User.prototype.registerResponse = function() {
+User.prototype.register = function(websocket) {
     $('#signupForm .alert').remove();
     $('#signupForm .loader').remove();
         
@@ -52,7 +47,7 @@ User.prototype.registerResponse = function() {
         'sex': $('#sex').val()
     };
         
-    this.websocket.send(JSON.stringify(data));
+    websocket.send(data);
 };
 
 User.prototype.registerResponse = function(data) {
@@ -72,28 +67,20 @@ User.prototype.registerResponse = function(data) {
     }
 };
 
-User.prototype.showLoginForm = function(callback) {
-    $('#loginModal').modal('hide');
-    $('#signupModal').modal('hide');
+User.prototype.showLoginForm = function(modalOptions) {
+    $('.modal').modal('hide');
         
-    $("#loginFormTemplate").Chevron("render", {
-        }, function(result){
-            $('#modal').html(result);
-            $('#loginModal').modal(this.modalOptions);
-                
-            if(callback) {
-                callback();
-            }
-        });  
+    $("#loginFormTemplate").Chevron("render", {}, function(result){
+        $('#modal').html(result);
+        $('#loginModal').modal(this.modalOptions);
+    });  
 };
     
-User.prototype.showSignupForm = function() {
-    $('#loginModal').modal('hide');
-    $('#signupModal').modal('hide');
+User.prototype.showSignupForm = function(modalOptions) {
+    $('.modal').modal('hide');
         
-    $("#signupFormTemplate").Chevron("render", {
-        }, function(result){
-            $('#modal').html(result);
-            $('#signupModal').modal(this.modalOptions);
-        });  
+    $("#signupFormTemplate").Chevron("render", {}, function(result){
+        $('#modal').html(result);
+        $('#signupModal').modal(this.modalOptions);
+    });  
 };

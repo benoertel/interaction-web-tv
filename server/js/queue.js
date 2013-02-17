@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-var debug = true;
+var debug = false;
 
 var queue = {};
 var pos = 0;
@@ -72,9 +72,9 @@ exports.next = function() {
     
     var i = 0;
     for (var idx in queue) {
-        console.log('lets iterate' + i + '...' + pos);
+       // console.log('lets iterate' + i + '...' + pos);
         if(i == pos + 1) {
-            console.log('yep, here we go' + i);
+      //      console.log('yep, here we go' + i);
             return parseInt(idx);
         }
         i++;

@@ -1,38 +1,19 @@
 function ContentList(){
-    this.latest = null;
+    this.content = [];
 }
 
-ContentList.prototype = {
-    get top(){
-        return this._latest;
-    },
-    
-    set top(data) {
-        this._latest = data;
-    }
+ContentList.prototype.push = function(el) {
+    this.content.push(el);
 }
 
-ContentList.prototype.changed = function(data) {
-    if(data) {
-        this.latest = data;
-    }
+ContentList.prototype.top = function() {
+    return this.content[this.content.length-1];
+}
+
+ContentList.prototype.render = function() {
     $("#contentFreetextTemplate").Chevron("render", {
-        'data': data 
+        'data': this.top() 
     }, function(result){
         $('#content').html(result);       
     });
 }
-
-ContentList.prototype.top = function(){
-    return this.latest;
-}
-
-ContentList.prototype.prepareData = function(data) {
-    data.formatted = {
-        'start': helper.parseHourMin(data.startDate),
-        'duration': helper.calcDuration(data.startDate, data.endDate, 'min')
-    }
-        
-    return data;
-}
-    

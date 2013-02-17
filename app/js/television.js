@@ -1,9 +1,8 @@
-function Television(id, channel, contentList) {
+function Television(id) {
     this.id = id;
-    this.channel = channel;
+    this.channel = null;
     this.status = 'unavailable';
     this.receiveUpdates = true;
-    this.contentList = contentList;
 }
 
 Television.prototype = {
@@ -14,43 +13,48 @@ Television.prototype = {
     set id(id) {
         this._id = id;
 
-        $.cookie('tvId', id, {
-            expires: 365
-        });
-        
-        tv.subscribe();
+        $.totalStorage('tvId', id);
+    },
+    
+    set channel(channel) {
+        this._channel = channel;
+        this.channelChanged(channel);
+    },
+    
+    set status(status) {
+        this.statusChanged(status);
     }
 }
 
-Television.prototype.subscribe = function() {
+Television.prototype.subscribe = function(websocket) {
     var data = {
         'method': 'subscribe',
         'tvId': this.id
     };
         
-    websocket.send(JSON.stringify(data));       
+    websocket.send(data);       
 };
 
 Television.prototype.subscribeResponse = function(data) {
     if(data.status == 'success'){
-        this.channel(data.tv);
-        this.status('available');
+        this.channel = data.tv.channel;
+        this.status = 'available';
     }
 };
 
-Television.prototype.channel = function(data) {
-    this.status('available');
-    if(receiveUpdates){
-        $('#current-channel').html(data.channel);
-        this.contentList.changed(latestData);
+Television.prototype.channelChanged = function(channel) {
+    this.status = 'available';
+
+    if(this.receiveUpdates){
+        $('#current-channel').html(channel);
     }
 };
 
 Television.prototype.disconnect = function() {
-    this.status('unavailable');
+    this.status = 'unavailable';
 }
 
-Television.prototype.status = function(status) {
+Television.prototype.statusChanged = function(status) {
     if(status == 'available') {
         $('#tv-status i').removeClass('gicon-tv-signal-off');
         $('#tv-status i').addClass('gicon-tv-signal-on');
@@ -65,18 +69,30 @@ Television.prototype.status = function(status) {
     }
 };
 
-Television.prototype.toggleReceiveUpdates = function() {
+Television.prototype.toggleReceiveUpdates = function(contentList) {
     if(!this.receiveUpdates) {
         $('#live-updates i').removeClass('gicon-play');
         $('#live-updates i').addClass('gicon-pause');
         $('#live-updates').attr('data-original-title', 'receiving live updates');
         this.receiveUpdates = true;
-            
-        this.channel(this.contentList.top());
+        
+        if(contentList) {
+            this.channel = contentList.top().channel;
+            contentList.render();
+        }
     } else {
         $('#live-updates i').removeClass('gicon-pause');
         $('#live-updates i').addClass('gicon-play');
         $('#live-updates').attr('data-original-title', 'no live updates');
         this.receiveUpdates = false;
     }
+}
+
+Television.prototype.showSettings = function(modalOptions){
+    $("#settingsTemplate").Chevron("render", {
+        tvId: this.id
+    }, function(result){
+        $('#modal').html(result);
+        $('#settingsModal').modal(modalOptions);
+    });
 }

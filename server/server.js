@@ -6,7 +6,7 @@ var http = require('http');
 var cradle = require('cradle');
 var hash = require("mhash").hash;
 var schedule = require('node-schedule');
-var helper = require('../js/helper.js');
+var helper = require('./js/helper.js');
 var queue = require('./js/queue.js');
 
 // init global vars
@@ -45,7 +45,7 @@ var websocketServer = new server({
 
 // websocket server
 websocketServer.on('request', function(request) {
-    console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
+    //console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
 
     var connection = request.accept(null, request.origin);
 
@@ -62,6 +62,7 @@ websocketServer.on('request', function(request) {
             
             // send the server configuration to the smart tv
             if(data.method == 'get-config') {
+                televisions[data.tvId] = null;
                 var obj = {
                     'method': 'get-config-response',
                     'mode': mode
@@ -83,27 +84,25 @@ websocketServer.on('request', function(request) {
                 var obj = {
                     'method': 'subscribe-response'
                 };
-
+                console.log(televisions);
                 // check if tvId exists
                 if(televisions[data.tvId]) {
                     // send back, send in next response the current channel
-                    db.view('content/by-channel', {
-                        key: televisions[data.tvId]
-                    }, function (err, result) {
+                   // db.view('content/by-channel', {
+                   //     key: televisions[data.tvId]
+                   // }, function (err, result) {
                         obj.status = 'success';
                         obj.message = 'Remote Smart-TV is available.';
                         obj.tv = {
-                            'channel': televisions[data.tvId],
-                            'data': result
+                            'channel': televisions[data.tvId]
+                     //       'data': result
                         };
-
-                        connection.send(JSON.stringify(obj));
-                    });
+                    //});
                 } else {
                     obj.status = 'error';
                     obj.message = 'Remote Smart-TV currently not available';
-                    connection.send(JSON.stringify(obj));
                 }
+                    connection.send(JSON.stringify(obj));
 
             // channel change on smart tv
             } else if(data.method == 'channel-changed') {
@@ -219,27 +218,6 @@ websocketServer.on('request', function(request) {
                     j.cancel();
                 }
                 queue.reset();
-            } else if(data.method == 'display-link') {                
-                var obj = {
-                    'method': 'display-link',
-                    'data': {
-                        'title': 'Auswertung',
-                        'text':     '<img src="/app/img/amazoncard.png" />' + 
-                                    '<p>Vielen Dank für die Teilnahme am Usability-Test, bitte fülle nun den Fragebogen zum Test aus.</p>' +
-                                    '<p style="color: #f9963f">Unter allen Teilnehmern wird ein Amazon Gutschein i.H.v. 30 Euro verlost.</p>' +
-                                    '<p style="font-size: 10px">Für Teilnahme am Gewinnspiel ist die Angabe einer validen E-Mail-Adresse notwendig!</p>',
-                        'linkText': 'zum Fragebogen',
-                        'link': 'https://de.surveymonkey.com/s/HBPMFGY'
-                    }
-                }
-                
-                for (var i=0; i < subscriptions.length; i++) {
-                    if(subscriptions[i] == data.tvId) {
-                        if(clients[i].authorized) {
-                            clients[i].send(JSON.stringify(obj));
-                        }
-                    }
-                }
             }
         }
     });
@@ -287,7 +265,7 @@ if(mode == 'television') {
 // 1) get content that starts within the next 15 minutes
 function initQueue(startDate, nowDate) {
     if(timeDiff > 0) {
-        console.log('we have a timeDiff of ' + timeDiff + ' seconds.');
+      //  console.log('we have a timeDiff of ' + timeDiff + ' seconds.');
     }
     
     if(!nowDate) {
@@ -299,19 +277,19 @@ function initQueue(startDate, nowDate) {
     }
     var endDate = helper.dateToArr(helper.addMinutes(helper.arrToDate(startDate), 15));
     
-    console.log(startDate);
-    console.log(endDate);
+   // console.log(startDate);
+   // console.log(endDate);
     
     db.view('content/by-date', {
         startkey: startDate,
         endkey: endDate
     }, function (err, result) {
-        console.log(result);
+       // console.log(result);
         if(!err) {
             // when there is no starting task within 15mins, get the next task that starts in the future
             if(result.length == 0) {
-                console.log('server.js - initQueue() - no tasks within 15mins');
-                console.log(nowDate);
+         //       console.log('server.js - initQueue() - no tasks within 15mins');
+           //     console.log(nowDate);
                 db.view('content/by-date', {
                     startkey: nowDate,
                     limit: 1
@@ -326,16 +304,16 @@ function initQueue(startDate, nowDate) {
                     }
                 });
             } else {
-                console.log('server.js - initQueue() - found tasks within 15mins');
+             //   console.log('server.js - initQueue() - found tasks within 15mins');
                 for(var idx in result) {
                     var timestamp = helper.adjustTimestamp(helper.arrToTimestamp(result[idx].value.startDate), -1 * timeDiff);
-                    console.log('server.js - the new scheduled date is ' + new Date(timestamp * 1000));
-                    console.log('server.js - initQueue() - timestamp' + timestamp);
+                 //   console.log('server.js - the new scheduled date is ' + new Date(timestamp * 1000));
+               //     console.log('server.js - initQueue() - timestamp' + timestamp);
 
                     queue.push(timestamp, result[idx]);
                 }
                 
-                console.log('server.js - initQueue() - current length' + queue.length);
+               // console.log('server.js - initQueue() - current length' + queue.length);
                 j = schedule.scheduleJob(helper.adjustDate(helper.arrToDate(result[0].value.startDate), -1 * timeDiff), function(){
                     distributeContent();
                 });
@@ -351,7 +329,7 @@ function distributeContent() {
     var nextTasks = queue.current();
     
     // distribute to connected devices
-    console.log('server.js - distributeContent() - send tasks to second screen devices:');
+   // console.log('server.js - distributeContent() - send tasks to second screen devices:');
     
     for (var idx in nextTasks) {
         var obj = {
@@ -380,7 +358,7 @@ function distributeContent() {
         console.log((queue.pos) + ' ... ' + (queue.length - 1));
         
         if(queue.pos == queue.length - 1) {
-            console.log('refill queue');
+          //  console.log('refill queue');
             var startDate = helper.timestampToDate(queue.top() + 1);
             initQueue(helper.dateToArr(startDate), startDate);
         }
@@ -389,7 +367,7 @@ function distributeContent() {
             distributeContent();
         });
     } else {
-        console.log('queue is empty for now, no more contents available');
+    //    console.log('queue is empty for now, no more contents available');
     }
     
     queue.posAdd();

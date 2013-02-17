@@ -2,7 +2,7 @@ function BookmarkList() {
     this.bookmarks = [];
 };
 
-BookmarkList.prototype.add = function(data) {
+BookmarkList.prototype.push = function(data) {
     for(var idx in this.bookmarks) {
         if(this.bookmarks[idx].id == data._id) {
             return;
@@ -17,8 +17,7 @@ BookmarkList.prototype.add = function(data) {
     });
     
     $.totalStorage('bookmarks', this.bookmarks);
-    
-    loadBookmarks(false);
+    this.load(false);
 }
     
 BookmarkList.prototype.load = function(displayActions) {

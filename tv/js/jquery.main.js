@@ -3,7 +3,7 @@ $(document).ready(function(){
     var tvId = null;
     var websocket = null;
     var channel = null;
-    
+    var mode = 'television';
     var channelList = [
     'schweig-hd'
     ];
@@ -16,7 +16,7 @@ $(document).ready(function(){
     hash = hash.split('/');
     
     // check for faked start time
-    if(hash[0] == 'date') {
+    /*if(hash[0] == 'date') {
         startTime = hash[1];
         
         var year = parseInt(hash[1].substr(0, 4));
@@ -29,7 +29,7 @@ $(document).ready(function(){
         var date = new Date(year, month, day, hour, minute, second);
         
         startTimestamp = date.getTime() / 1000;
-    }
+    }*/
     
     init();
     
@@ -95,6 +95,7 @@ $(document).ready(function(){
     }
     
     function updateChannel(channelId) {
+        
         channel = channelList[channelId];
         
         video.pause();
@@ -112,7 +113,7 @@ $(document).ready(function(){
 
         addSourceToVideo(video, 'http://localhost:2013/data/' + channel + '.mp4', 'video/mp4');
 
-        if(startTime == null) {
+        if(mode == 'television') {
             video.play();
         } else {
             console.log('we start this manually');
@@ -130,7 +131,7 @@ $(document).ready(function(){
             'tvId': tvId,
             'channel': channel
         };
-        
+        console.log(data);
         websocket.send(JSON.stringify(data));
     }
     
@@ -197,6 +198,7 @@ $(document).ready(function(){
     }
     
     function getConfigResponse(json) {
+        mode = json.mode;
         if(json.mode == 'movie') {
             // update video source
             initMovie(json.file);
