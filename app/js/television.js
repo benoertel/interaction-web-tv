@@ -13,7 +13,7 @@ Television.prototype = {
     set id(id) {
         this._id = id;
 
-        $.totalStorage('tvId', id);
+        $.totalStorage('remoteId', id);
     },
     
     set channel(channel) {
@@ -89,7 +89,7 @@ Television.prototype.toggleReceiveUpdates = function(contentList) {
 }
 
 Television.prototype.showSettings = function(modalOptions){
-    $("#settingsTemplate").Chevron("render", {
+    $('#settingsTemplate').Chevron('render', {
         tvId: this.id
     }, function(result){
         $('#modal').html(result);

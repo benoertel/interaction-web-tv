@@ -23,3 +23,5 @@ sudo aptitude install tzdata
 dpkg-reconfigure tzdata 
 sudo ntpdate time.euro.apple.com
 date
+
+node server.js --mode=movie --date=20130130120000 --channel=ard --file=/data/movie.mp4

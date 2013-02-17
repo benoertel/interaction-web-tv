@@ -1,41 +1,16 @@
-function WebsocketClient(websocketUri, tv, user, contentList){
+function WebsocketClient(websocketUri, tv){
     this.websocketUri = websocketUri;
     this.socket = new WebSocket(this.websocketUri);
     this.init();
     
     this.status = 'disconnected';
     this.tv = tv;
-    this.user = user;
-    this.contentList = contentList;
 }
 
 WebsocketClient.prototype = {
     set status(status) {
         this.statusChanged(status);
-    }    
-    /* get tv(){
-        return this._tv;
-    },
-    
-    set tv(tv) {
-        this._tv = tv;
-    },
-    
-    get user(){
-        return this._user;
-    },
-    
-    set user(user) {
-        this._user = user;
-    },
-    
-    get contentList(){
-        return this._contentList;
-    },
-    
-    set contentList(contentList) {
-        this._contentList = contentList;
-    }*/
+    }
 }
 
 WebsocketClient.prototype.init = function() {
@@ -56,19 +31,16 @@ WebsocketClient.prototype.init = function() {
 }
 
 WebsocketClient.prototype.onopen = function(event) {
-    console.log('ws onopen');
-    
     this.status = 'connected';
-    //    if(credentials) {
-    //        this.socket.send(JSON.stringify(credentials));
-    //    }
+    
+    var data = {
+        'method': 'get-config'
+    };
+    this.send(data);
 };
     
 WebsocketClient.prototype.onclose = function(event) {
-    console.log('ws onclose');
-    
     this.status = 'disconnected';
-    this.tv.status = 'unavailable';
     
     var context = this;
     window.setTimeout(function() {
@@ -84,21 +56,8 @@ WebsocketClient.prototype.onerror = function(event) {
 WebsocketClient.prototype.onmessage = function(message) {
     var json = JSON.parse(message.data);
 
-    if(json.method == 'channel-changed') {
-        this.tv.channel = json.channel;
-    } else if(json.method == 'content-changed') {
-        this.contentList.push(json.data);
-        if(this.tv.receiveUpdates) {
-            this.contentList.render();
-        }
-    } else if(json.method == 'login-user-response') {
-        this.user.loginResponse(json, this.tv, this);
-    } else if(json.method == 'register-user-response') {
-        this.user.registerResponse(json);
-    } else if(json.method == 'subscribe-response') {
-        this.tv.subscribeResponse(json);
-    } else if(json.method == 'tv-disconnected') {
-        this.tv.disconnect();
+    if(json.method == 'get-config-response') {
+        this.tv.getConfigResponse(json);
     }
 }
     

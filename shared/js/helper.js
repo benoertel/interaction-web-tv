@@ -87,3 +87,21 @@ Helper.prototype.createAlert = function(type, text) {
         
     return '<div class="' + classes + '">' + text + '</div>';
 }
+
+Helper.prototype.ucfirst = function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+/*
+ * http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random-characters-in-javascript
+ */
+Helper.prototype.randId = function() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for(var i=0; i < 16; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    
+    return text;
+}

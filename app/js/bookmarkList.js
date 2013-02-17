@@ -26,7 +26,7 @@ BookmarkList.prototype.load = function(displayActions) {
         this.bookmarks = [];
     }
         
-    $("#bookmarksTemplate").Chevron("render", {
+    $('#bookmarksTemplate').Chevron('render', {
         'bookmarks': this.bookmarks
     }, function(result){
         $('#bookmarks').html(result);

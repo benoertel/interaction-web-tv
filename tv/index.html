@@ -4,20 +4,15 @@
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-        <link href="/shared/css/bootstrap.css" rel="stylesheet">
-        <link href="/tv/css/style.css" rel="stylesheet">
-       <!-- <link href="/shared/css/style.css" rel="stylesheet">-->
-
-        <script src="/shared/js/config.js"></script>
         <script src="/shared/js/lib/jquery.min.js"></script>
-        <script src="/shared/js/lib/jquery.cookie.js"></script>
-        <script src="/tv/js/jquery.main.js"></script>
+        <script src="/shared/js/core.js"></script>
+        <script src="/tv/app.js"></script>
     </head>
     <body>
         <div id="tv-stream-wrapper">
-            <video autoplay controls id="tv-stream" data-channel="0"></video>
+            <video autoplay controls id="tv-stream"></video>
         </div>
-        
+
         <div id="settings-bar">
             <div id="websocket-status" data-status="disconnected">
                 <i class="gicon gicon-ws-signal-off"></i>

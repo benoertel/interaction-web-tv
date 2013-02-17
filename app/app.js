@@ -6,8 +6,8 @@ $(document).ready(function() {
     var config = {
         scripts: [
         '/app/js/user.js',
-        '/app/js/content.js',
-        '/app/js/bookmarks.js',
+        '/app/js/contentList.js',
+        '/app/js/bookmarkList.js',
         '/app/js/television.js',
         '/app/js/websocket.js',
         '/shared/js/lib/bootstrap.min.js',
@@ -63,9 +63,9 @@ $(document).ready(function() {
     
         var helper = new Helper();
         
-        var tv = new Television($.totalStorage('tvId'));
+        var tv = new Television($.totalStorage('remoteId'));
         var user = new User(helper);
-        var contentList = new ContentList();
+        var contentList = new ContentList(helper);
         var bookmarkList = new BookmarkList();
         
         var websocket = new WebsocketClient(websocketUri, tv, user, contentList);

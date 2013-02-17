@@ -9,7 +9,7 @@ function App(config, callback) {
 
     this.scriptsToLoad = config.scripts.length + config.stylesheets.length + config.templates.length;
     this.scriptsLoaded = 0;
-    
+   
     this.loadScripts(config.scripts);
     this.loadStylesheets(config.stylesheets);
     this.loadTemplates(config.templates);
@@ -17,10 +17,12 @@ function App(config, callback) {
 
 App.prototype.loadScripts = function(scripts) {
     for (var i in scripts) {
-        
         var app = this;
-        $.getScript(scripts[i], function(data, textStatus, jqxhr) {
+
+        $.getScript(scripts[i]).done(function(script, textStatus) {
             app.scriptLoaded();
+        }).fail(function(jqxhr, settings, exception) {
+            console.log(jqxhr);
         });
     }
 };
@@ -41,7 +43,6 @@ App.prototype.loadTemplates = function(templates) {
 
 App.prototype.scriptLoaded = function() {
     this.scriptsLoaded++;
-    
     if(this.scriptsToLoad == this.scriptsLoaded) {
         this.callback();
     }

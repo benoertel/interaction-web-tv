@@ -28,6 +28,7 @@ User.prototype.loginResponse = function(data, tv, websocket) {
     }
     if(data.status == 'success') {
         tv.subscribe(websocket);
+        
         $('#loginForm').prepend('<div class="loader"></div>');
         window.setTimeout(function() {
             $('#loginModal').modal('hide');
@@ -70,7 +71,7 @@ User.prototype.registerResponse = function(data) {
 User.prototype.showLoginForm = function(modalOptions) {
     $('.modal').modal('hide');
         
-    $("#loginFormTemplate").Chevron("render", {}, function(result){
+    $('#loginFormTemplate').Chevron('render', {}, function(result){
         $('#modal').html(result);
         $('#loginModal').modal(this.modalOptions);
     });  
@@ -79,7 +80,7 @@ User.prototype.showLoginForm = function(modalOptions) {
 User.prototype.showSignupForm = function(modalOptions) {
     $('.modal').modal('hide');
         
-    $("#signupFormTemplate").Chevron("render", {}, function(result){
+    $('#signupFormTemplate').Chevron('render', {}, function(result){
         $('#modal').html(result);
         $('#signupModal').modal(this.modalOptions);
     });  
