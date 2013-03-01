@@ -67,10 +67,11 @@ Television.prototype.zapp = function(direction, socket) {
 }
 
 Television.prototype.updateSource = function() {
-    this.video.pause();
-    this.video.src = "";
-    this.video.load();
-    
+    if(this.video) {
+        this.video.pause();
+        this.video.src = "";
+        this.video.load();
+    }
     $('video').remove();
     this.video = document.createElement('video');
     this.video.volume = this.volume;

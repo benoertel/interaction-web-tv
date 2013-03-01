@@ -5,53 +5,36 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 
-        <link href="/shared/css/bootstrap.css" rel="stylesheet">
-        <link href="/shared/css/bootstrap-responsive.css" rel="stylesheet">
-        <link href="/backend/css/style.css" rel="stylesheet">
-        <link href="/shared/css/style.css" rel="stylesheet">
-
-        <script src="/shared/js/config.js"></script>
         <script src="/shared/js/lib/jquery.min.js"></script>
-        <script src="/shared/js/lib/mustache.js"></script>
-        <script src="/shared/js/lib/chevron.js"></script>
-        <script src="/shared/js/lib/jquery.couch.js"></script>
-        <script src="/shared/js/lib/jqBootstrapValidation.js"></script>
-        <script src="/backend/js/jquery.main.js"></script>
-        <script src="/shared/js/helper.js"></script>
-
-        
-        <link href="/backend/templates/channelList.mustache" rel="template" id="channelListTemplate"/>
-        <link href="/backend/templates/showList.mustache" rel="template" id="showListTemplate"/>
-        <link href="/backend/templates/contentList.mustache" rel="template" id="contentListTemplate"/>
-        <link href="/backend/templates/timeList.mustache" rel="template" id="timeListTemplate"/>
-
-        <link href="/backend/templates/content/_header.mustache" rel="template" id="contentHeaderTemplate"/>
-        <link href="/backend/templates/content/_footer.mustache" rel="template" id="contentFooterTemplate"/>
-        <link href="/backend/templates/content/freetext.mustache" rel="template" id="contentFreetextTemplate"/>
+        <script src="/shared/js/core.js"></script>
+        <script src="/backend/app.js"></script>
     </head>
     <body>
-        <div class="navbar navbar-static-top navbar-inverse">
-            <div class="navbar-inner">
-                <a class="brand" href="#">Welcome guest</a>
-                <ul class="nav pull-right">
-                    <li class="divider-vertical"></li>
-                    <li><a href="#" rel="tooltip" data-placement="bottom" data-original-title="no connection" id="websocket-status" data-status="disconnected"><i class="gicon gicon-ws-signal-off"></i></a></li>
-                </ul>
-            </div>
-        </div>
-        <h1>backend</h1>
-        <div id="content">
-            <div id="channel-list-wrapper">
-                <div id="channel-list"></div>
-            </div>
-            <div id="guide-wrapper">
-                <div id="guide">
-                    <div id="time-list"></div>
-                    <div id="show-list"></div>
-                    <div id="content-list"></div>
+        <div id="background" style="overflow-y: auto">
+            <div class="navbar navbar-static-top navbar-inverse">
+                <div class="navbar-inner">
+                    <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li><a href="#" rel="tooltip" data-placement="bottom" data-original-title="no connection" id="websocket-status" data-status="disconnected"><i class="gicon gicon-ws-signal-off"></i></a></li>
+                    </ul>
                 </div>
             </div>
-            <div id="content-form"></div>
+            <div class="container">
+                <h1>content management area</h1>
+                <div id="content">
+                    <div id="channel-list-wrapper">
+                        <div id="channel-list"></div>
+                    </div>
+                    <div id="guide-wrapper">
+                        <div id="guide">
+                            <div id="time-list"></div>
+                            <div id="show-list"></div>
+                            <div id="content-list"></div>
+                        </div>
+                    </div>
+                    <div id="content-form"></div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

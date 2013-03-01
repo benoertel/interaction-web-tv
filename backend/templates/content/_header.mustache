@@ -1,64 +1,60 @@
 <form method="post" id="contentTextForm" class="contentForm" novalidate>
-    <fieldset>
-    <legend>Laufzeit</legend>
-        <div class="control-group">
-            <label class="control-label" for="startDate">Start</label>
-            <div class="controls">
-                <input 
-                    name="startDate" type="text" id="startDate" required class="input-medium"
-                    data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
-                    data-validation-regex-message="Format 31.01.2012 14:30:20." />
-            </div>
-        </div>
+    <div class="row-fluid">
+        <fieldset class="span6">
+            <legend>Laufzeit</legend>
+            <div class="row-fluid">
+                <div class="control-group span6">
+                    <label class="control-label" for="startDate">Start</label>
+                    <div class="controls input-datetime input-append date">
+                            <input 
+                                name="startDate" type="text" id="startDate" required class="input-block-level"
+                                data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
+                                data-validation-regex-message="Format 31.01.2012 14:30:20." />
+                            <span class="add-on">
+                                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                            </span>
+                    </div>
+                </div>
 
-        <div class="control-group">
-            <label class="control-label" for="endDate">Ende</label>
-            <div class="controls">
-                <input name="endDate" type="text" id="endDate" required class="input-medium"
-                    data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
-                    data-validation-regex-message="Format 31.01.2012 14:30:20." />
+                <div class="control-group span6">
+                    <label class="control-label" for="endDate">Ende</label>
+                    <div class="controls input-datetime input-append date">
+                        <input name="endDate" type="text" id="endDate" required class="input-block-level"
+                               data-validation-regex-regex="([0-9]{2}).([0-9]{2}).([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})" 
+                               data-validation-regex-message="Format 31.01.2012 14:30:20." />
+                        <span class="add-on">
+                                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                            </span>
+                    </div>
+                </div>
             </div>
-        </div>
+        </fieldset>
 
-        <div class="control-group">
-            <label class="control-label" for="duration">Minimum duration in seconds</label>
-            <div class="controls">
-                <input type="number" name="duration" id="duration" min="0" max="360" required class="input-mini" />
-        
+        <fieldset class="span6">
+            <legend>Zielgruppe</legend>
+            <div class="row-fluid">
+                <div class="control-group span6">
+                    <label class="control-label" for="sex">Geschlecht</label>
+                    <div class="controls">
+                        <select name="sex" id="sex" required class="input-block-level">
+                            <option value="all">männlich und weiblich</option>
+                            <option value="male">männlich</option>
+                            <option value="female">weiblich</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group span6">
+                    <label class="control-label" for="ageRange">Altersbereich</label>
+                    <div class="controls">
+                        <select name="ageRange" id="ageRange" required class="input-block-level">
+                            <option value="all">Alle</option>
+                            <option value="children">Kinder 6 – 13 Jahre</option>
+                            <option value="teenager">Jugendliche 14 – 29 Jahre</option>
+                            <option value="adults">Erwachsene 30 – 49 Jahre</option>
+                            <option value="elderly">Ältere Erwachsene ab 50 Jahre</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label" for="channel">Sender</label>
-            <div class="controls">
-                <input type="text" name="channel" id="channel" required readonly class="input-small" />
-            </div>
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Zielgruppe</legend>
-        <div class="control-group">
-            <label class="control-label" for="sex">Geschlecht</label>
-            <div class="controls">
-                <select name="sex" id="sex" required class="input-large">
-                    <option value="all">männlich und weiblich</option>
-                    <option value="male">männlich</option>
-                    <option value="female">weiblich</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label" for="ageRange">Altersbereich</label>
-            <div class="controls">
-                <select name="ageRange" id="ageRange" required class="input-large">
-                    <option value="all">Alle</option>
-                    <option value="children">Kinder 6 – 13 Jahre</option>
-                    <option value="teenager">Jugendliche 14 – 29 Jahre</option>
-                    <option value="adults">Erwachsene 30 – 49 Jahre</option>
-                    <option value="elderly">Ältere Erwachsene ab 50 Jahre</option>
-                </select>
-            </div>
-        </div>
-    </fieldset>
+        </fieldset>
+    </div>

@@ -18,11 +18,10 @@ function App(config, callback) {
 App.prototype.loadScripts = function(scripts) {
     for (var i in scripts) {
         var app = this;
-
         $.getScript(scripts[i]).done(function(script, textStatus) {
             app.scriptLoaded();
         }).fail(function(jqxhr, settings, exception) {
-            console.log(jqxhr);
+            console.log(scripts[i] + ' not loaded');
         });
     }
 };

@@ -25,3 +25,15 @@ sudo ntpdate time.euro.apple.com
 date
 
 node server.js --mode=movie --date=20130130120000 --channel=ard --file=/data/movie.mp4
+
+
+
+
+
+bootstrap
+@successText        #6dad28
+@errorText          #ad3e28
+@sansFontFamily     Quicksand, Helvetica, Arial, sans-serif
+@inputBorderRadius  4px
+
+

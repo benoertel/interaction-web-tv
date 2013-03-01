@@ -13,6 +13,7 @@ $(document).ready(function() {
         ],
         stylesheets: [
         '/shared/css/bootstrap.css',
+        '/shared/css/style.css',
         '/tv/css/style.css'
         ],
         templates: []

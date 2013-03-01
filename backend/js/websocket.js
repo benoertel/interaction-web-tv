@@ -1,21 +1,16 @@
-function WebsocketClient(websocketUri, tv){
+function WebsocketClient(websocketUri, contentList){
     this.websocketUri = websocketUri;
     this.socket = new WebSocket(this.websocketUri);
     this.init();
     
     this.status = 'disconnected';
-    this.tv = tv;
+    this.contentList = contentList;
 }
 
 WebsocketClient.prototype = {
     set status(status) {
-        this._status = status;
-        this.statusChanged();
-    },
-    
-    get status() {
-        return this._status;
-    }
+        this.statusChanged(status);
+    }    
 }
 
 WebsocketClient.prototype.init = function() {
@@ -36,16 +31,20 @@ WebsocketClient.prototype.init = function() {
 }
 
 WebsocketClient.prototype.onopen = function(event) {
+    console.log('ws onopen');
+    
     this.status = 'connected';
     
-    var data = {
-        'method': 'get-config'
-    };
-    this.send(data);
+//    hashChanged();
+//        updateChannelList();
+//        showForm('contentFreetextTemplate');
 };
     
 WebsocketClient.prototype.onclose = function(event) {
+    console.log('ws onclose');
+    
     this.status = 'disconnected';
+    this.tv.status = 'unavailable';
     
     var context = this;
     window.setTimeout(function() {
@@ -61,19 +60,32 @@ WebsocketClient.prototype.onerror = function(event) {
 WebsocketClient.prototype.onmessage = function(message) {
     var json = JSON.parse(message.data);
 
-    if(json.method == 'get-config-response') {
-        this.tv.getConfigResponse(json);
+    if(json.method == 'channel-changed') {
+        this.tv.channel = json.channel;
+    } else if(json.method == 'content-changed') {
+        this.contentList.push(json.data);
+        if(this.tv.receiveUpdates) {
+            this.contentList.render();
+        }
+    } else if(json.method == 'login-user-response') {
+        this.user.loginResponse(json, this.tv, this);
+    } else if(json.method == 'register-user-response') {
+        this.user.registerResponse(json);
+    } else if(json.method == 'subscribe-response') {
+        this.tv.subscribeResponse(json);
+    } else if(json.method == 'tv-disconnected') {
+        this.tv.disconnect();
     }
 }
     
-WebsocketClient.prototype.statusChanged = function() {
-    if(this.status == 'connected') {
+WebsocketClient.prototype.statusChanged = function(status) {
+    if(status == 'connected') {
         $('#websocket-status i').removeClass('gicon-ws-signal-off');
         $('#websocket-status i').addClass('gicon-ws-signal-on');
         $('#websocket-status').attr('data-status', 'connected');
         $('#websocket-status').attr('data-original-title', 'connection established');
             
-    } else if(this.status == 'disconnected') {
+    } else if(status == 'disconnected') {
         $('#websocket-status i').removeClass('gicon-ws-signal-on');
         $('#websocket-status i').addClass('gicon-ws-signal-off');
         $('#websocket-status').attr('data-status', 'disconnected');

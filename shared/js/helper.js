@@ -2,6 +2,17 @@ function Helper() {
     
 };
 
+Helper.prototype.getHashParams = function(){
+    var formData = [];
+
+    $.each(window.location.hash.replace("#", "").split("&"), function (i, urlParam) {
+        urlParam = urlParam.split("=");
+        formData[urlParam[0]] = urlParam[1];
+    });
+        
+    return formData;
+}
+
 Helper.prototype.parseHourMin = function(date) {
     return pad(date[3], 2) + ':' + pad(date[4], 2);
 };
@@ -104,4 +115,14 @@ Helper.prototype.randId = function() {
     }
     
     return text;
+}
+
+Helper.prototype.prepareCouchData = function(data) {
+    var doc = {};
+
+    $.each(data, function(index, value) {
+        doc[value.name] = value.value;
+    });
+
+    return doc;
 }
