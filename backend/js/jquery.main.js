@@ -21,28 +21,6 @@ $(document).ready(function(){
     }
 
     /**
-     * Load the shows for a specific channel.
-     */
-    function updateShowList(channel) {
-        $.couch.db("persad").view("show/by-channel", {
-            'key': channel,
-
-            success: function(data) {
-                var dataList = prepareListData(data);
-
-                $("#showListTemplate").Chevron("render", {
-                    'shows': dataList
-                }, function(result){
-                    $('#guide #show-list').html(result);
-                });
-            },
-            error: function(status) {
-                console.log(status);
-            }
-        });
-    }
-
-    /**
      * Load the additional content for a specific channel.
      */
     function updateContentList(channel) {
@@ -62,37 +40,6 @@ $(document).ready(function(){
                 console.log(status);
             }
         });
-    }
-
-
-    /**
-     * Prepare couch db list data for mustache.
-     */
-    function prepareListData(data) {
-        var dataList = [];
-        var prevEndTime = '05:00';
-        
-        $.each(data.rows, function(index, value) {
-            var elem = value.value;
-            var duration = helper.calcDuration(elem.startDate, elem.endDate, 'sec');
-            
-            var startTime = helper.parseHourMin(elem.startDate);
-            var endTime = helper.parseHourMin(elem.endDate);
-            
-            var width = (duration / 10) - 7;
-            var margin = helper.calcTimeDiff(prevEndTime, startTime) * 6;
-                        
-            elem.formatted = {
-                'start': startTime,
-                'duration': (duration/60) + 'min',
-                'width': width,
-                'margin': margin
-            }
-            dataList.push(value.value);
-            prevEndTime = endTime;
-        });
-
-        return dataList;
     }
 
     $(document).on('click', '#content-list li a button', function(){

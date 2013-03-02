@@ -31,6 +31,19 @@ h1 {
     
 }
 
+.programme-date.form-horizontal .control-group {
+    margin-bottom: 0;
+}
+
+.programme-date.form-horizontal .control-label {
+    color: white;
+    width: 65px;
+}
+
+.programme-date.form-horizontal .controls {
+    margin-left: 10px;
+}
+
 form {
     padding: 20px;
     background: #ece4d9;    
@@ -83,6 +96,52 @@ legend {
 #channel-list ul li a.active {
     background: #d26433;
     color: #67141B;
+}
+
+/* programme date */
+#programme-date-wrapper {
+    padding: 0 5px;
+    background: #7accc8;
+    color: white;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    height: 30px;
+    line-height: 30px;
+}
+
+#programme-date {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+#programme-date ul {
+    width: 450px;
+    margin: 0;
+}
+
+#programme-date ul li {
+    list-style-type: none;
+    float: left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#programme-date ul li a {
+    padding: 5px 15px;
+    display: block;
+    color: white;
+    cursor: pointer;
+}
+
+#programme-date ul li a:hover,
+#programme-date ul li a.active {
+    background: #64b7b3;
+    color: #67141B;
+}
+
+#programme-date::-webkit-scrollbar { 
+    display: none; 
 }
 
 /* guide */
@@ -292,6 +351,25 @@ legend {
     }
 }
 */
+select.btn {
+    -webkit-appearance: button;
+       -moz-appearance: button;
+            appearance: button;
+    width: auto;
+}
+
+select.btn-mini {
+    height: 19px;
+    line-height: 19px;
+    padding-right: 19px;
+    margin-top: -2px;
+}
+
+select.btn-mini + .caret {
+    margin-left: -15px;
+    margin-top: 10px;
+}
+
 @media (max-width: 767px) {
     body {
         padding-left: 10px;

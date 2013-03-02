@@ -10,8 +10,8 @@ function App(config, callback) {
     this.scriptsToLoad = config.scripts.length + config.stylesheets.length + config.templates.length;
     this.scriptsLoaded = 0;
    
-    this.loadScripts(config.scripts);
     this.loadStylesheets(config.stylesheets);
+    this.loadScripts(config.scripts);
     this.loadTemplates(config.templates);
 };
 

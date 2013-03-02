@@ -5,20 +5,20 @@ function Helper() {
 Helper.prototype.getHashParams = function(){
     var formData = [];
 
-    $.each(window.location.hash.replace("#", "").split("&"), function (i, urlParam) {
+    $.each(window.location.hash.replace("#!/", "").split("&"), function (i, urlParam) {
         urlParam = urlParam.split("=");
         formData[urlParam[0]] = urlParam[1];
     });
-        
+    console.log(formData);
     return formData;
 }
 
 Helper.prototype.parseHourMin = function(date) {
-    return pad(date[3], 2) + ':' + pad(date[4], 2);
+    return this.pad(date[3], 2) + ':' + this.pad(date[4], 2);
 };
     
 Helper.prototype.calcDuration = function (start, end, unit) {
-    var diff = Math.abs(new Date(parseDate(start)) - new Date(parseDate(end)));
+    var diff = Math.abs(new Date(this.parseDate(start)) - new Date(this.parseDate(end)));
         
     if(unit == 'min') {
         return Math.floor((diff/1000)/60);
@@ -28,10 +28,7 @@ Helper.prototype.calcDuration = function (start, end, unit) {
 };
     
 Helper.prototype.parseDate = function(date) {
-    var dateTime = date.split(' ');
-    var datePart = dateTime[0].split('-');
-
-    return datePart[0] + '/' + datePart[1] + '/' + datePart[2] + ' ' + dateTime[1];        
+    return date[0] + '/' + date[1] + '/' + date[2] + ' ' + date[3] + ':' + date[4] + ':' + date[5];        
 };
 
 Helper.prototype.formatDate = function(date) {
@@ -125,4 +122,55 @@ Helper.prototype.prepareCouchData = function(data) {
     });
 
     return doc;
+}
+
+
+Helper.prototype.prepareListData = function(data, date) {
+    var dataList = [];
+    var prevEndTime = '05:00';
+        
+    var context = this;
+    
+    // first sort it
+    var rows = data.rows;
+    rows.sort(SortByDate);
+
+
+    function SortByDate(a, b){
+        var aName = a.value.startDate;
+        var bName = b.value.startDate; 
+        return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+    }
+
+    $.each(rows, function(index, value) {
+            
+        var elem = value.value;
+        if(!(elem.endDate[0] == date[0] &&
+            elem.endDate[1] == date[1] &&
+            elem.endDate[2] == date[2] &&
+            elem.endDate[3] < 5
+            )){
+            var duration = context.calcDuration(elem.startDate, elem.endDate, 'sec');
+           // console.log(value.value.startDate);
+           // console.log(value.value.endDate);
+           // console.log('bla');
+            var startTime = context.parseHourMin(elem.startDate);
+            var endTime = context.parseHourMin(elem.endDate);
+            
+            var width = (duration / 10) - 7;
+            var margin = context.calcTimeDiff(prevEndTime, startTime) * 6;
+                        
+            elem.formatted = {
+                'start': startTime,
+                'duration': (duration/60) + 'min',
+                'width': width,
+                'margin': margin
+            }
+            dataList.push(value.value);
+            prevEndTime = endTime;
+        }
+            
+    });
+
+    return dataList;
 }

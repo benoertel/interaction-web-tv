@@ -12,6 +12,7 @@ $(document).ready(function() {
         '/backend/js/channelList.js',
         '/backend/js/timeList.js',
         '/backend/js/showList.js',
+        '/backend/js/dateList.js',
         '/shared/js/lib/bootstrap.min.js',
         '/shared/js/lib/mustache.js',
         '/shared/js/lib/chevron.js',
@@ -46,6 +47,10 @@ $(document).ready(function() {
             'location': '/backend/templates/timeList.mustache'
         },
         {
+            'id': 'dateListTemplate',
+            'location': '/backend/templates/dateList.mustache'
+        },
+        {
             'id': 'contentHeaderTemplate',
             'location': '/backend/templates/content/_header.mustache'
         },
@@ -78,27 +83,65 @@ $(document).ready(function() {
         var contentForm = new ContentForm(helper);
         var channelList = new ChannelList(helper);
         var timeList = new TimeList(helper);
+        var showList = new ShowList(helper);
+        var dateList = new DateList(helper);
         
         var websocket = new WebsocketClient(websocketUri, contentList);
         
         channelList.load();
         // contentList.load();
         timeList.render();
+        dateList.render();
         contentForm.render(websocket, channelList);
-        
-        $(document).on('click', '#channel-list li a', function(){
-            channelList.selected = $(this).attr('data-channel-id');
-            contentForm.channel = channelList.selected;
-        });
         
         $(window).bind('hashchange', function() {
             var params = helper.getHashParams();
             if(params.channel) {
                 channelList.selected = params.channel;
                 contentForm.channel = channelList.selected;
+                showList.load(dateList.date, params.channel);
+            }
+            if(params.date) {
+                dateList.selectedDate = params.date;
+            } else if(params.day) {
+                dateList.selectedDay = params.day;
             }
         });
         $(window).trigger('hashchange');
+        
+        $(document).on('click', '#channel-list li a', function(){
+           // channelList.selected = $(this).attr('data-channel-id');
+           // contentForm.channel = channelList.selected;
+            
+            var date = $('#programme-date select').val(); 
+            var day = $('a[data-day-id].active').attr('data-day-id');
+            var channel = $('#channel-list a.active').attr('data-channel-id');
+            
+            if(date != 'Datum') {
+                window.location.hash = '#!/channel=' + channel + '&date=' + date;  
+            } else {
+                window.location.hash = '#!/channel=' + channel + '&day=' + day;                
+            }
+            
+            return false;
+        });
+        
+        $(document).on('click', 'a[data-day-id]', function(){
+            var day = $(this).attr('data-day-id');
+            var channel = $('#channel-list a.active').attr('data-channel-id');
+            
+            window.location.hash = '#!/channel=' + channel + '&day=' + day;
+            
+            return false;
+        });
+        
+        $(document).on('change', '#programme-date select', function() {
+            var date = $(this).val(); 
+            var channel = $('#channel-list a.active').attr('data-channel-id');
+          
+            window.location.hash = '#!/channel=' + channel + '&date=' + date;
+        });
+
     
     /*
         bookmarkList.load(false);
