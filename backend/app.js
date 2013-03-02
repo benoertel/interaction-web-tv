@@ -96,22 +96,23 @@ $(document).ready(function() {
         
         $(window).bind('hashchange', function() {
             var params = helper.getHashParams();
-            if(params.channel) {
-                channelList.selected = params.channel;
-                contentForm.channel = channelList.selected;
-                showList.load(dateList.date, params.channel);
-            }
             if(params.date) {
                 dateList.selectedDate = params.date;
             } else if(params.day) {
                 dateList.selectedDay = params.day;
             }
+            
+            if(params.channel) {
+                channelList.selected = params.channel;
+                contentForm.channel = channelList.selected;
+                showList.load(dateList.date, params.channel);
+            }
         });
         $(window).trigger('hashchange');
         
         $(document).on('click', '#channel-list li a', function(){
-           // channelList.selected = $(this).attr('data-channel-id');
-           // contentForm.channel = channelList.selected;
+             channelList.selected = $(this).attr('data-channel-id');
+             contentForm.channel = channelList.selected;
             
             var date = $('#programme-date select').val(); 
             var day = $('a[data-day-id].active').attr('data-day-id');

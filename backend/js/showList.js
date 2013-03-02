@@ -3,28 +3,25 @@ function ShowList(helper){
 }
 
 ShowList.prototype.load = function(date, channel) {
-    console.log(date);
-    console.log(channel);
-    this.channel = 'ard-hd';
-    this.date = [2012, 9, 19]; 
+    this.channel = channel;
+    this.date = date; 
     this.render();
 }
 
 ShowList.prototype.render = function() {
     var context = this;
-    var day = new Date(this.date);
+    var day = new Date(this.date[0], this.date[1], this.date[2]);
     day.setDate(day.getDate() + 1);
     
     var startDate = [this.date[0], this.date[1], this.date[2], 0, 0, 0];
-    var endDate = [day.getUTCFullYear(), day.getUTCMonth() + 1, day.getDate(), 5,0,0];
+    var endDate = [day.getUTCFullYear(), day.getUTCMonth(), day.getDate(), 5,0,0];
     
     $.couch.db("persad").view("show/by-channel", {
         'startkey': [context.channel,startDate],
         'endkey': [context.channel,endDate],
         'ascending': true,
         success: function(data) {
-            console.log(data);
-            var dataList = context.helper.prepareListData(data, context.date);
+            var dataList = context.helper.prepareListData(data, context.date, endDate);
 
             $("#showListTemplate").Chevron("render", {
                 'shows': dataList

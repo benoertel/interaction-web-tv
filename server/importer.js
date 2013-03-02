@@ -17,8 +17,13 @@ var xmlfile = null;
 var channels = [
     'ard-hd',
     'rtl-hd',
-    'rtl2-hd',
-    'zdf-hd'
+    'rtl-ii-hd',
+    'zdf-hd',
+    'sat-1-hd',
+    'vox-hd',
+    'n-tv',
+    'n24-hd',
+    'kabel-eins-hd'
 ];
 
 // read command line args and parse them
@@ -55,6 +60,9 @@ if(!region || !xmlfile) {
 
     
     p.on('startElement', function(name, attr) {
+        if(name == 'channel') {
+         //   console.log(attr.slug);
+        }
         if(name == 'channel' && attr.region == region && inArray(attr.slug, channels)) {
             channel = attr.slug;
         } else if(name == 'programme' && channel) {
@@ -107,16 +115,13 @@ if(!region || !xmlfile) {
         var stop = programme.attr['stop'];
         var date = (programme.children['date']) ? programme.children['date'] : '';
 
-        start = dateToArr(new Date(start.substr(0, 4) + '-' + start.substr(4, 2) + '-' + start.substr(6, 2) + ' ' + start.substr(8, 2) + ':' + start.substr(10, 2) + ':' + start.substr(12, 2)));
-        stop = dateToArr(new Date(stop.substr(0, 4) + '-' + stop.substr(4, 2) + '-' + stop.substr(6, 2) + ' ' + stop.substr(8, 2) + ':' + stop.substr(10, 2) + ':' + stop.substr(12, 2)));
-
         var doc = {
             type: 'show',
             title: title,
             subtitle: subtitle,
             desc: desc,
-            startDate: start,
-            endDate: stop,
+            startDate: dateToArr(start),
+            endDate: dateToArr(stop),
             channel: channel
         }
         db.save('show-' + id, doc, function (err, res) {});
@@ -132,13 +137,12 @@ if(!region || !xmlfile) {
     
     function dateToArr(date) {
         var arr = [
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
-
-        date.getHours(),
-        date.getMinutes(),
-        date.getSeconds()
+           parseInt(date.substr(0, 4), 10),
+           parseInt(date.substr(4, 2), 10)-1,
+           parseInt(date.substr(6, 2), 10),
+           parseInt(date.substr(8, 2), 10),
+           parseInt(date.substr(10, 2), 10),
+           parseInt(date.substr(12, 2), 10)
         ];
 
         return arr;

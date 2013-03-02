@@ -182,8 +182,8 @@ legend {
     color: black;
 }
 #guide ul.show li {
-    background: whitesmoke;
-    border-radius: 3px;
+    background: #64b7b3;
+    border-radius: 4px;
     padding: 3px;
     cursor: pointer;
     height: 100px;
@@ -191,6 +191,7 @@ legend {
 
 #guide ul.show li span {
     font-weight: bold;
+    display: block;
 }
 
 #guide ul.content {
