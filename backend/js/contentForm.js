@@ -10,7 +10,7 @@ function ContentForm(helper){
 
 ContentForm.prototype.render = function(websocket, channelList) {
     this.websocket = websocket;
-  //  this.channelList = channelList;
+    //  this.channelList = channelList;
     console.log('render me');
     
     var context = this;
@@ -43,6 +43,8 @@ ContentForm.prototype.initValidation = function() {
 }
 
 ContentForm.prototype.errorContentForm = function(form, event, errors) {
+    this.helper.alert('block', 'Bitte fülle alle Pflichtfelder aus.', '#contentTextForm');
+
     event.preventDefault();
 }
 
@@ -56,6 +58,7 @@ ContentForm.prototype.storeContentForm = function(form, event) {
         doc.startDate = this.helper.dateToArr(new Date(this.helper.formatDate(doc.startDate)));
         doc.endDate = this.helper.dateToArr(new Date(this.helper.formatDate(doc.endDate)));
     }
+    doc.channel = this.channel;
 
     $.couch.db("persad").saveDoc(doc, {
         success: function(data) {
@@ -65,10 +68,13 @@ ContentForm.prototype.storeContentForm = function(form, event) {
             };
 
             context.websocket.send(JSON.stringify(data));
-          //  updateContentList(doc.channel);
+            
+            context.helper.alert('success', 'Der Zusatzcontent wurde erfolgreich hinzugefügt.', '#contentTextForm');
+            
+        //  updateContentList(doc.channel);
         },
         error: function(status) {
-            alert(status);
+            context.helper.alert('error', 'Der Zusatzinhalt konnte nicht hinzugefügt werden.', '#contentTextForm');
         }
     });
 

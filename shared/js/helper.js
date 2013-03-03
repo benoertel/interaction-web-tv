@@ -198,3 +198,10 @@ Helper.prototype.prepareListData = function(data, date, dateMax) {
 
     return dataList;
 }
+
+Helper.prototype.alert = function(type, text, appendTo) {
+    $('.alert').remove();
+    
+    var tpl = '<div class="alert alert-' + type + '"><button type="button" class="close" data-dismiss="alert">×</button>' + text + '</div>';
+    $(appendTo).prepend(tpl);
+}
