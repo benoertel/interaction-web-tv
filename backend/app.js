@@ -89,7 +89,6 @@ $(document).ready(function() {
         var websocket = new WebsocketClient(websocketUri, contentList);
         
         channelList.load();
-        // contentList.load();
         timeList.render();
         dateList.render();
         contentForm.render(websocket, channelList);
@@ -106,6 +105,7 @@ $(document).ready(function() {
                 channelList.selected = params.channel;
                 contentForm.channel = channelList.selected;
                 showList.load(dateList.date, params.channel);
+                contentList.load(dateList.date, params.channel);
             }
         });
         $(window).trigger('hashchange');

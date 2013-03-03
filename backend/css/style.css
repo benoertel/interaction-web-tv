@@ -28,7 +28,7 @@ h1 {
 }
 
 #content-form {
-    
+
 }
 
 .programme-date.form-horizontal .control-group {
@@ -189,9 +189,20 @@ legend {
     height: 100px;
 }
 
-#guide ul.show li span {
+#guide ul.show li span.time {
     font-weight: bold;
     display: block;
+    background: #393d3f;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+}
+#guide ul.show li span.title {
+    padding: 2px 4px;
+    font-size: 12px;
+    display: block;
+    white-space: normal;
 }
 
 #guide ul.content {
@@ -354,8 +365,8 @@ legend {
 */
 select.btn {
     -webkit-appearance: button;
-       -moz-appearance: button;
-            appearance: button;
+    -moz-appearance: button;
+    appearance: button;
     width: auto;
 }
 
