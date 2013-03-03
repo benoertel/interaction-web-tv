@@ -1,26 +1,39 @@
-function ContentForm(helper){
+function ContentForm(helper, contentTypes){
     this.helper = helper;
     this.content = [];
-    this.type = 'contentFreetextTemplate';
+    this.contentTypes = contentTypes;
+    this.type = 'freetext';
     this.data = [];
     this.websocket = null;
-    this.channel = 'hurz';
-    
+    this.channel;   
 }
 
-ContentForm.prototype.render = function(websocket, channelList) {
+ContentForm.prototype = {
+    set contentType(contentType) {
+        this.contentTypeChanged(contentType);
+    }
+}
+
+ContentForm.prototype.render = function(websocket) {
     this.websocket = websocket;
-    //  this.channelList = channelList;
-    console.log('render me');
     
     var context = this;
-    $("#contentHeaderTemplate").Chevron("render", {}, function(resultHeader){
+    $("#contentHeaderTemplate").Chevron("render", {contentTypes: context.contentTypes}, function(resultHeader){
         $("#contentFooterTemplate").Chevron("render", {}, function(resultFooter){
-            $("#" + context.type).Chevron("render", context.data, function(result){
+            $('#content' + context.helper.ucfirst(context.type) + 'Template').Chevron("render", context.data, function(result){
                 $('#content-form').html(resultHeader + result + resultFooter);
                 context.initValidation();
+                $('#contentType').val(context.type);
             });
         });
+    });
+}
+
+ContentForm.prototype.renderCustomPart = function() {
+    var context = this;
+    $('#content' + context.helper.ucfirst(context.type) + 'Template').Chevron("render", context.data, function(result){
+        $('#custom-form').html(result);
+        context.initValidation();
     });
 }
 
@@ -54,7 +67,7 @@ ContentForm.prototype.storeContentForm = function(form, event) {
     var data = $('.contentForm input, .contentForm select, .contentForm textarea').serializeArray();
     var doc = this.helper.prepareCouchData(data);
 
-    if(doc.type == 'content' && doc.category == 'freetext') {
+    if(doc.type == 'content') {
         doc.startDate = this.helper.dateToArr(new Date(this.helper.formatDate(doc.startDate)));
         doc.endDate = this.helper.dateToArr(new Date(this.helper.formatDate(doc.endDate)));
     }
@@ -70,8 +83,9 @@ ContentForm.prototype.storeContentForm = function(form, event) {
             context.websocket.send(JSON.stringify(data));
             
             context.helper.alert('success', 'Der Zusatzcontent wurde erfolgreich hinzugefügt.', '#contentTextForm');
+            context.render(context.websocket);
             
-        //  updateContentList(doc.channel);
+            $(window).trigger('hashchange');
         },
         error: function(status) {
             context.helper.alert('error', 'Der Zusatzinhalt konnte nicht hinzugefügt werden.', '#contentTextForm');
@@ -79,4 +93,9 @@ ContentForm.prototype.storeContentForm = function(form, event) {
     });
 
     event.preventDefault();
+}
+
+ContentForm.prototype.contentTypeChanged = function(contentType) {
+    this.type = contentType;
+    this.renderCustomPart();
 }

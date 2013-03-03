@@ -37,3 +37,9 @@ bootstrap
 @inputBorderRadius  4px
 
 
+// add new type
+add templtes to /backend/templates/content/poll.msuache
+edit app.js
+    load templates
+    add template to array
+

@@ -1,5 +1,6 @@
-function ContentList(helper){
+function ContentList(helper, contentTypes){
     this.helper = helper;
+    this.contentTypes = contentTypes
 }
 
 ContentList.prototype.load = function(date, channel) {
@@ -44,8 +45,17 @@ ContentList.prototype.seperateTargetGroups = function(data, endDate) {
     var adultsList = [];
     var elderlyList = [];
 
+    var context = this;
     $.each(data.rows, function(index, value) {
         var elem = value.value;
+        
+        $.each(context.contentTypes, function(idx, val) {
+           if(val.id == elem.category) {
+               elem.label = elem[val.labelField];
+               return false;
+           } 
+        });
+        
         if(elem.ageRange == 'all') {
             allList.push({value: elem});
         } else if(elem.ageRange == 'children') {

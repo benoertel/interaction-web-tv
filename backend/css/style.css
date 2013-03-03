@@ -286,6 +286,13 @@ margin-top: -3px;
 margin-right: 5px;
     }
 
+  #content-form h3 {
+        background: #d3c8b8;
+border-radius: 4px;
+padding: 3px 9px;
+margin-left: -9px;
+margin-right: -9px;
+    }
 /* show list
 #show-list {
     background: #2d585a;

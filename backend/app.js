@@ -61,10 +61,26 @@ $(document).ready(function() {
         {
             'id': 'contentFreetextTemplate',
             'location': '/backend/templates/content/freetext.mustache'
+        },
+        {
+            'id': 'contentPollTemplate',
+            'location': '/backend/templates/content/poll.mustache'
         }
         ]
     };
-        
+    
+    var contentTypes = [
+    {
+        id: 'freetext',
+        label: 'Freitext',
+        labelField: 'title'
+    },{
+        id: 'poll',
+        label: 'Umfrage',
+        labelField: 'question'
+    }
+    ];
+
    
     var app = new App(config, loaded);
         
@@ -79,8 +95,8 @@ $(document).ready(function() {
         
         var helper = new Helper();
         
-        var contentList = new ContentList(helper);
-        var contentForm = new ContentForm(helper);
+        var contentList = new ContentList(helper, contentTypes);
+        var contentForm = new ContentForm(helper, contentTypes);
         var channelList = new ChannelList(helper);
         var timeList = new TimeList(helper);
         var showList = new ShowList(helper);
@@ -91,7 +107,7 @@ $(document).ready(function() {
         channelList.load();
         timeList.render();
         dateList.render();
-        contentForm.render(websocket, channelList);
+        contentForm.render(websocket);
         
         $(window).bind('hashchange', function() {
             var params = helper.getHashParams();
@@ -111,8 +127,8 @@ $(document).ready(function() {
         $(window).trigger('hashchange');
         
         $(document).on('click', '#channel-list li a', function(){
-             channelList.selected = $(this).attr('data-channel-id');
-             contentForm.channel = channelList.selected;
+            channelList.selected = $(this).attr('data-channel-id');
+            contentForm.channel = channelList.selected;
             
             var date = $('#programme-date select').val(); 
             var day = $('a[data-day-id].active').attr('data-day-id');
@@ -142,58 +158,9 @@ $(document).ready(function() {
           
             window.location.hash = '#!/channel=' + channel + '&date=' + date;
         });
-
-    
-    /*
-        bookmarkList.load(false);
-        contentList.render();
-        user.showLoginForm();
-      
-        window.addEventListener("offline", function(e) {
-            websocket.status = 'disconnected';
-            tv.status = 'unavailable';
-        })
- 
-        window.addEventListener("online", function(e) {
-            setupWebsocket();
+        
+        $(document).on('change', '#contentType', function() {
+            contentForm.contentType = $(this).val();
         });
-
-        $('a[rel=tooltip]').tooltip();
-        $('a[rel=popover]').popover();
-    
-        $(document).on('keypress', 'form', function(e) {
-            if (e.which == 13) {
-                $(this).parent().next('.modal-footer').children('.btn-success').click();
-            
-                return false;
-            }
-        });
-   
-        $(document).on('click', 'button[data-action], a[data-action], span[data-action]', function(e){
-            var action = $(this).attr('data-action');
-
-            if(action == 'signup') {
-                user.showSignupForm(modalOptions);
-            } else if(action == 'login') {
-                user.showLoginForm(modalOptions);
-            } else if(action == 'settings') {
-                tv.showSettings(modalOptions);
-            } else if(action == 'toggle-updates') {
-                tv.toggleReceiveUpdates(contentList);
-            } else if(action == 'update-settings') {
-                tv.id = $('#tvId').val();
-            } else if(action == 'register-user') {
-                user.register(websocket);
-            } else if(action == 'login-user') {
-                user.login(websocket);
-            } else if(action == 'bookmark') {
-                bookmarkList.push(contentList.top());
-            } else if(action == 'toggle-delete-bookmarks') {
-                bookmarkList.toggleRemove();
-            } else if(action == 'delete-bookmark') {
-                bookmarkList.remove($(this).attr('data-id'));
-                e.preventDefault();
-            }
-        });*/
     }
 });
