@@ -51,12 +51,8 @@ $(document).ready(function() {
             'location': '/backend/templates/dateList.mustache'
         },
         {
-            'id': 'contentHeaderTemplate',
-            'location': '/backend/templates/content/_header.mustache'
-        },
-        {
-            'id': 'contentFooterTemplate',
-            'location': '/backend/templates/content/_footer.mustache'
+            'id': 'contentCommonTemplate',
+            'location': '/backend/templates/content/common.mustache'
         },
         {
             'id': 'contentFreetextTemplate',

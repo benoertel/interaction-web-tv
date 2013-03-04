@@ -18,14 +18,9 @@ ContentForm.prototype.render = function(websocket) {
     this.websocket = websocket;
     
     var context = this;
-    $("#contentHeaderTemplate").Chevron("render", {contentTypes: context.contentTypes}, function(resultHeader){
-        $("#contentFooterTemplate").Chevron("render", {}, function(resultFooter){
-            $('#content' + context.helper.ucfirst(context.type) + 'Template').Chevron("render", context.data, function(result){
-                $('#content-form').html(resultHeader + result + resultFooter);
-                context.initValidation();
-                $('#contentType').val(context.type);
-            });
-        });
+    $("#contentCommonTemplate").Chevron("render", {contentTypes: context.contentTypes}, function(result){
+        $('#content-form').html(result);
+        context.renderCustomPart();
     });
 }
 
