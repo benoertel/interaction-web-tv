@@ -267,7 +267,7 @@ if(mode == 'live') {
 // 1) get content that starts within the next 15 minutes
 function initQueue(startDate, nowDate) {
     if(timeDiff > 0) {
-      //  console.log('we have a timeDiff of ' + timeDiff + ' seconds.');
+        console.log('we have a timeDiff of ' + timeDiff + ' seconds.');
     }
     
     if(!nowDate) {
@@ -279,19 +279,19 @@ function initQueue(startDate, nowDate) {
     }
     var endDate = helper.dateToArr(helper.addMinutes(helper.arrToDate(startDate), 15));
     
-   // console.log(startDate);
-   // console.log(endDate);
+    console.log(startDate);
+    console.log(endDate);
     
     db.view('content/by-date', {
         startkey: startDate,
         endkey: endDate
     }, function (err, result) {
-       // console.log(result);
+        console.log(result);
         if(!err) {
             // when there is no starting task within 15mins, get the next task that starts in the future
             if(result.length == 0) {
-         //       console.log('server.js - initQueue() - no tasks within 15mins');
-           //     console.log(nowDate);
+                console.log('server.js - initQueue() - no tasks within 15mins');
+                console.log(nowDate);
                 db.view('content/by-date', {
                     startkey: nowDate,
                     limit: 1
@@ -306,16 +306,16 @@ function initQueue(startDate, nowDate) {
                     }
                 });
             } else {
-             //   console.log('server.js - initQueue() - found tasks within 15mins');
+                console.log('server.js - initQueue() - found tasks within 15mins');
                 for(var idx in result) {
                     var timestamp = helper.adjustTimestamp(helper.arrToTimestamp(result[idx].value.startDate), -1 * timeDiff);
-                 //   console.log('server.js - the new scheduled date is ' + new Date(timestamp * 1000));
-               //     console.log('server.js - initQueue() - timestamp' + timestamp);
+                    console.log('server.js - the new scheduled date is ' + new Date(timestamp * 1000));
+                    console.log('server.js - initQueue() - timestamp' + timestamp);
 
                     queue.push(timestamp, result[idx]);
                 }
                 
-               // console.log('server.js - initQueue() - current length' + queue.length);
+                console.log('server.js - initQueue() - current length' + queue.length);
                 j = schedule.scheduleJob(helper.adjustDate(helper.arrToDate(result[0].value.startDate), -1 * timeDiff), function(){
                     distributeContent();
                 });
@@ -331,7 +331,7 @@ function distributeContent() {
     var nextTasks = queue.current();
     
     // distribute to connected devices
-   // console.log('server.js - distributeContent() - send tasks to second screen devices:');
+    console.log('server.js - distributeContent() - send tasks to second screen devices:');
     
     for (var idx in nextTasks) {
         var obj = {
@@ -360,7 +360,7 @@ function distributeContent() {
         console.log((queue.pos) + ' ... ' + (queue.length - 1));
         
         if(queue.pos == queue.length - 1) {
-          //  console.log('refill queue');
+            console.log('refill queue');
             var startDate = helper.timestampToDate(queue.top() + 1);
             initQueue(helper.dateToArr(startDate), startDate);
         }
@@ -369,7 +369,7 @@ function distributeContent() {
             distributeContent();
         });
     } else {
-    //    console.log('queue is empty for now, no more contents available');
+        console.log('queue is empty for now, no more contents available');
     }
     
     queue.posAdd();
