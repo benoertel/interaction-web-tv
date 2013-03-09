@@ -281,8 +281,9 @@ function initQueue(startDate, nowDate) {
     }
     var endDate = helper.dateToArr(helper.addMinutes(helper.arrToDate(startDate), 15));
     
-    console.log(startDate);
-    console.log(endDate);
+    console.log('here are the keys');
+    console.log([channel, startDate]);
+    console.log([channel, startDate]);
     
     db.view('content/by-date', {
         startkey: [channel, startDate],
