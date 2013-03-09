@@ -283,7 +283,7 @@ function initQueue(startDate, nowDate) {
     
     console.log('here are the keys');
     console.log([channel, startDate]);
-    console.log([channel, startDate]);
+    console.log([channel, endDate]);
     
     db.view('content/by-date', {
         startkey: [channel, startDate],
