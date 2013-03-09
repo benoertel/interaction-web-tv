@@ -20,7 +20,7 @@ var j = null;
 // read command line args and parse them
 var args = helper.parseArgs(process.argv.splice(2));
 
-var mode = args.mode ? args.mode : 'television';
+var mode = args.mode ? args.mode : 'live';
 var virtualStart = args.date ? args.date : null;
 var channel = args.channel ? args.channel : null;
 var movieFile = args.file ? args.file : null;
@@ -62,7 +62,7 @@ websocketServer.on('request', function(request) {
             
             // send the server configuration to the smart tv
             if(data.method == 'get-config') {
-                televisions[data.tvId] = null;
+                
                 var obj = {
                     'method': 'get-config-response',
                     'mode': mode
@@ -71,6 +71,15 @@ websocketServer.on('request', function(request) {
                 if(mode == 'movie') {
                     obj.file = movieFile,
                     obj.channel = channel
+                }
+                
+                if(!televisions[data.tvId]) {
+                    device.type = 'tv';
+                    device.tvId = data.tvId;
+                    // when it is a new device, we need to notify all second screen
+                    // devices, that are waiting for this device
+                    console.log('smart tv ' + data.tvId + ' is online');
+                    televisions[data.tvId] = channel;
                 }
                 
                 connection.send(JSON.stringify(obj));
@@ -84,13 +93,12 @@ websocketServer.on('request', function(request) {
                 var obj = {
                     'method': 'subscribe-response'
                 };
+                console.log('try connecting to ' + data.tvId);
                 console.log(televisions);
                 // check if tvId exists
                 if(televisions[data.tvId]) {
                     // send back, send in next response the current channel
-                   // db.view('content/by-channel', {
-                   //     key: televisions[data.tvId]
-                   // }, function (err, result) {
+                   
                         obj.status = 'success';
                         obj.message = 'Remote Smart-TV is available.';
                         obj.tv = {
@@ -106,13 +114,7 @@ websocketServer.on('request', function(request) {
 
             // channel change on smart tv
             } else if(data.method == 'channel-changed') {
-                if(!televisions[data.tvId]) {
-                    device.type = 'tv';
-                    device.tvId = data.tvId;
-                    // when it is a new device, we need to notify all second screen
-                    // devices, that are waiting for this device
-                    console.log('smart tv ' + data.tvId + ' is online');
-                }
+                
 
                 televisions[data.tvId] = data.channel;
 
@@ -258,7 +260,7 @@ websocketServer.on('request', function(request) {
 // ### SCHEDULER ####
 // ##################
 
-if(mode == 'television') {
+if(mode == 'live') {
     initQueue();
 }
 

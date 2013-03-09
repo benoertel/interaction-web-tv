@@ -25,6 +25,8 @@ BookmarkList.prototype.load = function(displayActions) {
     if(!this.bookmarks) {
         this.bookmarks = [];
     }
+    console.log('load me');
+    console.log($.totalStorage('bookmarks'));
         
     $('#bookmarksTemplate').Chevron('render', {
         'bookmarks': this.bookmarks

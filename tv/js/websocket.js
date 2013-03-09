@@ -39,7 +39,8 @@ WebsocketClient.prototype.onopen = function(event) {
     this.status = 'connected';
     
     var data = {
-        'method': 'get-config'
+        'method': 'get-config',
+        'tvId': this.tv.id
     };
     this.send(data);
 };

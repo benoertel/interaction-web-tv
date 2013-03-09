@@ -26,6 +26,7 @@ body {
 #content {
     padding: 20px 20px 10px 20px;
     background-color: rgba(255, 255, 255, .95);
+    border-radius: 4px;
     margin-bottom: 20px;
 }
 
@@ -86,6 +87,15 @@ body {
     background-position: center 0;
 }
 
+#closup {
+    margin-top: 10px;
+    background: rgba(146,190,199,0.8);
+    padding: 3px 10px;
+    font-size: 11px;
+    border-radius: 4px;
+    color: white;
+}
+
 /* bookmarks */
 #bookmarks {
 }
@@ -95,7 +105,9 @@ body {
 }
 
 #bookmarks ul {
-    background-color: rgba(153, 184, 213, .79);
+    background-color: rgba(219, 88, 102, .79);
+    border-radius: 4px;
+    color: white;
     padding: 10px;
 }
 #bookmarks li span.remove {
