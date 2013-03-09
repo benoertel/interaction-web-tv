@@ -285,8 +285,8 @@ function initQueue(startDate, nowDate) {
     console.log(endDate);
     
     db.view('content/by-date', {
-        startkey: startDate,
-        endkey: endDate
+        startkey: [channel, startDate],
+        endkey: [channel, startDate]
     }, function (err, result) {
         console.log(result);
         if(!err) {
@@ -295,7 +295,7 @@ function initQueue(startDate, nowDate) {
                 console.log('server.js - initQueue() - no tasks within 15mins');
                 console.log(nowDate);
                 db.view('content/by-date', {
-                    startkey: nowDate,
+                    startkey: [channel, startDate],
                     limit: 1
                 }, function (suberr, subresult) {
                     if(!suberr) {
