@@ -21,7 +21,7 @@ var j = null;
 var args = helper.parseArgs(process.argv.splice(2));
 
 var mode = args.mode ? args.mode : 'live';
-var virtualStart = args.date ? args.date : null;
+var virtualStart = args.date ? helper.dateStringToDate(args.date) : null;
 var channel = args.channel ? args.channel : null;
 var movieFile = args.file ? args.file : null;
 
@@ -203,13 +203,15 @@ websocketServer.on('request', function(request) {
                 });
             } else if(data.method == 'movie-play') {
                 console.log('movie play');
-                
                 // now we have to calc the date difference between the current real time and the the time we
                 // need to sync additional content with and then we have to calc everything for this device
                 // with the diff
                 var now = new Date();
                 var nowTimestamp = helper.dateToTimestamp(now);
-                timeDiff = data.start - nowTimestamp;
+                var virtualStartTimestamp = helper.dateToTimestamp(virtualStart);
+                
+                timeDiff = virtualStartTimestamp - nowTimestamp + data.start;
+                
                 
                 initQueue();
                                 
@@ -266,7 +268,7 @@ if(mode == 'live') {
 
 // 1) get content that starts within the next 15 minutes
 function initQueue(startDate, nowDate) {
-    if(timeDiff > 0) {
+    if(timeDiff != 0) {
         console.log('we have a timeDiff of ' + timeDiff + ' seconds.');
     }
     

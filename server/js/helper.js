@@ -97,3 +97,14 @@ exports.parseArgs = function(arguments) {
     
     return response;
 }
+
+exports.dateStringToDate = function(dateString) {
+    var y = parseInt(dateString.substr(0,4), 10);
+    var m = parseInt(dateString.substr(4,2), 10) - 1;
+    var d = parseInt(dateString.substr(6,2), 10);
+    var h = parseInt(dateString.substr(8,2), 10);
+    var i = parseInt(dateString.substr(10,2), 10);
+    var s = parseInt(dateString.substr(12,2), 10);
+    
+    return new Date(y, m, d, h, i, s);
+}
