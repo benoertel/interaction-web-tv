@@ -8,7 +8,7 @@ function Television(id, helper) {
     this.channel = null;
     this.status = 'paused';
     this.mode = 'television';
-    this.volume = 0;
+    this.volume = 1;
     
     this.channelList = [
     'schweig-hd',

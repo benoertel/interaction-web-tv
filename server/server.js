@@ -5,17 +5,13 @@ var server = require('websocket').server;
 var http = require('http');
 var cradle = require('cradle');
 var hash = require("mhash").hash;
-var schedule = require('node-schedule');
 var helper = require('./js/helper.js');
-var queue = require('./js/queue.js');
+var scheduler = require('./js/scheduler.js');
 
 // init global vars
-var televisions = [];
-var subscriptions = [];
-var clients = [];
-
-var timeDiff = 0;
-var j = null;
+global.televisions = [];
+global.subscriptions = [];
+global.clients = [];
 
 // read command line args and parse them
 var args = helper.parseArgs(process.argv.splice(2));
@@ -32,6 +28,8 @@ var db = new(cradle.Connection)('http://localhost', 5984, {
     cache: true,
     raw: false
 }).database('persad');
+
+scheduler.init(db);
 
 // create server
 var httpServer = http.createServer();
@@ -51,7 +49,7 @@ websocketServer.on('request', function(request) {
 
     // we need to know client index to remove them on 'close' event
     var device = {
-        'index': clients.push(connection) - 1,
+        'index': global.clients.push(connection) - 1,
         'type': null
     };
 
@@ -73,13 +71,13 @@ websocketServer.on('request', function(request) {
                     obj.channel = channel
                 }
                 
-                if(!televisions[data.tvId]) {
+                if(!global.televisions[data.tvId]) {
                     device.type = 'tv';
                     device.tvId = data.tvId;
                     // when it is a new device, we need to notify all second screen
                     // devices, that are waiting for this device
                     console.log('smart tv ' + data.tvId + ' is online');
-                    televisions[data.tvId] = channel;
+                    global.televisions[data.tvId] = channel;
                 }
                 
                 connection.send(JSON.stringify(obj));
@@ -88,21 +86,21 @@ websocketServer.on('request', function(request) {
             } else if(data.method == 'subscribe') {
                 device.type = 'second-screen';
 
-                subscriptions[device.index] = data.tvId;
+                global.subscriptions[device.index] = data.tvId;
 
                 var obj = {
                     'method': 'subscribe-response'
                 };
                 console.log('try connecting to ' + data.tvId);
-                console.log(televisions);
+                console.log(global.televisions);
 
                 // check if tvId exists
-                if(televisions[data.tvId]) {
+                if(global.televisions[data.tvId]) {
                     // send back, send in next response the current channel
                     obj.status = 'success';
                     obj.message = 'Remote Smart-TV is available.';
                     obj.tv = {
-                        'channel': televisions[data.tvId]
+                        'channel': global.televisions[data.tvId]
                     };
                 } else {
                     obj.status = 'error';
@@ -115,17 +113,17 @@ websocketServer.on('request', function(request) {
             } else if(data.method == 'channel-changed') {
                 
                 console.log('channel changed on smart tv');
-                televisions[data.tvId] = data.channel;
+                global.televisions[data.tvId] = data.channel;
 
                 var obj = {
                     method: 'channel-changed',
                     channel: data.channel
                 };
 
-                for (var i=0; i < subscriptions.length; i++) {
-                    if(subscriptions[i] == data.tvId) {
-                        if(clients[i].authorized) {
-                            clients[i].send(JSON.stringify(obj));
+                for (var i=0; i < global.subscriptions.length; i++) {
+                    if(global.subscriptions[i] == data.tvId) {
+                        if(global.clients[i].authorized) {
+                            global.clients[i].send(JSON.stringify(obj));
                         } else {
                             console.log('not authorized anymore');
                         }
@@ -137,8 +135,7 @@ websocketServer.on('request', function(request) {
                 db.view('content/by-channel', {
                     key: data.channel
                 }, function (err, result) {
-                    queue.reset();
-                    initQueue();
+                    scheduler.reset();
                     
                 });
                 
@@ -206,22 +203,14 @@ websocketServer.on('request', function(request) {
                 // now we have to calc the date difference between the current real time and the the time we
                 // need to sync additional content with and then we have to calc everything for this device
                 // with the diff
-                var now = new Date();
-                var nowTimestamp = helper.dateToTimestamp(now);
+                var nowTimestamp = helper.dateToTimestamp(new Date());
                 var virtualStartTimestamp = helper.dateToTimestamp(virtualStart);
-                
-                timeDiff = virtualStartTimestamp - nowTimestamp + data.start;
-                
-                
-                initQueue();
                                 
+                scheduler.reset(virtualStartTimestamp - nowTimestamp + data.start);
+
             } else if(data.method == 'movie-pause') {
                 console.log('movie pause');
-                
-                if(j) {
-                    j.cancel();
-                }
-                queue.reset();
+                scheduler.stop();
             }
         }
     });
@@ -229,23 +218,23 @@ websocketServer.on('request', function(request) {
     // user disconnected
     connection.on('close', function(connection) {
         // remove user from the list of connected clients
-        delete clients[device.index];
-        delete subscriptions[device.index];
+        delete global.clients[device.index];
+        delete global.subscriptions[device.index];
 
         if(device.type == 'tv') {
             var obj = {
                 'method': 'tv-disconnected'
             };
 
-            for (var i=0; i < subscriptions.length; i++) {
-                if(subscriptions[i] == device.tvId) {
-                    if(clients[i].authorized) {
-                        clients[i].send(JSON.stringify(obj));
+            for (var i=0; i < global.subscriptions.length; i++) {
+                if(global.subscriptions[i] == device.tvId) {
+                    if(global.clients[i].authorized) {
+                        global.clients[i].send(JSON.stringify(obj));
                     }
                 }
             }
 
-            delete televisions[device.tvId];
+            delete global.televisions[device.tvId];
             console.log('smart tv ' + device.tvId + ' closed the connection.');
         } else {
             console.log('second screen device closed the connection.');
@@ -258,123 +247,8 @@ websocketServer.on('request', function(request) {
     });
 });
 
-// ##################
-// ### SCHEDULER ####
-// ##################
-
+// in live mode, the scheduler can start whenever the sever started, for movies
+// it will be started when the movie starts playing
 if(mode == 'live') {
-    initQueue();
+    scheduler.start();
 }
-
-// 1) get content that starts within the next 15 minutes
-function initQueue(startDate, nowDate) {
-    if(timeDiff != 0) {
-        console.log('we have a timeDiff of ' + timeDiff + ' seconds.');
-    }
-    
-    if(!nowDate) {
-        nowDate = helper.dateToArr(helper.adjustDate(new Date(), timeDiff));
-    }
-    
-    if(!startDate) {
-        startDate = nowDate;
-    }
-    var endDate = helper.dateToArr(helper.addMinutes(helper.arrToDate(startDate), 15));
-    
-    console.log('here are the keys');
-    console.log([channel, startDate]);
-    console.log([channel, endDate]);
-    
-    db.view('content/by-date', {
-        startkey: startDate,
-        endkey: endDate
-    }, function (err, result) {
-        console.log(result);
-        if(!err) {
-            // when there is no starting task within 15mins, get the next task that starts in the future
-            if(result.length == 0) {
-                console.log('server.js - initQueue() - no tasks within 15mins');
-                console.log(nowDate);
-                db.view('content/by-date', {
-                    startkey: startDate,
-                    limit: 1
-                }, function (suberr, subresult) {
-                    if(!suberr) {
-                        // when the subresult length is 0, we can stop at this point, no tasks in the future
-                        if(subresult.length == 1) {
-                            initQueue(subresult[0].value.startDate);
-                        }
-                    } else {
-                        console.log(suberr);
-                    }
-                });
-            } else {
-                console.log('server.js - initQueue() - found tasks within 15mins');
-                for(var idx in result) {
-                    var timestamp = helper.adjustTimestamp(helper.arrToTimestamp(result[idx].value.startDate), -1 * timeDiff);
-                    console.log('server.js - the new scheduled date is ' + new Date(timestamp * 1000));
-                    console.log('server.js - initQueue() - timestamp' + timestamp);
-
-                    queue.push(timestamp, result[idx]);
-                }
-                
-                console.log('server.js - initQueue() - current length' + queue.length);
-                j = schedule.scheduleJob(helper.adjustDate(helper.arrToDate(result[0].value.startDate), -1 * timeDiff), function(){
-                    distributeContent();
-                });
-            }
-        } else {
-            console.log(err);
-        }
-    });
-}
-
-// 2) initialize the distributon to the second screen devices
-function distributeContent() {
-    var nextTasks = queue.current();
-    
-    // distribute to connected devices
-    console.log('server.js - distributeContent() - send tasks to second screen devices:');
-    
-    for (var idx in nextTasks) {
-        var obj = {
-            method: 'content-changed',
-            channel: nextTasks[idx].value.channel,
-            data: nextTasks[idx].value
-        };
-
-        for(var tvId in televisions) {
-            if(televisions[tvId] == nextTasks[idx].value.channel) {
-                for (var i=0; i < subscriptions.length; i++) {
-                    if(subscriptions[i] == tvId) {
-                        if(clients[i].authorized) {
-                            clients[i].send(JSON.stringify(obj));
-                            console.log('- ' + nextTasks[idx].value.title);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    // get the time of the very next task
-    if(queue.next()) {
-        // when the pre-last task is reached, refill the queue
-        console.log((queue.pos) + ' ... ' + (queue.length - 1));
-        
-        if(queue.pos == queue.length - 1) {
-            console.log('refill queue');
-            var startDate = helper.timestampToDate(queue.top() + 1);
-            initQueue(helper.dateToArr(startDate), startDate);
-        }
-        
-        j = schedule.scheduleJob(helper.timestampToDate(queue.next()), function(){
-            distributeContent();
-        });
-    } else {
-        console.log('queue is empty for now, no more contents available');
-    }
-    
-    queue.posAdd();
-}
-
