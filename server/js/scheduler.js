@@ -95,9 +95,10 @@ exports.start = function(startDate, endDate){
 // 2) distribute to the second screen devices
 exports.distribute = function() {
     var nextTasks = queue.current();
+    var context = this;
     
     // distribute to connected devices
-    console.log('server.js - distributeContent() - send tasks to second screen devices:');
+    console.log('server.js - distribute() - send tasks to second screen devices:');
     
     for (var idx in nextTasks) {
         var obj = {
@@ -132,7 +133,7 @@ exports.distribute = function() {
         }
         
         job = schedule.scheduleJob(helper.timestampToDate(queue.next()), function(){
-            distributeContent();
+            context.distribute();
         });
     } else {
         console.log('queue is empty for now, no more contents available');
