@@ -27,27 +27,27 @@ $(document).ready(function() {
         templates: [
         {
             'id': 'contentFreetextTemplate',
-            'location': '/app/templates/content/freetext.mustache'
+            'location': '/app/templates/content/freetext.tpl'
         },
         {
             'id': 'signupFormTemplate',
-            'location': '/app/templates/signupForm.mustache'
+            'location': '/app/templates/signupForm.tpl'
         },
         {
             'id': 'loginFormTemplate',
-            'location': '/app/templates/loginForm.mustache'
+            'location': '/app/templates/loginForm.tpl'
         },
         {
             'id': 'settingsTemplate',
-            'location': '/app/templates/settings.mustache'
+            'location': '/app/templates/settings.tpl'
         },
         {
             'id': 'bookmarksTemplate',
-            'location': '/app/templates/bookmarks.mustache'
+            'location': '/app/templates/bookmarks.tpl'
         },
         {
             'id': 'displayLinkTemplate',
-            'location': '/app/templates/displayLink.mustache'
+            'location': '/app/templates/displayLink.tpl'
         }
         ]
     };

@@ -32,35 +32,35 @@ $(document).ready(function() {
         templates: [
         {
             'id': 'channelListTemplate',
-            'location': '/backend/templates/channelList.mustache'
+            'location': '/backend/templates/channelList.tpl'
         },
         {
             'id': 'showListTemplate',
-            'location': '/backend/templates/showList.mustache'
+            'location': '/backend/templates/showList.tpl'
         },
         {
             'id': 'contentListTemplate',
-            'location': '/backend/templates/contentList.mustache'
+            'location': '/backend/templates/contentList.tpl'
         },
         {
             'id': 'timeListTemplate',
-            'location': '/backend/templates/timeList.mustache'
+            'location': '/backend/templates/timeList.tpl'
         },
         {
             'id': 'dateListTemplate',
-            'location': '/backend/templates/dateList.mustache'
+            'location': '/backend/templates/dateList.tpl'
         },
         {
             'id': 'contentCommonTemplate',
-            'location': '/backend/templates/content/common.mustache'
+            'location': '/backend/templates/content/common.tpl'
         },
         {
             'id': 'contentFreetextTemplate',
-            'location': '/backend/templates/content/freetext.mustache'
+            'location': '/backend/templates/content/freetext.tpl'
         },
         {
             'id': 'contentPollTemplate',
-            'location': '/backend/templates/content/poll.mustache'
+            'location': '/backend/templates/content/poll.tpl'
         }
         ]
     };
