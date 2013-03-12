@@ -22,15 +22,19 @@ WebsocketClient.prototype.init = function() {
     var context = this;
 
     this.socket.onopen = function(event) {
+        $('#logger').append('<br><b>open</b>' + JSON.stringify(event));
         context.onopen(event);
     }
     this.socket.onerror = function(event) {
+        $('#logger').append('<br><b>error</b>' + JSON.stringify(event));
         context.onerror(event);
     }
     this.socket.onclose = function(event) {
+        $('#logger').append('<br><b>close</b>' + JSON.stringify(event));
         context.onclose(event);
     }
     this.socket.onmessage = function(event) {
+        $('#logger').append('<br><b>mesage</b>' + JSON.stringify(event));
         context.onmessage(event);
     }
 }
