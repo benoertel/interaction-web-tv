@@ -66,3 +66,7 @@ body {
 right: -6px;
 bottom: -25px;
     }
+    
+    .gicon-ws-signal-off {
+        background-position: 0 -30px;
+    }
