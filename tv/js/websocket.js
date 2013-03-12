@@ -63,7 +63,7 @@ WebsocketClient.prototype.onmessage = function(message) {
     var json = JSON.parse(message.data);
 
     if(json.method == 'get-config-response') {
-        this.tv.getConfigResponse(json);
+        this.tv.getConfigResponse(json, this);
     }
 }
     

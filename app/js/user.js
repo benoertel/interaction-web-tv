@@ -1,8 +1,11 @@
-function User(helper, modalOptions){
+function User(helper){
     this.helper = helper;
     this.credentials =  null;
 }
 
+/**
+ * Login an existing user.
+ */
 User.prototype.login = function(websocket) {
     $('#loginForm .alert').remove();
     $('#loginForm .loader').remove();
@@ -14,18 +17,21 @@ User.prototype.login = function(websocket) {
         'username': $('#username').val(),
         'password': $('#password').val()
     };
-        
-    websocket.send(this.credentials);
+    
+    if(websocket.status == 'connected') {
+        websocket.send(this.credentials);
+    } else {
+        var alert = this.helper.createAlert('error', 'Keine Anmeldung möglich, es besteht keine Verbindung zum Server.');
+        $('#loginForm').prepend(alert);
+        $('#loginForm .loader').remove();
+    }
 };
 
 User.prototype.loginResponse = function(data, tv, websocket) {
     $('#loginForm .loader').remove();
     var alert = this.helper.createAlert(data.status, data.message);
-        
+
     $('#loginForm').prepend(alert);
-    if(data.user) {
-        $('span.username').html(data.user.username);
-    }
     if(data.status == 'success') {
         tv.subscribe(websocket);
         
@@ -36,6 +42,9 @@ User.prototype.loginResponse = function(data, tv, websocket) {
     }
 };
 
+/**
+ * Register a new user in the system.
+ */
 User.prototype.register = function(websocket) {
     $('#signupForm .alert').remove();
     $('#signupForm .loader').remove();
@@ -47,8 +56,14 @@ User.prototype.register = function(websocket) {
         'age': $('#age').val(),
         'sex': $('#sex').val()
     };
-        
-    websocket.send(data);
+    
+    if(websocket.status == 'connected') {
+        websocket.send(data);
+    } else {
+        var alert = this.helper.createAlert('error', 'Keine Registrierung möglich, es besteht keine Verbindung zum Server.');
+        $('#signupForm').prepend(alert);
+        $('#signupForm .loader').remove();
+    }
 };
 
 User.prototype.registerResponse = function(data) {

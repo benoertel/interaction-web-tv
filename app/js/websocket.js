@@ -3,7 +3,7 @@ function WebsocketClient(websocketUri, tv, user, contentList){
     this.socket = new WebSocket(this.websocketUri);
     this.init();
     
-    this.status = 'disconnected';
+    this.__status = 'disconnected';
     this.tv = tv;
     this.user = user;
     this.contentList = contentList;
@@ -12,30 +12,10 @@ function WebsocketClient(websocketUri, tv, user, contentList){
 WebsocketClient.prototype = {
     set status(status) {
         this.statusChanged(status);
-    }    
-    /* get tv(){
-        return this._tv;
     },
-    
-    set tv(tv) {
-        this._tv = tv;
-    },
-    
-    get user(){
-        return this._user;
-    },
-    
-    set user(user) {
-        this._user = user;
-    },
-    
-    get contentList(){
-        return this._contentList;
-    },
-    
-    set contentList(contentList) {
-        this._contentList = contentList;
-    }*/
+    get status() {
+        return this.__status;
+    }
 }
 
 WebsocketClient.prototype.init = function() {
@@ -55,18 +35,14 @@ WebsocketClient.prototype.init = function() {
     }
 }
 
-WebsocketClient.prototype.onopen = function(event) {
-    console.log('ws onopen');
-    
+WebsocketClient.prototype.onopen = function(event) {    
     this.status = 'connected';
-    //    if(credentials) {
-    //        this.socket.send(JSON.stringify(credentials));
-    //    }
+    if(this.user.credentials) {
+        this.socket.send(JSON.stringify(this.user.credentials));
+    }
 };
     
-WebsocketClient.prototype.onclose = function(event) {
-    console.log('ws onclose');
-    
+WebsocketClient.prototype.onclose = function(event) {    
     this.status = 'disconnected';
     this.tv.status = 'unavailable';
     
@@ -101,8 +77,9 @@ WebsocketClient.prototype.onmessage = function(message) {
         this.tv.disconnect();
     }
 }
-    
+
 WebsocketClient.prototype.statusChanged = function(status) {
+    this.__status = status;
     if(status == 'connected') {
         $('#websocket-status i').removeClass('gicon-ws-signal-off');
         $('#websocket-status i').addClass('gicon-ws-signal-on');

@@ -19,7 +19,7 @@ function Television(id, helper) {
     this.file = null;
 }
 
-Television.prototype.getConfigResponse = function(json, websocket) {
+Television.prototype.getConfigResponse = function(json, socket) {
     this.mode = json.mode;
     
     if(json.mode == 'movie') {
@@ -27,7 +27,7 @@ Television.prototype.getConfigResponse = function(json, websocket) {
         this.file = json.file;
     }
     
-    this.updateSource();
+    this.updateSource(socket);
 }
 
 /**
@@ -36,7 +36,6 @@ Television.prototype.getConfigResponse = function(json, websocket) {
 Television.prototype.zapp = function(direction, socket) {
     // zapping disabled for movie mode
     if(this.mode == 'movie') {
-        console.log('zapping disabled for movie mode');
         return;
     }
     
@@ -55,18 +54,13 @@ Television.prototype.zapp = function(direction, socket) {
     
     this.channelId = channelId;
     this.channel = this.channelList[channelId];
-    this.updateSource();
+    this.updateSource(socket);
     this.video.play();
-    
-    var data = {
-        'method': 'channel-changed',
-        'tvId': this.id,
-        'channel': this.channel
-    };
-    socket.send(data);
 }
 
-Television.prototype.updateSource = function() {
+Television.prototype.updateSource = function(socket) {
+    this.notifyChannelChange(socket);
+    
     if(this.video) {
         this.video.pause();
         this.video.src = "";
@@ -96,12 +90,20 @@ Television.prototype.updateSource = function() {
     }
 }
 
+Television.prototype.notifyChannelChange = function(socket) {
+    var data = {
+        'method': 'channel-changed',
+        'tvId': this.id,
+        'channel': this.channel
+    };
+    socket.send(data);
+}
+
 /**
  * Switch status of television between play and pause.
  */
 Television.prototype.togglePlay = function(socket) {
     if(this.mode == 'television') {
-        console.log('pausing is disabled for television mode');
         return;
     }
     

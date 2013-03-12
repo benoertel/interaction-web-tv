@@ -73,7 +73,7 @@ $(document).ready(function() {
         bookmarkList.load(false);
         contentList.render();
         user.showLoginForm();
-      
+        
         window.addEventListener("offline", function(e) {
             websocket.status = 'disconnected';
             tv.status = 'unavailable';

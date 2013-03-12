@@ -22,7 +22,7 @@ var args = helper.parseArgs(process.argv.splice(2));
 
 var mode = args.mode ? args.mode : 'live';
 var virtualStart = args.date ? helper.dateStringToDate(args.date) : null;
-var channel = args.channel ? args.channel : null;
+var channel = args.channel ? args.channel : '-';
 var movieFile = args.file ? args.file : null;
 
 console.log('server.js - running in mode: ' + mode);
@@ -86,7 +86,7 @@ websocketServer.on('request', function(request) {
             
             // a second-screen device subscribes to a smart tv
             } else if(data.method == 'subscribe') {
-                device.type = 'secondScreen';
+                device.type = 'second-screen';
 
                 subscriptions[device.index] = data.tvId;
 
@@ -95,27 +95,26 @@ websocketServer.on('request', function(request) {
                 };
                 console.log('try connecting to ' + data.tvId);
                 console.log(televisions);
+
                 // check if tvId exists
                 if(televisions[data.tvId]) {
                     // send back, send in next response the current channel
-                   
-                        obj.status = 'success';
-                        obj.message = 'Remote Smart-TV is available.';
-                        obj.tv = {
-                            'channel': televisions[data.tvId]
-                     //       'data': result
-                        };
-                    //});
+                    obj.status = 'success';
+                    obj.message = 'Remote Smart-TV is available.';
+                    obj.tv = {
+                        'channel': televisions[data.tvId]
+                    };
                 } else {
                     obj.status = 'error';
                     obj.message = 'Remote Smart-TV currently not available';
                 }
-                    connection.send(JSON.stringify(obj));
+                
+                connection.send(JSON.stringify(obj));
 
             // channel change on smart tv
             } else if(data.method == 'channel-changed') {
                 
-
+                console.log('channel changed on smart tv');
                 televisions[data.tvId] = data.channel;
 
                 var obj = {
@@ -127,13 +126,14 @@ websocketServer.on('request', function(request) {
                     if(subscriptions[i] == data.tvId) {
                         if(clients[i].authorized) {
                             clients[i].send(JSON.stringify(obj));
+                        } else {
+                            console.log('not authorized anymore');
                         }
                     }
                 }
 
             // content of a channel was updated in backend
             } else if(data.method == 'channel-content-updated') {
-
                 db.view('content/by-channel', {
                     key: data.channel
                 }, function (err, result) {
@@ -141,6 +141,7 @@ websocketServer.on('request', function(request) {
                     initQueue();
                     
                 });
+                
             } else if(data.method == 'register-user') {
                 var obj = {
                     'method': 'register-user-response'
@@ -148,7 +149,7 @@ websocketServer.on('request', function(request) {
 
                 if(!data.username || !data.password) {
                     obj.status = 'error';
-                    obj.message = 'Username and password are required.';
+                    obj.message = 'Benutzername und Passwort müssen angegeben werden.';
                     clients[device.index].send(JSON.stringify(obj));
                 } else {
                     var id = 'user-' + data.username;
@@ -161,7 +162,6 @@ websocketServer.on('request', function(request) {
                                 'username': data.username,
                                 'password': hash("sha512", data.password)
                             }, function (err, res) {
-
                                 if(res.ok) {
                                     obj.status = 'success';
                                     obj.message = 'Deine Registrierung ist abgeschlossen, du kannst dich jetzt anmelden.';
