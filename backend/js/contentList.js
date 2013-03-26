@@ -98,3 +98,13 @@ ContentList.prototype.seperateTargetGroups = function(data, endDate) {
     
     return result;
 }
+
+$(document).ready(function(){
+    $(document).on('mouseover','#content-list li', function() {
+       $(this).popover('show');
+    });
+    
+    $(document).on('mouseout','#content-list li', function() {
+       $(this).popover('hide');
+    });
+});

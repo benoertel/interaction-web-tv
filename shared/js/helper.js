@@ -149,11 +149,11 @@ Helper.prototype.prepareListData = function(data, date, dateMax) {
     }
 
     $.each(rows, function(index, value) {
-            
+
         var elem = value.value;
         if(!(elem.endDate[0] == date[0] && elem.endDate[1] == date[1] && elem.endDate[2] == date[2] && elem.endDate[3] < 5)){
             var duration = context.calcDuration(elem.startDate, elem.endDate, 'sec');
-            if(duration > 60) {
+            if(duration > 5) {
                 var startTime = context.parseHourMin(elem.startDate);
                 var endTime = context.parseHourMin(elem.endDate);
 
@@ -177,13 +177,15 @@ Helper.prototype.prepareListData = function(data, date, dateMax) {
                     duration -= diff;
                 }
                     
-                if(duration > 60) {
-                    
-                
-                    var width = (duration / 10) - 7;
-                    var margin = context.calcTimeDiff(prevEndTime, startTime) * 6 + 1;
+                if(duration > 5) {
+                    var width = (duration / 5) - 7;
+                    if(width < 1) {
+                        width = 1;
+                    }
+                    var margin = context.calcTimeDiff(prevEndTime, startTime) * 12 + 1;
                     elem.formatted = {
                         'start': context.parseHourMin(elem.startDate),
+                        'end': context.parseHourMin(elem.endDate),
                         'duration': (duration/60) + 'min',
                         'width': width,
                         'margin': margin

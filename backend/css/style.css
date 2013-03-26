@@ -160,7 +160,7 @@ legend {
 }
 
 #guide ul {
-    width: 8640px;
+    width: 17280px;
     margin: 0;
 }
 
@@ -172,7 +172,7 @@ legend {
 }
 
 #guide ul.time li {
-    width: 172px;
+    width: 352px;
     padding: 10px 0 10px 5px;
     border-left: 3px #73979d solid;
 }
