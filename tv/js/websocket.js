@@ -35,6 +35,9 @@ WebsocketClient.prototype.init = function() {
     }
 }
 
+/**
+ * Websocket connection opened.
+ */
 WebsocketClient.prototype.onopen = function(event) {
     this.status = 'connected';
     
@@ -44,7 +47,10 @@ WebsocketClient.prototype.onopen = function(event) {
     };
     this.send(data);
 };
-    
+
+/**
+ * Websocket connection closed.
+ */ 
 WebsocketClient.prototype.onclose = function(event) {
     this.status = 'disconnected';
     
@@ -54,11 +60,17 @@ WebsocketClient.prototype.onclose = function(event) {
         context.init();
     }, 5000);
 }
-    
+
+/**
+ * Websocket connection error.
+ */
 WebsocketClient.prototype.onerror = function(event) {
     alert('error');
 }
-    
+
+/**
+ * Websocket connection message received.
+ */
 WebsocketClient.prototype.onmessage = function(message) {
     var json = JSON.parse(message.data);
 
@@ -66,7 +78,10 @@ WebsocketClient.prototype.onmessage = function(message) {
         this.tv.getConfigResponse(json, this);
     }
 }
-    
+
+/**
+ * Websocket connection status changed.
+ */
 WebsocketClient.prototype.statusChanged = function() {
     if(this.status == 'connected') {
         $('#websocket-status i').removeClass('gicon-ws-signal-off');
@@ -82,6 +97,9 @@ WebsocketClient.prototype.statusChanged = function() {
     }
 }
 
+/**
+ * Send a message to the server through the websocket connection.
+ */
 WebsocketClient.prototype.send = function(data) {
     this.socket.send(JSON.stringify(data));
 }

@@ -1,7 +1,4 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 var schedule = require('node-schedule');
 
 var queue = require('./queue.js');

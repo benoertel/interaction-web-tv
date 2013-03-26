@@ -35,13 +35,19 @@ WebsocketClient.prototype.init = function() {
     }
 }
 
+/**
+ * Websocket connection opened.
+ */
 WebsocketClient.prototype.onopen = function(event) {    
     this.status = 'connected';
     if(this.user.credentials) {
         this.socket.send(JSON.stringify(this.user.credentials));
     }
 };
-    
+
+/**
+ * Websocket connection closed.
+ */
 WebsocketClient.prototype.onclose = function(event) {    
     this.status = 'disconnected';
     this.tv.status = 'unavailable';
@@ -52,11 +58,17 @@ WebsocketClient.prototype.onclose = function(event) {
         context.init();
     }, 5000);
 }
-    
+
+/**
+ * Websocket connection error.
+ */
 WebsocketClient.prototype.onerror = function(event) {
     alert('error');
 }
-    
+
+/**
+ * Websocket connection message received.
+ */
 WebsocketClient.prototype.onmessage = function(message) {
     var json = JSON.parse(message.data);
 
@@ -78,6 +90,9 @@ WebsocketClient.prototype.onmessage = function(message) {
     }
 }
 
+/**
+ * Websocket connection established/broke.
+ */
 WebsocketClient.prototype.statusChanged = function(status) {
     this.__status = status;
     if(status == 'connected') {
@@ -94,6 +109,9 @@ WebsocketClient.prototype.statusChanged = function(status) {
     }
 }
 
+/**
+ * Send a message to the server through the websocket.
+ */
 WebsocketClient.prototype.send = function(data) {
     this.socket.send(JSON.stringify(data));
 }

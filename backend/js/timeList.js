@@ -2,6 +2,9 @@ function TimeList(helper){
     this.helper = helper;
 }
 
+/**
+ * Render the time list.
+ */
 TimeList.prototype.render = function() {
     var times = [];
 

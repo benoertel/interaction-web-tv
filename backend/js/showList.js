@@ -8,6 +8,9 @@ ShowList.prototype.load = function(date, channel) {
     this.render();
 }
 
+/**
+ * Render the show list.
+ */
 ShowList.prototype.render = function() {
     var context = this;
     var day = new Date(this.date[0], this.date[1], this.date[2]);

@@ -104,8 +104,10 @@ if(!region || !xmlfile) {
     var mystic = fs.createReadStream(__dirname + '/../data/epg/' + xmlfile);
     mystic.pipe(p);
 
+    /**
+     * Save the content of a programme to the dabase.
+     */
     function persistProgramme(programme, channel) {
-
         var id = programme.id;
         var title = (programme.children['title']) ? programme.children['title'] : '';
         var subtitle = (programme.children['subtitle']) ? programme.children['subtitle'] : '';
@@ -127,6 +129,9 @@ if(!region || !xmlfile) {
         db.save('show-' + id, doc, function (err, res) {});
     }
     
+    /**
+     * Check whether a needle is in an array.
+     */
     function inArray(needle, haystack) {
         var length = haystack.length;
         for(var i = 0; i < length; i++) {
@@ -135,6 +140,9 @@ if(!region || !xmlfile) {
         return false;
     }
     
+    /**
+     * Transform a javascript date string to an array.
+     */
     function dateToArr(date) {
         var arr = [
            parseInt(date.substr(0, 4), 10),

@@ -14,6 +14,9 @@ ContentForm.prototype = {
     }
 }
 
+/**
+ * Render the content form.
+ */
 ContentForm.prototype.render = function(websocket) {
     this.websocket = websocket;
     
@@ -24,6 +27,9 @@ ContentForm.prototype.render = function(websocket) {
     });
 }
 
+/**
+ * Render the partial of the content form that is different for each content type.
+ */
 ContentForm.prototype.renderCustomPart = function() {
     var context = this;
     $('#content' + context.helper.ucfirst(context.type) + 'Template').Chevron("render", context.data, function(result){
@@ -32,6 +38,9 @@ ContentForm.prototype.renderCustomPart = function() {
     });
 }
 
+/**
+ * Initialize the validation for the form fields.
+ */
 ContentForm.prototype.initValidation = function() {
     var context = this;
     $("input,select,textarea").not("[type=submit]").jqBootstrapValidation({
@@ -50,12 +59,18 @@ ContentForm.prototype.initValidation = function() {
     });
 }
 
+/**
+ * Error when submitting the form.
+ */
 ContentForm.prototype.errorContentForm = function(form, event, errors) {
     this.helper.alert('block', 'Bitte fülle alle Pflichtfelder aus.', '#contentTextForm');
 
     event.preventDefault();
 }
 
+/**
+ * Store the content form to the database
+ */
 ContentForm.prototype.storeContentForm = function(form, event) {
     var context = this;
     
@@ -90,6 +105,9 @@ ContentForm.prototype.storeContentForm = function(form, event) {
     event.preventDefault();
 }
 
+/**
+ * The selected content type to display the form for changed.
+ */
 ContentForm.prototype.contentTypeChanged = function(contentType) {
     this.type = contentType;
     this.renderCustomPart();

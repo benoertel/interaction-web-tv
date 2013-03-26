@@ -58,6 +58,9 @@ Television.prototype.zapp = function(direction, socket) {
     this.video.play();
 }
 
+/**
+ * Update the source of the television device.
+ */
 Television.prototype.updateSource = function(socket) {
     this.notifyChannelChange(socket);
     
@@ -90,6 +93,9 @@ Television.prototype.updateSource = function(socket) {
     }
 }
 
+/**
+ * Tell the server that the channel on the televison changed.
+ */
 Television.prototype.notifyChannelChange = function(socket) {
     var data = {
         'method': 'channel-changed',

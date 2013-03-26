@@ -9,6 +9,9 @@ ContentList.prototype.load = function(date, channel) {
     this.render();
 }
 
+/**
+ * Render the content list.
+ */
 ContentList.prototype.render = function() {
     var context = this;
     var day = new Date(this.date[0], this.date[1], this.date[2]);
@@ -36,6 +39,9 @@ ContentList.prototype.render = function() {
     });
 }
 
+/**
+ * Split up content for different target groups.
+ */
 ContentList.prototype.seperateTargetGroups = function(data, endDate) {
     var result = [];
 

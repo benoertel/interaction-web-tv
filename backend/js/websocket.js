@@ -30,16 +30,18 @@ WebsocketClient.prototype.init = function() {
     }
 }
 
+/**
+ * Websocket connection opened.
+ */
 WebsocketClient.prototype.onopen = function(event) {
     console.log('ws onopen');
     
     this.status = 'connected';
-    
-//    hashChanged();
-//        updateChannelList();
-//        showForm('contentFreetextTemplate');
 };
-    
+
+/**
+ * Websocket connection closed.
+ */
 WebsocketClient.prototype.onclose = function(event) {
     console.log('ws onclose');
     
@@ -52,11 +54,17 @@ WebsocketClient.prototype.onclose = function(event) {
         context.init();
     }, 5000);
 }
-    
+
+/**
+ * Websocket connection error.
+ */
 WebsocketClient.prototype.onerror = function(event) {
     alert('error');
 }
-    
+
+/**
+ * Websocket connection message received.
+ */
 WebsocketClient.prototype.onmessage = function(message) {
     var json = JSON.parse(message.data);
 
@@ -77,7 +85,10 @@ WebsocketClient.prototype.onmessage = function(message) {
         this.tv.disconnect();
     }
 }
-    
+
+/**
+ * Websocket connection established/broke.
+ */
 WebsocketClient.prototype.statusChanged = function(status) {
     if(status == 'connected') {
         $('#websocket-status i').removeClass('gicon-ws-signal-off');

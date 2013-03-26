@@ -20,6 +20,9 @@ DateList.prototype = {
     }
 }
 
+/**
+ * Render the date bar.
+ */
 DateList.prototype.render = function() {
     var dates = [];
        
@@ -53,6 +56,9 @@ DateList.prototype.render = function() {
     });
 }
 
+/**
+ * The day in the time bar changed. 
+ */
 DateList.prototype.selectedDayChanged = function(selectedDay) {
     $('#programme-date li a').removeClass('active');
     $('a[data-day-id=' + selectedDay + ']').addClass('active');
@@ -65,6 +71,9 @@ DateList.prototype.selectedDayChanged = function(selectedDay) {
     this.date = [tmp.getUTCFullYear(), tmp.getUTCMonth()-1, tmp.getUTCDate()];
 };
 
+/**
+ * The date in the time bar changed.
+ */
 DateList.prototype.selectedDateChanged = function(selectedDate) {
     $('#programme-date li a').removeClass('active');
     $('#programme-date select').val(selectedDate);

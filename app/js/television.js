@@ -26,6 +26,9 @@ Television.prototype = {
     }
 }
 
+/**
+ * Subscribe to the channel of a specific television.
+ */
 Television.prototype.subscribe = function(websocket) {
     var data = {
         'method': 'subscribe',
@@ -35,6 +38,9 @@ Television.prototype.subscribe = function(websocket) {
     websocket.send(data);       
 };
 
+/**
+ * Received response for subscription from the server.
+ */
 Television.prototype.subscribeResponse = function(data) {
     if(data.status == 'success'){
         this.channel = data.tv.channel;
@@ -42,6 +48,9 @@ Television.prototype.subscribeResponse = function(data) {
     }
 };
 
+/**
+ * The channel on the television changed.
+ */
 Television.prototype.channelChanged = function(channel) {
     this.status = 'available';
 
@@ -50,10 +59,16 @@ Television.prototype.channelChanged = function(channel) {
     }
 };
 
+/**
+ * Disconnect the television.
+ */
 Television.prototype.disconnect = function() {
     this.status = 'unavailable';
 }
 
+/**
+ * The status on the televison changed.
+ */
 Television.prototype.statusChanged = function(status) {
     if(status == 'available') {
         $('#tv-status i').removeClass('gicon-tv-signal-off');
@@ -69,6 +84,9 @@ Television.prototype.statusChanged = function(status) {
     }
 };
 
+/**
+ * Toggle whether to receive updates or not.
+ */
 Television.prototype.toggleReceiveUpdates = function(contentList) {
     if(!this.receiveUpdates) {
         $('#live-updates i').removeClass('gicon-play');
@@ -88,6 +106,9 @@ Television.prototype.toggleReceiveUpdates = function(contentList) {
     }
 }
 
+/**
+ * Show overlay with settings form.
+ */
 Television.prototype.showSettings = function(modalOptions){
     $('#settingsTemplate').Chevron('render', {
         tvId: this.id

@@ -27,6 +27,9 @@ User.prototype.login = function(websocket) {
     }
 };
 
+/**
+ * Received response for user login.
+ */
 User.prototype.loginResponse = function(data, tv, websocket) {
     $('#loginForm .loader').remove();
     var alert = this.helper.createAlert(data.status, data.message);
@@ -66,6 +69,9 @@ User.prototype.register = function(websocket) {
     }
 };
 
+/**
+ * Received response for user registration.
+ */
 User.prototype.registerResponse = function(data) {
     $('#loginForm .loader').remove();
         
@@ -83,6 +89,9 @@ User.prototype.registerResponse = function(data) {
     }
 };
 
+/**
+ * Show an overlay with the login form.
+ */
 User.prototype.showLoginForm = function(modalOptions) {
     $('.modal').modal('hide');
         
@@ -92,6 +101,9 @@ User.prototype.showLoginForm = function(modalOptions) {
     });  
 };
     
+/**
+ * Show an overlay with the signup form.
+ */
 User.prototype.showSignupForm = function(modalOptions) {
     $('.modal').modal('hide');
         
