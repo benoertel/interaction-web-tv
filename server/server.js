@@ -132,12 +132,8 @@ wss.on('connection', function(ws) {
 
         // content of a channel was updated in backend
         } else if(data.method == 'channel-content-updated') {
-            db.view('content/by-channel', {
-                key: data.channel
-            }, function (err, result) {
-                scheduler.reset();
-                    
-            });
+                console.log('reset scheduler');
+                scheduler.reset(0);
                 
         } else if(data.method == 'register-user') {
             var obj = {

@@ -57,7 +57,7 @@ ChannelList.prototype.render = function() {
         // re-calculate the width based on the added channels
         var sum = 0;
         $('#channel-list ul li').each( function(){
-            sum += $(this).width() + 4;
+            sum += $(this).width() + 9;
         });
 
         $('#channel-list ul').width(sum);

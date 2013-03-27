@@ -26,8 +26,8 @@ DateList.prototype = {
 DateList.prototype.render = function() {
     var dates = [];
        
-    //var todayDate = new Date();
-    var todayDate = new Date(2013, 0, 3);
+    var todayDate = new Date();
+    //var todayDate = new Date(2013, 0, 3);
     todayDate.setDate(todayDate.getDate() - 1); 
     
     for(var i=1; i<=30; i++) {

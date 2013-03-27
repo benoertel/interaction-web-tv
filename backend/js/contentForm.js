@@ -22,7 +22,7 @@ ContentForm.prototype.render = function(websocket) {
     
     var context = this;
     $("#contentCommonTemplate").Chevron("render", {contentTypes: context.contentTypes}, function(result){
-        $('#content-form').html(result);
+        $('#content-form-inner').html(result);
         context.renderCustomPart();
     });
 }
@@ -63,7 +63,7 @@ ContentForm.prototype.initValidation = function() {
  * Error when submitting the form.
  */
 ContentForm.prototype.errorContentForm = function(form, event, errors) {
-    this.helper.alert('block', 'Bitte fülle alle Pflichtfelder aus.', '#contentTextForm');
+    this.helper.alert('block', 'Bitte fülle alle Pflichtfelder aus.', '#content-form');
 
     event.preventDefault();
 }
@@ -73,7 +73,6 @@ ContentForm.prototype.errorContentForm = function(form, event, errors) {
  */
 ContentForm.prototype.storeContentForm = function(form, event) {
     var context = this;
-    
     var data = $('.contentForm input, .contentForm select, .contentForm textarea').serializeArray();
     var doc = this.helper.prepareCouchData(data);
 
@@ -90,15 +89,14 @@ ContentForm.prototype.storeContentForm = function(form, event) {
                 'channel': context.channel
             };
 
-            context.websocket.send(JSON.stringify(data));
-            
-            context.helper.alert('success', 'Der Zusatzcontent wurde erfolgreich hinzugefügt.', '#contentTextForm');
+            context.websocket.send(data);
+            context.helper.alert('success', 'Der Zusatzcontent wurde erfolgreich hinzugefügt.', '#content-form');
             context.render(context.websocket);
             
             $(window).trigger('hashchange');
         },
         error: function(status) {
-            context.helper.alert('error', 'Der Zusatzinhalt konnte nicht hinzugefügt werden.', '#contentTextForm');
+            context.helper.alert('error', 'Der Zusatzinhalt konnte nicht hinzugefügt werden.', '#content-form');
         }
     });
 

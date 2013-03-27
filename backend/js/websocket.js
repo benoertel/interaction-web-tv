@@ -33,20 +33,15 @@ WebsocketClient.prototype.init = function() {
 /**
  * Websocket connection opened.
  */
-WebsocketClient.prototype.onopen = function(event) {
-    console.log('ws onopen');
-    
+WebsocketClient.prototype.onopen = function(event) {    
     this.status = 'connected';
 };
 
 /**
  * Websocket connection closed.
  */
-WebsocketClient.prototype.onclose = function(event) {
-    console.log('ws onclose');
-    
+WebsocketClient.prototype.onclose = function(event) {    
     this.status = 'disconnected';
-    this.tv.status = 'unavailable';
     
     var context = this;
     window.setTimeout(function() {
@@ -59,7 +54,7 @@ WebsocketClient.prototype.onclose = function(event) {
  * Websocket connection error.
  */
 WebsocketClient.prototype.onerror = function(event) {
-    alert('error');
+    console.log('error');
 }
 
 /**

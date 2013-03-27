@@ -23,6 +23,8 @@ exports.reset = function(_timeDiff) {
     if(_timeDiff) {
         timeDiff = _timeDiff;
     }
+    nowDate = null;
+    
     queue.reset();
     exports.start();
 }

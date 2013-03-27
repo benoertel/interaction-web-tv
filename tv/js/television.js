@@ -7,7 +7,7 @@ function Television(id, helper) {
     this.video = document.getElementById('tv-stream');
     this.channel = null;
     this.status = 'paused';
-    this.mode = 'television';
+    this.mode = 'live';
     this.volume = 1;
     
     this.channelList = [
@@ -26,6 +26,7 @@ Television.prototype.getConfigResponse = function(json, socket) {
         this.channel = json.channel;
         this.file = json.file;
     }
+        console.log('mode is not movie');
     
     this.updateSource(socket);
 }
@@ -88,7 +89,7 @@ Television.prototype.updateSource = function(socket) {
     
     this.video.appendChild(source);
     
-    if(this.mode == 'television') {
+    if(this.mode == 'live') {
         this.video.play();
     }
 }
@@ -109,7 +110,7 @@ Television.prototype.notifyChannelChange = function(socket) {
  * Switch status of television between play and pause.
  */
 Television.prototype.togglePlay = function(socket) {
-    if(this.mode == 'television') {
+    if(this.mode == 'live') {
         return;
     }
     
